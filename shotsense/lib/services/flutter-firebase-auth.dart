@@ -62,7 +62,6 @@ class FirebaseAuthMethods {
         password: password,
       );
       if (!user.emailVerified) {
-        print(context);
         await sendEmailVerification(context);
         // restrict access to certain things using provider
         // transition to another page instead of home screen

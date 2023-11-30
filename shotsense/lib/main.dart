@@ -20,7 +20,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-  static const String _title = 'Firebase Example';
+  // static const String _title = 'Shot Sense';
 
   @override
   Widget build(BuildContext context) {

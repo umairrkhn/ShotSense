@@ -1,4 +1,3 @@
-import 'package:shotsense/screens/homepage.dart';
 import 'package:shotsense/services/flutter-firebase-auth.dart';
 import 'package:shotsense/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
