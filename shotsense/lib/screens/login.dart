@@ -20,6 +20,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
     context.read<FirebaseAuthMethods>().loginWithEmail(
           email: emailController.text,
           password: passwordController.text,
+          context: context,
         );
   }
 
@@ -29,6 +30,17 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Container(
+            height: MediaQuery.of(context).size.height * 0.15,
+            width: MediaQuery.of(context).size.width * 0.5,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/ShotSense-logo.png'),
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
           const Text(
             "Login",
             style: TextStyle(fontSize: 30),
@@ -53,13 +65,10 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
           ElevatedButton(
             onPressed: () {
               loginUser();
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage()),
-              );
             },
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.blue),
+              backgroundColor:
+                  MaterialStateProperty.all(Color.fromARGB(255, 38, 5, 116)),
               textStyle: MaterialStateProperty.all(
                 const TextStyle(color: Colors.white),
               ),

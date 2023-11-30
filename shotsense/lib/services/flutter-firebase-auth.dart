@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shotsense/utils/showSnackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shotsense/screens/homepage.dart';
 
 // import 'package:google_sign_in/google_sign_in.dart';
 
@@ -53,6 +54,7 @@ class FirebaseAuthMethods {
   Future<void> loginWithEmail({
     required String email,
     required String password,
+    required BuildContext context,
   }) async {
     try {
       await _auth.signInWithEmailAndPassword(
@@ -60,17 +62,17 @@ class FirebaseAuthMethods {
         password: password,
       );
       if (!user.emailVerified) {
-        // await sendEmailVerification(context);
-        print('Email not verified');
+        print(context);
+        await sendEmailVerification(context);
         // restrict access to certain things using provider
         // transition to another page instead of home screen
       }
-      if (user.emailVerified) {
-        // transition to home screen
-        print('Email verified');
-      }
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
     } on FirebaseAuthException catch (e) {
-      print(e.message);
+      showSnackBar(context, e.message!); // Displaying the error message
     }
   }
 
@@ -213,6 +215,9 @@ class FirebaseAuthMethods {
   Future<void> signOut(BuildContext context) async {
     try {
       await _auth.signOut();
+
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message!); // Displaying the error message
     }

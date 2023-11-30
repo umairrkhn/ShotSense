@@ -9,6 +9,7 @@ environment:
 dependencies:
   firebase_auth: ^4.14.1
   firebase_core: ^2.23.0
+  font_awesome_flutter: ^10.6.0
 
   google_sign_in: ^5.2.4
   provider: ^6.0.2
@@ -22,3 +23,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/

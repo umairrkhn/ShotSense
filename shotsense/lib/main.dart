@@ -6,6 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shotsense/services/flutter-firebase-auth.dart';
+import 'package:shotsense/screens/settings.dart';
+import 'package:shotsense/widgets/bottom_navigation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,18 +35,29 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Flutter Firebase Auth Demo',
+        title: 'Shot Sense',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const EmailPasswordLogin(),
-        // routes: {
-        //   EmailPasswordSignup.routeName: (context) =>
-        //       const EmailPasswordSignup(),
-        //   EmailPasswordLogin.routeName: (context) => const EmailPasswordLogin(),
-        //   PhoneScreen.routeName: (context) => const PhoneScreen(),
-        // },
+        home: const AuthWrapper(),
+        routes: {
+          SettingsPage.routeName: (context) => const SettingsPage(),
+        },
       ),
     );
+  }
+}
+
+class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final firebaseUser = context.watch<User?>();
+
+    if (firebaseUser != null) {
+      return BottomBarScreen(child: HomePage());
+    }
+    return EmailPasswordLogin();
   }
 }
