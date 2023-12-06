@@ -80,6 +80,9 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
               style: TextStyle(color: Colors.white, fontSize: 16),
             ),
           ),
+          Text("TEST:"),
+          Text("muhammadfahad870@gmail.com"),
+          Text("123456"),
         ],
       ),
     );

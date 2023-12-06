@@ -66,10 +66,8 @@ class FirebaseAuthMethods {
         // restrict access to certain things using provider
         // transition to another page instead of home screen
       }
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message!); // Displaying the error message
     }
