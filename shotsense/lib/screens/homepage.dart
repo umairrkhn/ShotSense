@@ -5,152 +5,206 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            SizedBox(width: 8),
-            Text('ShotSense',
-                style: Theme.of(context).textTheme.headline6!.copyWith(
-                      color: Colors.white,
-                      fontSize: 24,
-                    )),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.person),
-            onPressed: () {
-              Navigator.pushNamed(context, '/settings');
-            },
-            iconSize: 32,
+        appBar: AppBar(
+          title: Row(
+            children: [
+              SizedBox(width: 8),
+              Text('ShotSense',
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
+                        color: Colors.white,
+                        fontSize: 24,
+                      )),
+            ],
           ),
-        ],
-      ),
-      // appBar: CustomAppBar(), // later for adding a custom app bar
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Cover Drive',
-                    style: Theme.of(context).textTheme.headline6!.copyWith(
-                          // color: Colors.white,
-                          fontSize: 32,
-                          fontFamily: 'Roboto',
-                          fontWeight: FontWeight.bold,
-                        )),
-                FaIcon(FontAwesomeIcons.filter, size: 28),
-              ],
-            ),
-            SizedBox(height: 8.0),
-            Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 15.0),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white),
-                          borderRadius: BorderRadius.circular(8.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 10,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
-                          color: Colors.white,
-                        ),
-                        child: ListTile(
-                          leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Image.asset(
-                              'assets/images/ShotSense-logo.png',
-                              width: 80,
-                              height: 45,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          title: Text('11-04-22'),
-                          subtitle: Text('0:13'),
-                        ),
-                      ),
-                      SizedBox(height: 15.0),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white),
-                          borderRadius: BorderRadius.circular(8.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 10,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
-                          color: Colors.white,
-                        ),
-                        child: ListTile(
-                          leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Image.asset(
-                              'assets/images/ShotSense-logo.png',
-                              width: 80,
-                              height: 45,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          title: Text('11-04-22'),
-                          subtitle: Text('0:15'),
-                        ),
-                      ),
-                      SizedBox(height: 15.0),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white),
-                          borderRadius: BorderRadius.circular(8.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 10,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
-                          color: Colors.white,
-                        ),
-                        child: ListTile(
-                          leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Image.asset(
-                              'assets/images/ShotSense-logo.png',
-                              width: 80,
-                              height: 45,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          title: Text('08-04-22'),
-                          subtitle: Text('0:06'),
-                        ),
-                      ),
-                      SizedBox(height: 15.0),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
         ),
-      ),
-    );
+        // appBar: CustomAppBar(), // later for adding a custom app bar
+        body: SingleChildScrollView(
+            child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        SizedBox(height: 15.0),
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white),
+                            borderRadius: BorderRadius.circular(20.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.15),
+                                spreadRadius: 1,
+                                blurRadius: 8,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                            color: Colors.white,
+                          ),
+                          child: const ListTile(
+                              // leading: ClipRRect(
+                              //   borderRadius: BorderRadius.circular(8.0),
+                              // ),
+                              title: Text('Most Frequent shot played',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Color.fromARGB(255, 123, 123, 123))),
+                              subtitle: Text(
+                                'Cover Drive',
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              )),
+                        ),
+                        const SizedBox(height: 15.0),
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white),
+                            borderRadius: BorderRadius.circular(20.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.15),
+                                spreadRadius: 1,
+                                blurRadius: 8,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                            color: Colors.white,
+                          ),
+                          child: const ListTile(
+                              // leading: ClipRRect(
+                              //   borderRadius: BorderRadius.circular(8.0),
+                              // ),
+                              title: Text('Overall Accuracy',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Color.fromARGB(255, 123, 123, 123))),
+                              subtitle: Text(
+                                '84%',
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              )),
+                        ),
+                        SizedBox(height: 15.0),
+                        Text("Last Session Played",
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 123, 123, 123))),
+                        SizedBox(height: 15.0),
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white),
+                            borderRadius: BorderRadius.circular(20.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.15),
+                                spreadRadius: 1,
+                                blurRadius: 8,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                            color: Colors.white,
+                          ),
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 5.0),
+                              const ListTile(
+                                // leading: ClipRRect(
+                                //   child: Text('1'),
+                                // ),
+                                title: Text('Most Frequent shot played',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(255, 0, 0, 0))),
+                                subtitle: Text('Cover Drive',
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color:
+                                            Color.fromARGB(255, 79, 79, 79))),
+                              ),
+                              const SizedBox(height: 5.0),
+                              ListTile(
+                                // leading: ClipRRect(
+                                //   child: Text('1'),
+                                // ),
+                                title: const Text('Balls hit',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(255, 0, 0, 0))),
+                                subtitle: RichText(
+                                  text: TextSpan(
+                                    style: DefaultTextStyle.of(context).style,
+                                    children: const <TextSpan>[
+                                      TextSpan(
+                                        text: '35/43 ',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          color:
+                                              Color.fromARGB(255, 61, 61, 61),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: 'balls hit',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          color:
+                                              Color.fromARGB(255, 79, 79, 79),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 5.0),
+                              // add one for the date
+                              const ListTile(
+                                // leading: ClipRRect(
+                                //   child: Text('1'),
+                                // ),
+                                title: Text('Date',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(255, 0, 0, 0))),
+                                subtitle: Text(
+                                  '11/04/2023',
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    color: Color.fromARGB(255, 79, 79, 79),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        )));
   }
 }
