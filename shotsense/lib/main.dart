@@ -41,7 +41,6 @@ class MyApp extends StatelessWidget {
         home: const AuthWrapper(),
         routes: {
           SettingsPage.routeName: (context) => const SettingsPage(),
-          // SessionPage.routeName: (context) => const SessionPage(),
         },
       ),
     );

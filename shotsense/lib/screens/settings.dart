@@ -14,7 +14,12 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(
+          title: Text('Settings',
+              style: Theme.of(context).textTheme.headline6!.copyWith(
+                    color: Colors.white,
+                    fontSize: 24,
+                  ))),
       body: Center(
         child: ElevatedButton(
           onPressed: () {

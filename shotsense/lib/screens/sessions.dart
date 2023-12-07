@@ -118,17 +118,18 @@ class _SessionPageState extends State<SessionPage> {
                               blurRadius: 10,
                               offset: const Offset(0, 2),
                             ),
-                          ],
-                          color: Colors.white,
-                        ),
-                        child: ListTile(
-                          leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Image.asset(
-                              'assets/images/ShotSense-logo.png',
-                              width: 80,
-                              height: 45,
-                              fit: BoxFit.cover,
+                            child: ListTile(
+                              leading: ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Image.asset(
+                                  'assets/images/ShotSense-logo.png',
+                                  width: 80,
+                                  height: 45,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              title: const Text('Session 1'),
+                              subtitle: const Text('2nd Nov 2023'),
                             ),
                           ),
                           title: const Text('Session 1'),
@@ -147,17 +148,18 @@ class _SessionPageState extends State<SessionPage> {
                               blurRadius: 10,
                               offset: const Offset(0, 2),
                             ),
-                          ],
-                          color: Colors.white,
-                        ),
-                        child: ListTile(
-                          leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Image.asset(
-                              'assets/images/ShotSense-logo.png',
-                              width: 80,
-                              height: 45,
-                              fit: BoxFit.cover,
+                            child: ListTile(
+                              leading: ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Image.asset(
+                                  'assets/images/ShotSense-logo.png',
+                                  width: 80,
+                                  height: 45,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              title: Text('Session 2'),
+                              subtitle: Text('10th Nov 2023'),
                             ),
                           ),
                           title: const Text('Session 2'),
@@ -176,17 +178,18 @@ class _SessionPageState extends State<SessionPage> {
                               blurRadius: 10,
                               offset: const Offset(0, 2),
                             ),
-                          ],
-                          color: Colors.white,
-                        ),
-                        child: ListTile(
-                          leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Image.asset(
-                              'assets/images/ShotSense-logo.png',
-                              width: 80,
-                              height: 45,
-                              fit: BoxFit.cover,
+                            child: ListTile(
+                              leading: ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Image.asset(
+                                  'assets/images/ShotSense-logo.png',
+                                  width: 80,
+                                  height: 45,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              title: Text('Session 3'),
+                              subtitle: Text('4th Dec 2023'),
                             ),
                           ),
                           title: const Text('Session 3'),
@@ -199,9 +202,7 @@ class _SessionPageState extends State<SessionPage> {
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }
