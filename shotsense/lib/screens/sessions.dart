@@ -43,6 +43,10 @@ class _SessionPageState extends State<SessionPage> {
                 ),
               ),
             ),
+            const SizedBox(height: 15.0),
+            const Padding(padding: EdgeInsets.all(5.0),
+              child: Text('Current Sessions', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+            ),
             const Padding(
               padding: EdgeInsets.all(5.0),
               child: Text('Previous Sessions', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
