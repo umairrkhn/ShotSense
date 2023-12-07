@@ -18,37 +18,47 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
     return Scaffold(
       body: widget.child,
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).primaryColor,
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
             _currentIndex = index;
           });
-
           switch (index) {
             case 0:
-              Navigator.pushNamed(context, '/');
+              if (index != _currentIndex) {
+                Navigator.pushNamed(context, '/');
+              }
               break;
             case 1:
               // Navigator.pushNamed(context, '/record');
-              print("record page");
+              print("Session page");
               break;
             case 2:
+              // Navigator.pushNamed(context, '/shots');
+              print("Shots page");
+              break;
+            case 3:
               Navigator.pushNamed(context, '/settings');
               break;
           }
         },
-        items: [
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.analytics),
+            label: 'Sessions',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.sports_cricket),
             label: 'Shots',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.camera),
-            label: 'Record',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.analytics),
-            label: 'Analytics',
+              icon: Icon(Icons.settings),
+              label: 'Settings'
           ),
         ],
       ),
