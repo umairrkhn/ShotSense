@@ -18,7 +18,8 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
     return Scaffold(
       body: widget.child,
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).primaryColor,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
@@ -57,9 +58,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
             label: 'Shots',
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'Settings'
-          ),
+              icon: Icon(Icons.settings), label: 'Settings'),
         ],
       ),
     );
