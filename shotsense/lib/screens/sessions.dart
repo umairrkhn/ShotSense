@@ -47,6 +47,53 @@ class _SessionPageState extends State<SessionPage> {
             const Padding(padding: EdgeInsets.all(5.0),
               child: Text('Current Sessions', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
             ),
+            Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 15.0),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.circular(8.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 10,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                          color: Colors.white,
+                        ),
+                        child: ListTile(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/current_session');
+                          },
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image.asset(
+                              'assets/images/ShotSense-logo.png',
+                              width: 80,
+                              height: 45,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          title: const Text('Session in progress'),
+                          subtitle: const Text('8th Dec 2023'),
+                        ),
+                      ),
+                      const SizedBox(height: 15.0),
+                    ],
+                  ),
+                ),
+              ],
+            ),
             const Padding(
               padding: EdgeInsets.all(5.0),
               child: Text('Previous Sessions', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
