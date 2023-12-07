@@ -33,7 +33,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
               }
               break;
             case 1:
-              // Navigator.pushNamed(context, '/record');
+              Navigator.pushNamed(context, '/sessions');
               print("Session page");
               break;
             case 2:
