@@ -18,6 +18,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
     return Scaffold(
       body: widget.child,
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
         currentIndex: _currentIndex,
