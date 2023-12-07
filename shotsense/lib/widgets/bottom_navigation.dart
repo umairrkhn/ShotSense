@@ -1,66 +1,76 @@
 import 'package:flutter/material.dart';
+import 'package:shotsense/screens/homepage.dart';
+import 'package:shotsense/screens/sessions.dart';
+import 'package:shotsense/screens/shots.dart';
 import 'package:shotsense/screens/settings.dart';
 
-class BottomBarScreen extends StatefulWidget {
-  const BottomBarScreen({Key? key, required this.child}) : super(key: key);
+void main() => runApp(const BottomNavigationBarExampleApp());
 
-  final Widget child;
+class BottomNavigationBarExampleApp extends StatelessWidget {
+  const BottomNavigationBarExampleApp({super.key});
 
   @override
-  _BottomBarScreenState createState() => _BottomBarScreenState();
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: BottomNavigationBarExample(),
+    );
+  }
 }
 
-class _BottomBarScreenState extends State<BottomBarScreen> {
-  int _currentIndex = 0;
+class BottomNavigationBarExample extends StatefulWidget {
+  const BottomNavigationBarExample({super.key});
+
+  @override
+  State<BottomNavigationBarExample> createState() =>
+      _BottomNavigationBarExampleState();
+}
+
+class _BottomNavigationBarExampleState
+    extends State<BottomNavigationBarExample> {
+  int _selectedIndex = 0;
+  static List<Widget> _widgetOptions = <Widget>[
+    HomePage(),
+    SessionPage(),
+    ShotScreen(),
+    SettingsPage()
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: widget.child,
+      body: Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-          switch (index) {
-            case 0:
-              if (index != _currentIndex) {
-                Navigator.pushNamed(context, '/');
-              }
-              break;
-            case 1:
-              Navigator.pushNamed(context, '/sessions');
-              print("Session page");
-              break;
-            case 2:
-              // Navigator.pushNamed(context, '/shots');
-              print("Shots page");
-              break;
-            case 3:
-              Navigator.pushNamed(context, '/settings');
-              break;
-          }
-        },
-        items: const [
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.analytics),
-            label: 'Sessions',
+            label: 'Session',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.sports_cricket),
-            label: 'Shots',
+            label: 'Shot',
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: 'Settings'),
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
         ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey[600],
+        onTap: _onItemTapped,
       ),
     );
   }

@@ -1,5 +1,4 @@
 import 'package:shotsense/firebase_options.dart';
-import 'package:shotsense/screens/homepage.dart';
 import 'package:shotsense/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -42,6 +41,7 @@ class MyApp extends StatelessWidget {
         home: const AuthWrapper(),
         routes: {
           SettingsPage.routeName: (context) => const SettingsPage(),
+          // SessionPage.routeName: (context) => const SessionPage(),
         },
       ),
     );
@@ -56,9 +56,7 @@ class AuthWrapper extends StatelessWidget {
     final firebaseUser = context.watch<User?>();
 
     if (firebaseUser != null) {
-      return BottomBarScreen(
-          child: HomePage()
-      );
+      return BottomNavigationBarExampleApp();
     }
     return EmailPasswordLogin();
   }
