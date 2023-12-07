@@ -17,22 +17,36 @@ class _SessionPageState extends State<SessionPage> {
         title: const Text('Sessions'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             const ElevatedButton(
               onPressed: null,
-              child: Text(
-                  'Create New Session',
-                  style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold
-                  ),
-                  textAlign: TextAlign.center
+              child: SizedBox(
+                width: double.infinity,
+                height: 100,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.add_box_rounded, size: 30),
+                    Text(
+                        'Create New Session',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black
+                        ),
+                        textAlign: TextAlign.center
+                    ),
+                  ],
+                ),
               ),
             ),
-            const Text('Previous Sessions', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+            const Padding(
+              padding: EdgeInsets.all(5.0),
+              child: Text('Previous Sessions', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+            ),
             Column(
               children: [
                 Container(
@@ -42,7 +56,6 @@ class _SessionPageState extends State<SessionPage> {
                   ),
                   child: Column(
                     children: [
-                      SizedBox(height: 15.0),
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.white),
@@ -52,7 +65,7 @@ class _SessionPageState extends State<SessionPage> {
                               color: Colors.black.withOpacity(0.2),
                               spreadRadius: 2,
                               blurRadius: 10,
-                              offset: Offset(0, 2),
+                              offset: const Offset(0, 2),
                             ),
                           ],
                           color: Colors.white,
@@ -81,7 +94,7 @@ class _SessionPageState extends State<SessionPage> {
                               color: Colors.black.withOpacity(0.2),
                               spreadRadius: 2,
                               blurRadius: 10,
-                              offset: Offset(0, 2),
+                              offset: const Offset(0, 2),
                             ),
                           ],
                           color: Colors.white,
@@ -96,11 +109,11 @@ class _SessionPageState extends State<SessionPage> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          title: Text('Session 2'),
-                          subtitle: Text('10th Nov 2023'),
+                          title: const Text('Session 2'),
+                          subtitle: const Text('10th Nov 2023'),
                         ),
                       ),
-                      SizedBox(height: 15.0),
+                      const SizedBox(height: 15.0),
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.white),
@@ -110,7 +123,7 @@ class _SessionPageState extends State<SessionPage> {
                               color: Colors.black.withOpacity(0.2),
                               spreadRadius: 2,
                               blurRadius: 10,
-                              offset: Offset(0, 2),
+                              offset: const Offset(0, 2),
                             ),
                           ],
                           color: Colors.white,
@@ -125,11 +138,11 @@ class _SessionPageState extends State<SessionPage> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          title: Text('Session 3'),
-                          subtitle: Text('4th Dec 2023'),
+                          title: const Text('Session 3'),
+                          subtitle: const Text('4th Dec 2023'),
                         ),
                       ),
-                      SizedBox(height: 15.0),
+                      const SizedBox(height: 15.0),
                     ],
                   ),
                 ),
