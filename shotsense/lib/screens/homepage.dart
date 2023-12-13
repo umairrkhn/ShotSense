@@ -101,7 +101,7 @@ class HomePage extends StatelessWidget {
                               )),
                         ),
                         SizedBox(height: 15.0),
-                        Text("Last Session Played",
+                        const Text("Last Session Played",
                             style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shotsense/screens/sessionDetail.dart';
 import '../widgets/bottom_navigation.dart';
 
 class SessionPage extends StatefulWidget {
@@ -31,22 +32,22 @@ class _SessionPageState extends State<SessionPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.add_box_rounded, size: 30),
-                      Text(
-                          'Create New Session',
+                      Text('Create New Session',
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black
-                          ),
-                          textAlign: TextAlign.center
-                      ),
+                              color: Colors.black),
+                          textAlign: TextAlign.center),
                     ],
                   ),
                 ),
               ),
               const SizedBox(height: 15.0),
-              const Padding(padding: EdgeInsets.all(5.0),
-                child: Text('Current Sessions', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+              const Padding(
+                padding: EdgeInsets.all(5.0),
+                child: Text('Current Sessions',
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.left),
               ),
               Column(
                 children: [
@@ -74,7 +75,11 @@ class _SessionPageState extends State<SessionPage> {
                           ),
                           child: ListTile(
                             onTap: () {
-                              // Navigator.pushNamed(context, '/current_session');
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) {
+                                  return const SessionDetailScreen();
+                                },
+                              ));
                               print('Session tapped');
                             },
                             leading: ClipRRect(
@@ -98,7 +103,9 @@ class _SessionPageState extends State<SessionPage> {
               ),
               const Padding(
                 padding: EdgeInsets.all(5.0),
-                child: Text('Previous Sessions', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+                child: Text('Previous Sessions',
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.left),
               ),
               Column(
                 children: [
