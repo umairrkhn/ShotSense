@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shotsense/screens/addOver.dart';
 
 class SessionDetailScreen extends StatefulWidget {
   const SessionDetailScreen({Key? key}) : super(key: key);
@@ -61,8 +62,9 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                    width: 172,
-                    height: 190,
+                    // width: 172,
+                    width: MediaQuery.of(context).size.width / 2.3,
+                    height: 192,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(20.0),
@@ -102,7 +104,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                       ],
                     )),
                 Container(
-                    width: 172,
+                    width: MediaQuery.of(context).size.width / 2.3,
                     height: 190,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.white),
@@ -155,20 +157,29 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   children: [
                     InkWell(
                         onTap: () => {},
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Over 4",
+                            const Text("Over 4",
                                 style: TextStyle(
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold,
                                     color: Color.fromARGB(255, 11, 11, 11))),
-                            Icon(Icons.arrow_drop_down_rounded, size: 50),
-                            SizedBox(width: 200),
-                            Icon(
-                              Icons.add_circle,
-                              size: 35,
-                              color: Color.fromARGB(255, 21, 101, 167),
+                            const Icon(Icons.arrow_drop_down_rounded, size: 50),
+                            const SizedBox(width: 200),
+                            InkWell(
+                              onTap: () => {
+                                Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) {
+                                    return const AddOver();
+                                  },
+                                ))
+                              },
+                              child: const Icon(
+                                Icons.add_circle,
+                                size: 35,
+                                color: Color.fromARGB(255, 21, 101, 167),
+                              ),
                             )
                           ],
                         )),
