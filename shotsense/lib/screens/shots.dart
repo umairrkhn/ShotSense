@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shotsense/screens/singleBall.dart';
 import 'package:shotsense/widgets/bottom_navigation.dart';
 
 class ShotScreen extends StatelessWidget {
@@ -76,6 +77,13 @@ class ShotScreen extends StatelessWidget {
                               color: Colors.white,
                             ),
                             child: ListTile(
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) {
+                                    return const SingleBallPage();
+                                  },
+                                ));
+                              },
                               leading: ClipRRect(
                                 borderRadius: BorderRadius.circular(8.0),
                                 child: Image.asset(

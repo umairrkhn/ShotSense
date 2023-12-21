@@ -80,7 +80,6 @@ class _SessionPageState extends State<SessionPage> {
                                   return const SessionDetailScreen();
                                 },
                               ));
-                              print('Session tapped');
                             },
                             leading: ClipRRect(
                               borderRadius: BorderRadius.circular(8.0),

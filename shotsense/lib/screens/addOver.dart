@@ -22,11 +22,15 @@ class _AddOverState extends State<AddOver> {
     if (pickedFile != null) {
       setState(() {
         _video = File(pickedFile.path);
-        _videoPlayerController.add(
-          VideoPlayerController.file(_video!)
-            ..initialize()
-            ..setLooping(true),
-        );
+        if (_videoPlayerController.length < 6) {
+          _videoPlayerController.add(
+            VideoPlayerController.file(_video!)
+              ..initialize()
+              ..setLooping(true),
+          );
+        } else {
+          showSnackBar(context, "Over must not exceed 6 videos");
+        }
       });
     }
   }
