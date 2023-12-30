@@ -43,55 +43,56 @@ class _BottomNavigationBarExampleState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(5),
-                topLeft: Radius.circular(5),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 0,
-                  blurRadius: 20,
-                  offset: const Offset(0, 3), // changes position of shadow
-                ),
-              ],
+    return SafeArea(
+        child: Scaffold(
+            body: Center(
+              child: _widgetOptions.elementAt(_selectedIndex),
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(15.0),
-                topRight: Radius.circular(15.0),
-              ),
-              child: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                items: const <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    label: 'Home',
+            bottomNavigationBar: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(5),
+                    topLeft: Radius.circular(5),
                   ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.analytics),
-                    label: 'Session',
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 0,
+                      blurRadius: 20,
+                      offset: const Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15.0),
+                    topRight: Radius.circular(15.0),
                   ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.sports_cricket),
-                    label: 'Shot',
+                  child: BottomNavigationBar(
+                    type: BottomNavigationBarType.fixed,
+                    items: const <BottomNavigationBarItem>[
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.home),
+                        label: 'Home',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.analytics),
+                        label: 'Session',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.sports_cricket),
+                        label: 'Shot',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.settings),
+                        label: 'Settings',
+                      ),
+                    ],
+                    currentIndex: _selectedIndex,
+                    selectedItemColor: Colors.black,
+                    unselectedItemColor: Colors.grey[600],
+                    onTap: _onItemTapped,
                   ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.settings),
-                    label: 'Settings',
-                  ),
-                ],
-                currentIndex: _selectedIndex,
-                selectedItemColor: Colors.black,
-                unselectedItemColor: Colors.grey[600],
-                onTap: _onItemTapped,
-              ),
-            )));
+                ))));
   }
 }
