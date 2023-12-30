@@ -50,6 +50,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
             child: CustomTextField(
               controller: emailController,
               hintText: 'Enter your email',
+              visible: false,
             ),
           ),
           const SizedBox(height: 20),
@@ -58,6 +59,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
             child: CustomTextField(
               controller: passwordController,
               hintText: 'Enter your password',
+              visible: true,
             ),
           ),
           const SizedBox(height: 40),
