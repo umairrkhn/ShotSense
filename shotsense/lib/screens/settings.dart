@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shotsense/services/flutter-firebase-auth.dart';
+import 'package:shotsense/widgets/custom_appBar.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -14,12 +15,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: Text('Settings',
-              style: Theme.of(context).textTheme.headline6!.copyWith(
-                    color: Colors.white,
-                    fontSize: 24,
-                  ))),
+      appBar: CustomAppBar(title: "Settings"),
       body: Center(
         child: ElevatedButton(
           onPressed: () {

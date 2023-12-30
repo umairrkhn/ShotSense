@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shotsense/services/flutter-firebase-auth.dart';
+import 'package:shotsense/widgets/custom_appBar.dart';
 
 class SingleBallPage extends StatelessWidget {
   const SingleBallPage({Key? key}) : super(key: key);
@@ -14,12 +15,7 @@ class SingleBallPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            title: Text('Ball 1/6',
-                style: Theme.of(context).textTheme.headline6!.copyWith(
-                      color: Colors.white,
-                      fontSize: 24,
-                    ))),
+        appBar: CustomAppBar(title: "Ball 1/6"),
         body: Container(
             padding: EdgeInsets.all(16.0),
             color: Color(0xFFF5F5F5),

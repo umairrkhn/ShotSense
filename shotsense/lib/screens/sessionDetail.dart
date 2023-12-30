@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shotsense/screens/addOver.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shotsense/widgets/custom_appBar.dart';
 import 'dart:io';
 import 'package:video_player/video_player.dart';
 
@@ -154,9 +155,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Session Detail'),
-      ),
+      appBar: CustomAppBar(title: "Session Details"),
       body: Container(
         padding: EdgeInsets.all(16.0),
         color: Color(0xFFF5F5F5),

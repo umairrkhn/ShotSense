@@ -1,26 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../widgets/custom_appBar.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Row(
-            children: [
-              SizedBox(width: 8),
-              Text('ShotSense',
-                  style: Theme.of(context).textTheme.headline6!.copyWith(
-                        color: Colors.white,
-                        fontSize: 24,
-                      )),
-            ],
-          ),
+        appBar: CustomAppBar(
+          title: 'ShotSense',
         ),
-        // appBar: CustomAppBar(), // later for adding a custom app bar
+        // later for adding a custom app bar
         body: SingleChildScrollView(
             child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[

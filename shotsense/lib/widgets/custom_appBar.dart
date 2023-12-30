@@ -1,64 +1,47 @@
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({Key? key}) : super(key: key);
+  final String title;
 
-  @override
-  final Size preferredSize = const Size.fromHeight(kToolbarHeight);
+  CustomAppBar({required this.title});
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Container(
-      height: preferredSize.height,
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.25),
-            offset: const Offset(0, 4),
-            blurRadius: 4,
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    return AppBar(
+      backgroundColor:
+          Navigator.canPop(context) ? Color(0xFFF5F5F5) : Colors.transparent,
+      elevation: 0,
+      leading: Navigator.canPop(context)
+          ? Padding(
+              padding: EdgeInsets.only(top: 18),
+              child: IconButton(
+                icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
+                iconSize: 26,
+                onPressed: () => Navigator.of(context).pop(),
+              ))
+          : null,
+      title: Padding(
+        padding: EdgeInsets.only(top: 20),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: Navigator.canPop(context)
+              ? MainAxisAlignment.start
+              : MainAxisAlignment.center,
           children: [
-            // Title widget
             Text(
-              'ShotSense',
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Colors.white,
-                  ),
-            ),
-
-            // Trailing widget
-            Row(
-              children: [
-                // Search button
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.search,
-                    color: Colors.white,
-                  ),
-                ),
-
-                // More button
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.more_vert,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
+              title,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 32,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         ),
       ),
-    ));
+    );
   }
+
+  @override
+  Size get preferredSize => Size.fromHeight(70);
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shotsense/screens/singleBall.dart';
 import 'package:shotsense/widgets/bottom_navigation.dart';
+import 'package:shotsense/widgets/custom_appBar.dart';
 
 class ShotScreen extends StatelessWidget {
   const ShotScreen({Key? key}) : super(key: key);
@@ -10,28 +11,7 @@ class ShotScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Row(
-            children: [
-              SizedBox(width: 8),
-              Text('Shots',
-                  style: Theme.of(context).textTheme.headline6!.copyWith(
-                        color: Colors.white,
-                        fontSize: 24,
-                      )),
-            ],
-          ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.person),
-              onPressed: () {
-                Navigator.pushNamed(context, '/settings');
-              },
-              iconSize: 32,
-            ),
-          ],
-        ),
-        // appBar: CustomAppBar(), // later for adding a custom app bar
+        appBar: CustomAppBar(title: "Shots"),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),

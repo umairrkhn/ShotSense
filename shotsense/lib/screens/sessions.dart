@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shotsense/screens/sessionDetail.dart';
+import 'package:shotsense/widgets/custom_appBar.dart';
 import '../widgets/bottom_navigation.dart';
 
 class SessionPage extends StatefulWidget {
@@ -14,9 +15,10 @@ class _SessionPageState extends State<SessionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sessions'),
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Sessions'),
+      // ),
+      appBar: CustomAppBar(title: "Sessions"),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -27,11 +29,11 @@ class _SessionPageState extends State<SessionPage> {
                 onPressed: null,
                 child: SizedBox(
                   width: double.infinity,
-                  height: 100,
+                  height: 60,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.add_box_rounded, size: 30),
+                      Icon(Icons.add_box_rounded, size: 25),
                       Text('Create New Session',
                           style: TextStyle(
                               fontSize: 20,
@@ -90,7 +92,7 @@ class _SessionPageState extends State<SessionPage> {
                                 fit: BoxFit.cover,
                               ),
                             ),
-                            title: const Text('Session in progress'),
+                            title: const Text('Batting Training'),
                             subtitle: const Text('8th Dec 2023'),
                           ),
                         ),
