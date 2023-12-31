@@ -43,11 +43,7 @@ class MyApp extends StatelessWidget {
         home: const AuthWrapper(),
         routes: {
           SettingsPage.routeName: (context) => const SettingsPage(),
-<<<<<<< Updated upstream
-          SessionDetailScreen.routeName: (context) => SessionDetailScreen(),
-=======
           ShotScreen.routeName: (context) => const ShotScreen(),
->>>>>>> Stashed changes
         },
       ),
     );
@@ -62,11 +58,7 @@ class AuthWrapper extends StatelessWidget {
     final firebaseUser = context.watch<User?>();
 
     if (firebaseUser != null) {
-<<<<<<< Updated upstream
       return const BottomNavigationBarExampleApp();
-=======
-      return BottomBarScreen(child: HomePage());
->>>>>>> Stashed changes
     }
     return const EmailPasswordLogin();
   }

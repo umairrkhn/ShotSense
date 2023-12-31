@@ -197,13 +197,6 @@ class HomePage extends StatelessWidget {
               ),
             ],
           ),
-<<<<<<< Updated upstream
         )));
-=======
-        ],
-      ),
-      body: Text('Home Page'),
-    );
->>>>>>> Stashed changes
   }
 }
