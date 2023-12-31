@@ -24,11 +24,11 @@ class ShotScreen extends StatelessWidget {
                     Text('Cover Drive',
                         style: Theme.of(context).textTheme.headline6!.copyWith(
                               // color: Colors.white,
-                              fontSize: 32,
+                              fontSize: 26,
                               fontFamily: 'Roboto',
                               fontWeight: FontWeight.bold,
                             )),
-                    FaIcon(FontAwesomeIcons.filter, size: 28),
+                    FaIcon(FontAwesomeIcons.filter, size: 22),
                   ],
                 ),
                 SizedBox(height: 8.0),
