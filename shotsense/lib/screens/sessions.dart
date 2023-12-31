@@ -25,7 +25,7 @@ class _SessionPageState extends State<SessionPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               ElevatedButton(
-                onPressed: null,
+                onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xff221D55),
                   shape: RoundedRectangleBorder(
@@ -40,12 +40,15 @@ class _SessionPageState extends State<SessionPage> {
                     children: [
                       Icon(Icons.add_box_rounded, size: 25, color: Colors.white),
                       SizedBox(width: 4.0),
-                      Text('Create New Session',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                          textAlign: TextAlign.center),
+                      Text(
+                        'Create New Session',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ],
                   ),
                 ),

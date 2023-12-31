@@ -219,9 +219,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
-          onPressed: () {
-            // Implement the logic for finishing the session
-          },
+          onPressed: () {},
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xff221D55),
             shape: RoundedRectangleBorder(
