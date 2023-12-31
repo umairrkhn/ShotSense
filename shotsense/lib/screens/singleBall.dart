@@ -140,7 +140,7 @@ class SingleBallPage extends StatelessWidget {
                               Text(
                                 "Ball Hit",
                                 style: TextStyle(
-                                    fontSize: 40,
+                                    fontSize: 30,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
                               ),

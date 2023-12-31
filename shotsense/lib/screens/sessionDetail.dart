@@ -27,7 +27,8 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   }
 
   Future<void> _pickVideo() async {
-    final pickedFile = await _imagePicker.pickVideo(source: ImageSource.gallery);
+    final pickedFile =
+        await _imagePicker.pickVideo(source: ImageSource.gallery);
     if (pickedFile != null) {
       _video = File(pickedFile.path);
       _initializeAndShowVideoConfirmationDialog();
@@ -46,7 +47,10 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirm Video'),
+          title: const Text(
+            'Confirm Video',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -61,20 +65,22 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        _videoPlayerControllers.last.pause();
+                        _videoPlayerControllers.last.dispose();
+                        _videoPlayerControllers.removeLast();
                       });
                       Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.blueGrey,
+                      backgroundColor: Color(0xff221D55),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
                     child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                       child: Text(
-                        'Confirm',
+                        'Cancel',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -87,21 +93,21 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        _videoPlayerControllers.last.dispose();
-                        _videoPlayerControllers.removeLast();
+                        _videoPlayerControllers.last.pause();
                       });
                       Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.blueGrey,
+                      backgroundColor: Color(0xff221D55),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
                     child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                       child: Text(
-                        'Cancel',
+                        'Confirm',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -175,7 +181,8 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                 color: Colors.white,
               ),
               child: const ListTile(
-                contentPadding: EdgeInsets.only(top: 6, bottom: 0, left: 20, right: 20),
+                contentPadding:
+                    EdgeInsets.only(top: 6, bottom: 0, left: 20, right: 20),
                 title: Text(
                   'Batting Training',
                   style: TextStyle(
@@ -216,7 +223,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
             // Implement the logic for finishing the session
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blueGrey,
+            backgroundColor: Color(0xff221D55),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
@@ -306,7 +313,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                     child: const Icon(
                       Icons.add_circle,
                       size: 35,
-                      color: Color.fromARGB(255, 21, 101, 167),
+                      color: Color.fromARGB(255, 11, 51, 84),
                     ),
                   ),
                 ],
@@ -361,7 +368,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
           ),
         ),
         const Padding(
-          padding: EdgeInsets.only(left: 20, right: 10),
+          padding: EdgeInsets.only(left: 20, right: 10, bottom: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
