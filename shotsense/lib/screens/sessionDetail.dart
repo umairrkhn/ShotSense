@@ -105,7 +105,6 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   TextButton(
                     child: Text('Confirm'),
                     onPressed: () {
-                      // Add the controller to the list and start playing
                       setState(() {
                         // _videoPlayerController.setLooping(true);
                         // _videoPlayerController.play();
@@ -139,6 +138,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
               },
             ),
             ListTile(
+              contentPadding: EdgeInsets.only(left: 20, bottom: 20),
               leading: Icon(Icons.image),
               title: Text('Choose from gallery'),
               onTap: () {
@@ -334,79 +334,87 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
               // Balls in the over section
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                for (var videoPlayerController
-                    in _videoPlayerControllers.asMap().entries)
-                  Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(bottom: 5),
-                        width: 45,
-                        height: 45,
-                        decoration: BoxDecoration(
-                          image: const DecorationImage(
-                            image: AssetImage('assets/images/BallIcon.png'),
-                            fit: BoxFit.cover,
+                if (_videoPlayerControllers.length > 0)
+                  for (var videoPlayerController
+                      in _videoPlayerControllers.asMap().entries)
+                    Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(bottom: 5),
+                          width: 45,
+                          height: 45,
+                          decoration: BoxDecoration(
+                            image: const DecorationImage(
+                              image: AssetImage('assets/images/BallIcon.png'),
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Center(
-                          child: Text(
-                            _videoPlayerControllers
-                                .asMap()
-                                .entries
-                                .map((entry) => "${entry.key + 1}")
-                                .join(" "),
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                          child: Center(
+                            child: Text(
+                              _videoPlayerControllers
+                                  .asMap()
+                                  .entries
+                                  .map((entry) => "${entry.key + 1}")
+                                  .join(" "),
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
-                          padding: EdgeInsets.only(left: 20, right: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 280,
-                                child: const Text(
-                                  "Backward defense against a turning delivery",
-                                  softWrap: true,
-                                  overflow: TextOverflow.clip,
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.black),
+                        Padding(
+                            padding: EdgeInsets.only(left: 20, right: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 280,
+                                  child: const Text(
+                                    "Backward defense against a turning delivery",
+                                    softWrap: true,
+                                    overflow: TextOverflow.clip,
+                                    style: TextStyle(
+                                        fontSize: 15, color: Colors.black),
+                                  ),
                                 ),
-                              ),
-                              const Row(
-                                children: [
-                                  Text(
-                                    "May 1 2022",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Color.fromARGB(187, 21, 30, 35)),
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text(
-                                    "•",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Color.fromARGB(187, 21, 30, 35)),
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text(
-                                    "Defense Shot",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Color.fromARGB(187, 21, 30, 35)),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ))
-                    ],
-                  ),
+                                const Row(
+                                  children: [
+                                    Text(
+                                      "May 1 2022",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color:
+                                              Color.fromARGB(187, 21, 30, 35)),
+                                    ),
+                                    SizedBox(width: 5),
+                                    Text(
+                                      "•",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color:
+                                              Color.fromARGB(187, 21, 30, 35)),
+                                    ),
+                                    SizedBox(width: 5),
+                                    Text(
+                                      "Defense Shot",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color:
+                                              Color.fromARGB(187, 21, 30, 35)),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ))
+                      ],
+                    ),
+                if (_videoPlayerControllers.length == 0)
+                  Container(
+                      padding: EdgeInsets.all(100),
+                      child: Text("No Videos added for this over")),
                 SizedBox(height: 15.0),
               ],
             ),

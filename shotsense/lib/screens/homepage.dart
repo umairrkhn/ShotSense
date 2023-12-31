@@ -54,7 +54,7 @@ class HomePage extends StatelessWidget {
                               subtitle: Text(
                                 'Cover Drive',
                                 style: TextStyle(
-                                    fontSize: 25,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
                               )),
@@ -87,7 +87,7 @@ class HomePage extends StatelessWidget {
                               subtitle: Text(
                                 '84%',
                                 style: TextStyle(
-                                    fontSize: 25,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
                               )),
@@ -122,13 +122,13 @@ class HomePage extends StatelessWidget {
                                 // ),
                                 title: Text('Most Frequent shot played',
                                     style: TextStyle(
-                                        fontSize: 15,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                         color: Color.fromARGB(255, 0, 0, 0))),
                                 subtitle: Text('Cover Drive',
                                     style: TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
                                         color:
                                             Color.fromARGB(255, 79, 79, 79))),
                               ),
@@ -139,7 +139,7 @@ class HomePage extends StatelessWidget {
                                 // ),
                                 title: const Text('Balls hit',
                                     style: TextStyle(
-                                        fontSize: 15,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                         color: Color.fromARGB(255, 0, 0, 0))),
                                 subtitle: RichText(
@@ -149,16 +149,16 @@ class HomePage extends StatelessWidget {
                                       TextSpan(
                                         text: '35/43 ',
                                         style: TextStyle(
-                                          fontSize: 17,
+                                          fontSize: 18,
                                           color:
                                               Color.fromARGB(255, 61, 61, 61),
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                       TextSpan(
                                         text: 'balls hit',
                                         style: TextStyle(
-                                          fontSize: 17,
+                                          fontSize: 18,
                                           color:
                                               Color.fromARGB(255, 79, 79, 79),
                                         ),
@@ -175,15 +175,15 @@ class HomePage extends StatelessWidget {
                                 // ),
                                 title: Text('Date',
                                     style: TextStyle(
-                                        fontSize: 15,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                         color: Color.fromARGB(255, 0, 0, 0))),
                                 subtitle: Text(
                                   '11/04/2023',
                                   style: TextStyle(
-                                    fontSize: 17,
+                                    fontSize: 18,
                                     color: Color.fromARGB(255, 79, 79, 79),
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ),
