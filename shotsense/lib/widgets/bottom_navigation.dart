@@ -43,7 +43,7 @@ class _BottomNavigationBarExampleState
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: CurvedNavigationBar(
-        height: 50,
+        height: 75,
         backgroundColor: Colors.transparent,
         color: const Color(0xff221D55),
         buttonBackgroundColor: const Color(0xffED247E),
@@ -59,7 +59,7 @@ class _BottomNavigationBarExampleState
           });
         },
         animationCurve: Curves.easeInOut,
-        animationDuration: const Duration(milliseconds: 300),
+        animationDuration: const Duration(milliseconds: 400),
       ),
     );
   }
