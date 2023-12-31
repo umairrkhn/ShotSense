@@ -8,6 +8,7 @@ import 'package:shotsense/screens/sessionDetail.dart';
 import 'package:shotsense/services/flutter-firebase-auth.dart';
 import 'package:shotsense/screens/settings.dart';
 import 'package:shotsense/widgets/bottom_navigation.dart';
+import 'package:shotsense/screens/shots.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,7 +43,11 @@ class MyApp extends StatelessWidget {
         home: const AuthWrapper(),
         routes: {
           SettingsPage.routeName: (context) => const SettingsPage(),
+<<<<<<< Updated upstream
           SessionDetailScreen.routeName: (context) => SessionDetailScreen(),
+=======
+          ShotScreen.routeName: (context) => const ShotScreen(),
+>>>>>>> Stashed changes
         },
       ),
     );
@@ -57,7 +62,11 @@ class AuthWrapper extends StatelessWidget {
     final firebaseUser = context.watch<User?>();
 
     if (firebaseUser != null) {
+<<<<<<< Updated upstream
       return const BottomNavigationBarExampleApp();
+=======
+      return BottomBarScreen(child: HomePage());
+>>>>>>> Stashed changes
     }
     return const EmailPasswordLogin();
   }

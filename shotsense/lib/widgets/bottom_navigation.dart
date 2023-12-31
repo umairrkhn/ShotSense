@@ -4,6 +4,7 @@ import 'package:shotsense/screens/homepage.dart';
 import 'package:shotsense/screens/sessions.dart';
 import 'package:shotsense/screens/shots.dart';
 import 'package:shotsense/screens/settings.dart';
+import 'package:shotsense/screens/shots.dart';
 
 void main() => runApp(const BottomNavigationBarExampleApp());
 
@@ -56,6 +57,34 @@ class _BottomNavigationBarExampleState
           setState(() {
             _selectedIndex = index;
           });
+<<<<<<< Updated upstream
+=======
+          switch (index) {
+            case 0:
+              if (index != _currentIndex) {
+                Navigator.pushReplacementNamed(context, '/');
+              }
+              break;
+            case 1:
+              // Navigator.pushNamed(context, '/record');
+              print("Session page");
+              break;
+            case 2:
+              // Navigator.pushNamed(context, '/shots');
+
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => ShotScreen()),
+              );
+
+              print("Shots page");
+              break;
+            case 3:
+              Navigator.pushReplacementNamed(context, '/settings');
+
+              break;
+          }
+>>>>>>> Stashed changes
         },
         animationCurve: Curves.easeInOut,
         animationDuration: const Duration(milliseconds: 300),
