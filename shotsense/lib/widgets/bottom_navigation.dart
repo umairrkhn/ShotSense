@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:shotsense/screens/homepage.dart';
 import 'package:shotsense/screens/sessions.dart';
 import 'package:shotsense/screens/shots.dart';
@@ -7,7 +8,7 @@ import 'package:shotsense/screens/settings.dart';
 void main() => runApp(const BottomNavigationBarExampleApp());
 
 class BottomNavigationBarExampleApp extends StatelessWidget {
-  const BottomNavigationBarExampleApp({super.key});
+  const BottomNavigationBarExampleApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class BottomNavigationBarExampleApp extends StatelessWidget {
 }
 
 class BottomNavigationBarExample extends StatefulWidget {
-  const BottomNavigationBarExample({super.key});
+  const BottomNavigationBarExample({Key? key}) : super(key: key);
 
   @override
   State<BottomNavigationBarExample> createState() =>
@@ -28,70 +29,37 @@ class BottomNavigationBarExample extends StatefulWidget {
 class _BottomNavigationBarExampleState
     extends State<BottomNavigationBarExample> {
   int _selectedIndex = 0;
-  static List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
-    SessionPage(),
-    ShotScreen(),
-    SettingsPage()
-  ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  static final List<Widget> _widgetOptions = <Widget>[
+    HomePage(),
+    const SessionPage(),
+    const ShotScreen(),
+    const SettingsPage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(5),
-                topLeft: Radius.circular(5),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 0,
-                  blurRadius: 20,
-                  offset: const Offset(0, 3), // changes position of shadow
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(15.0),
-                topRight: Radius.circular(15.0),
-              ),
-              child: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                items: const <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    label: 'Home',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.analytics),
-                    label: 'Session',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.sports_cricket),
-                    label: 'Shot',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.settings),
-                    label: 'Settings',
-                  ),
-                ],
-                currentIndex: _selectedIndex,
-                selectedItemColor: Colors.black,
-                unselectedItemColor: Colors.grey[600],
-                onTap: _onItemTapped,
-              ),
-            )));
+      body: _widgetOptions.elementAt(_selectedIndex),
+      bottomNavigationBar: CurvedNavigationBar(
+        height: 50,
+        backgroundColor: Colors.transparent,
+        color: const Color(0xff221D55),
+        buttonBackgroundColor: const Color(0xffED247E),
+        items: const <Widget>[
+          Icon(Icons.home, size: 30, color: Colors.white),
+          Icon(Icons.analytics, size: 30, color: Colors.white),
+          Icon(Icons.sports_cricket, size: 30, color: Colors.white),
+          Icon(Icons.settings, size: 30, color: Colors.white),
+        ],
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        animationCurve: Curves.easeInOut,
+        animationDuration: const Duration(milliseconds: 300),
+      ),
+    );
   }
 }
