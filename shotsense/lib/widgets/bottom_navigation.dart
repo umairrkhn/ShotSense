@@ -43,7 +43,7 @@ class _BottomNavigationBarExampleState
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: CurvedNavigationBar(
-        height: 50,
+        height: 75,
         backgroundColor: Colors.transparent,
         color: const Color(0xff221D55),
         buttonBackgroundColor: Color.fromARGB(255, 205, 32, 109),
