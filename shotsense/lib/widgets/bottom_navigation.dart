@@ -46,7 +46,7 @@ class _BottomNavigationBarExampleState
         height: 50,
         backgroundColor: Colors.transparent,
         color: const Color(0xff221D55),
-        buttonBackgroundColor: const Color(0xffED247E),
+        buttonBackgroundColor: Color.fromARGB(255, 205, 32, 109),
         items: const <Widget>[
           Icon(Icons.home, size: 30, color: Colors.white),
           Icon(Icons.analytics, size: 30, color: Colors.white),
@@ -59,7 +59,7 @@ class _BottomNavigationBarExampleState
           });
         },
         animationCurve: Curves.easeInOut,
-        animationDuration: const Duration(milliseconds: 300),
+        animationDuration: const Duration(milliseconds: 400),
       ),
     );
   }

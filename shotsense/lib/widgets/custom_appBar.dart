@@ -25,11 +25,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ? Padding(
                   padding: EdgeInsets.only(top: 18),
                   child: IconButton(
-                    icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
+                    icon: Icon(Icons.arrow_back_ios_new,
+                        color: Color.fromARGB(255, 29, 20, 118)),
                     iconSize: 26,
                     onPressed: () => Navigator.of(context).pop(),
                   ))
-              : null,
+              : (title == 'ShotSense')
+                  ? Container(
+                      padding: EdgeInsets.only(top: 18, left: 20),
+                      child: Image.asset(
+                        'assets/images/ShotSense-logo.png', // Replace with your image path
+                        width: 16,
+                        height: 16,
+                      ))
+                  : null,
           title: Padding(
             padding: EdgeInsets.only(top: 20),
             child: Row(
