@@ -7,6 +7,12 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+<string>Importing videos to see predictions </string>
+<key>NSCameraUsageDescription</key>
+<string>Importing videos to see predictions</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>to record the sounds of the videos records</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
