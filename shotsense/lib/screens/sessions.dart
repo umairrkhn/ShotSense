@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shotsense/screens/sessionDetail.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
-import '../widgets/bottom_navigation.dart';
 
 class SessionPage extends StatefulWidget {
   const SessionPage({Key? key}) : super(key: key);
@@ -25,20 +24,27 @@ class _SessionPageState extends State<SessionPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              const ElevatedButton(
+              ElevatedButton(
                 onPressed: null,
-                child: SizedBox(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xff221D55),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                child: const SizedBox(
                   width: double.infinity,
                   height: 60,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.add_box_rounded, size: 25),
+                      Icon(Icons.add_box_rounded, size: 25, color: Colors.white),
+                      SizedBox(width: 4.0),
                       Text('Create New Session',
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black),
+                              color: Colors.white),
                           textAlign: TextAlign.center),
                     ],
                   ),
@@ -47,9 +53,11 @@ class _SessionPageState extends State<SessionPage> {
               const SizedBox(height: 15.0),
               const Padding(
                 padding: EdgeInsets.all(5.0),
-                child: Text('Current Sessions',
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.left),
+                child: Text("Current Session",
+                    style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 79, 79, 79))),
               ),
               Column(
                 children: [
@@ -104,9 +112,11 @@ class _SessionPageState extends State<SessionPage> {
               ),
               const Padding(
                 padding: EdgeInsets.all(5.0),
-                child: Text('Previous Sessions',
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.left),
+                child: Text("Previous Sessions",
+                    style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 79, 79, 79))),
               ),
               Column(
                 children: [

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../widgets/custom_appBar.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,7 +146,6 @@ class HomePage extends StatelessWidget {
                                         color:
                                         Color.fromARGB(255, 79, 79, 79))),
                               ),
-                              const SizedBox(height: 5.0),
                               ListTile(
                                 // leading: ClipRRect(
                                 //   child: Text('1'),
@@ -180,7 +180,6 @@ class HomePage extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 5.0),
                               // add one for the date
                               const ListTile(
                                 // leading: ClipRRect(

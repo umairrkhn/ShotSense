@@ -223,7 +223,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
             // Implement the logic for finishing the session
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color(0xff221D55),
+            backgroundColor: const Color(0xff221D55),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
