@@ -9,6 +9,7 @@ import 'package:shotsense/services/flutter-firebase-auth.dart';
 import 'package:shotsense/screens/settings.dart';
 import 'package:shotsense/widgets/bottom_navigation.dart';
 import 'package:shotsense/screens/shots.dart';
+import 'package:shotsense/screens/signup.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
         routes: {
           SettingsPage.routeName: (context) => const SettingsPage(),
           ShotScreen.routeName: (context) => const ShotScreen(),
+          SignUpScreen.routeName: (context) => SignUpScreen(),
         },
       ),
     );
