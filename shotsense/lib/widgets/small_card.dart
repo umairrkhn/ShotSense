@@ -1,11 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shotsense/screens/sessionDetail.dart';
+import 'package:intl/intl.dart';
 
 class smallCard extends StatefulWidget {
   final String name;
   final String date;
+  final String sessionId;
 
-  const smallCard({Key? key, required this.name, required this.date})
+  const smallCard(
+      {Key? key,
+      required this.name,
+      required this.date,
+      required this.sessionId})
       : super(key: key);
 
   @override
@@ -40,7 +47,7 @@ class _smallCardState extends State<smallCard> {
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
-                    return const SessionDetailScreen();
+                    return SessionDetailScreen(sessionID: widget.sessionId);
                   },
                 ));
               },

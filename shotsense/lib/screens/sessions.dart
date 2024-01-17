@@ -27,12 +27,17 @@ class _SessionPageState extends State<SessionPage> {
 
   final CollectionReference _sessions =
       FirebaseFirestore.instance.collection('sessions');
+
+  Stream<QuerySnapshot> getSessionsStream() {
+    return FirebaseFirestore.instance
+        .collection('sessions')
+        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .snapshots();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Sessions'),
-      // ),
       appBar: CustomAppBar(title: "Sessions"),
       body: SingleChildScrollView(
         child: Padding(
@@ -118,7 +123,7 @@ class _SessionPageState extends State<SessionPage> {
                         color: Color.fromARGB(255, 79, 79, 79))),
               ),
               StreamBuilder(
-                  stream: _sessions.snapshots(),
+                  stream: getSessionsStream(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
@@ -132,6 +137,7 @@ class _SessionPageState extends State<SessionPage> {
                       List<ball> ballsList = List<ball>.from(
                           doc["balls"].map((item) => ball.fromJson(item)));
                       return session(
+                          id: doc.id,
                           name: doc['name'],
                           userID: doc['userId'],
                           createdAt: doc['createdAt'],
@@ -143,13 +149,20 @@ class _SessionPageState extends State<SessionPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Column(
-                            children: Sessions.map((Session) {
-                              return smallCard(
-                                name: Session.name,
-                                date: DateFormat('d MMM y')
-                                    .format(Session.createdAt.toDate()),
-                              );
-                            }).toList(),
+                            children: Sessions.length >= 0
+                                ? Sessions.map((Session) {
+                                    return smallCard(
+                                      name: Session.name,
+                                      date: DateFormat('d MMM y')
+                                          .format(Session.createdAt.toDate()),
+                                      sessionId: Session.id,
+                                    );
+                                  }).toList()
+                                : [
+                                    Container(
+                                      child: Text("No sesion Added"),
+                                    )
+                                  ],
                           ),
                           if (_previousSessionsExist == true)
                             const Padding(
@@ -168,6 +181,7 @@ class _SessionPageState extends State<SessionPage> {
                                   name: Session.name,
                                   date: DateFormat('d MMM y')
                                       .format(Session.createdAt.toDate()),
+                                  sessionId: Session.id,
                                 );
                               } else {
                                 return Container();
