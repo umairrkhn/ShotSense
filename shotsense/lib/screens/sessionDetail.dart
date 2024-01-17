@@ -1,12 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shotsense/screens/addOver.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
 import 'dart:io';
 import 'package:video_player/video_player.dart';
+import 'package:shotsense/classes/session.dart';
 
 class SessionDetailScreen extends StatefulWidget {
-  const SessionDetailScreen({Key? key}) : super(key: key);
+  final String sessionID;
+  const SessionDetailScreen({Key? key, required this.sessionID}) : super(key: key);
   static const routeName = '/sessionDetail';
 
   @override
@@ -14,9 +17,35 @@ class SessionDetailScreen extends StatefulWidget {
 }
 
 class _SessionDetailScreenState extends State<SessionDetailScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  late String sessionName;
+  late Timestamp sessionDate;
   File? _video;
   final ImagePicker _imagePicker = ImagePicker();
   List<VideoPlayerController> _videoPlayerControllers = [];
+
+  Future<void> fetchSessionData() async {
+    try {
+      User? user = _auth.currentUser;
+
+      if (user != null) {
+        DocumentSnapshot sessionSnapshot = await _firestore
+            .collection('sessions')
+            .doc(widget.sessionID)
+            .get();
+
+        session sessionData = session.fromMap(sessionSnapshot.data() as Map<String, dynamic>);
+
+        setState(() {
+          sessionName = sessionData.name;
+          sessionDate = sessionData.createdAt;
+        });
+      }
+    } catch (e) {
+      print('Error fetching session data: $e');
+    }
+  }
 
   Future<void> _recordVideo() async {
     final pickedFile = await _imagePicker.pickVideo(source: ImageSource.camera);
@@ -71,7 +100,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                       Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xff221D55),
+                      backgroundColor: const Color(0xff221D55),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
@@ -98,7 +127,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                       Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xff221D55),
+                      backgroundColor: const Color(0xff221D55),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
@@ -158,7 +187,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Session Details"),
+      appBar: const CustomAppBar(title: "Session Details"),
       body: Container(
         padding: const EdgeInsets.all(16.0),
         color: const Color(0xFFF5F5F5),
@@ -180,20 +209,20 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                 ],
                 color: Colors.white,
               ),
-              child: const ListTile(
+              child: ListTile(
                 contentPadding:
-                    EdgeInsets.only(top: 6, bottom: 0, left: 20, right: 20),
+                    const EdgeInsets.only(top: 6, bottom: 0, left: 20, right: 20),
                 title: Text(
-                  'Batting Training',
-                  style: TextStyle(
+                  sessionName,
+                  style: const TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
                 ),
                 subtitle: Text(
-                  '12th Nov 2023',
-                  style: TextStyle(
+                  sessionDate.toString(),
+                  style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 123, 123, 123),
@@ -219,7 +248,10 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xff221D55),
             shape: RoundedRectangleBorder(
