@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 
-  CustomAppBar({required this.title});
+  const CustomAppBar({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +23,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           elevation: 0,
           leading: Navigator.canPop(context)
               ? Padding(
-                  padding: EdgeInsets.only(top: 18),
+                  padding: const EdgeInsets.only(top: 18),
                   child: IconButton(
-                    icon: Icon(Icons.arrow_back_ios_new,
+                    icon: const Icon(Icons.arrow_back_ios_new,
                         color: Color.fromARGB(255, 29, 20, 118)),
                     iconSize: 26,
                     onPressed: () => Navigator.of(context).pop(),
                   ))
               : (title == 'ShotSense')
                   ? Container(
-                      padding: EdgeInsets.only(top: 18, left: 20),
+                      padding: const EdgeInsets.only(top: 18, left: 20),
                       child: Image.asset(
                         'assets/images/ShotSense-logo.png', // Replace with your image path
                         width: 16,
@@ -40,7 +40,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ))
                   : null,
           title: Padding(
-            padding: EdgeInsets.only(top: 20),
+            padding: const EdgeInsets.only(top: 20),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: Navigator.canPop(context)
@@ -48,7 +48,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   : MainAxisAlignment.start,
               children: [
                 ShaderMask(
-                  shaderCallback: (bounds) => LinearGradient(
+                  shaderCallback: (bounds) => const LinearGradient(
                     colors: [
                       Color.fromARGB(208, 237, 36, 126),
                       Color.fromARGB(205, 34, 29, 85),
@@ -72,5 +72,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(70);
+  Size get preferredSize => const Size.fromHeight(70);
 }
