@@ -1,17 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shotsense/screens/singleBall.dart';
-import 'package:shotsense/widgets/bottom_navigation.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
 
-class ShotScreen extends StatelessWidget {
+class ShotScreen extends StatefulWidget {
   const ShotScreen({Key? key}) : super(key: key);
   static const routeName = '/shots';
 
   @override
+  _ShotScreenState createState() => _ShotScreenState();
+}
+
+class _ShotScreenState extends State<ShotScreen> {
+  String selectedShotType = 'Cover Drive';
+
+  List<String> shotTypes = [
+    'Cover Drive',
+    'Straight',
+    'Defence',
+    'Hook',
+    'Pull',
+    'Cut',
+    'Sweep',
+    'Flick',
+  ];
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(title: "Shots"),
+        appBar: const CustomAppBar(title: "Shots"),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -21,17 +38,23 @@ class ShotScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Cover Drive',
-                        style: Theme.of(context).textTheme.headline6!.copyWith(
-                              // color: Colors.white,
-                              fontSize: 26,
-                              fontFamily: 'Roboto',
-                              fontWeight: FontWeight.bold,
-                            )),
-                    FaIcon(FontAwesomeIcons.filter, size: 22),
+                    Text(
+                      selectedShotType,
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w900,
+                        color: const Color.fromARGB(255, 38, 5, 116),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _showShotTypeDropdown(context);
+                      },
+                      child: const FaIcon(FontAwesomeIcons.filter, size: 22),
+                    ),
                   ],
                 ),
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
                 Column(
                   children: [
                     Container(
@@ -41,7 +64,7 @@ class ShotScreen extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          SizedBox(height: 15.0),
+                          const SizedBox(height: 15.0),
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.white),
@@ -51,7 +74,7 @@ class ShotScreen extends StatelessWidget {
                                   color: Colors.black.withOpacity(0.2),
                                   spreadRadius: 2,
                                   blurRadius: 10,
-                                  offset: Offset(0, 2),
+                                  offset: const Offset(0, 2),
                                 ),
                               ],
                               color: Colors.white,
@@ -73,11 +96,11 @@ class ShotScreen extends StatelessWidget {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              title: Text('11-04-22'),
-                              subtitle: Text('0:13'),
+                              title: const Text('11-04-22'),
+                              subtitle: const Text('0:13'),
                             ),
                           ),
-                          SizedBox(height: 15.0),
+                          const SizedBox(height: 15.0),
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.white),
@@ -87,7 +110,7 @@ class ShotScreen extends StatelessWidget {
                                   color: Colors.black.withOpacity(0.2),
                                   spreadRadius: 2,
                                   blurRadius: 10,
-                                  offset: Offset(0, 2),
+                                  offset: const Offset(0, 2),
                                 ),
                               ],
                               color: Colors.white,
@@ -102,11 +125,11 @@ class ShotScreen extends StatelessWidget {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              title: Text('11-04-22'),
-                              subtitle: Text('0:15'),
+                              title: const Text('11-04-22'),
+                              subtitle: const Text('0:15'),
                             ),
                           ),
-                          SizedBox(height: 15.0),
+                          const SizedBox(height: 15.0),
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.white),
@@ -116,7 +139,7 @@ class ShotScreen extends StatelessWidget {
                                   color: Colors.black.withOpacity(0.2),
                                   spreadRadius: 2,
                                   blurRadius: 10,
-                                  offset: Offset(0, 2),
+                                  offset: const Offset(0, 2),
                                 ),
                               ],
                               color: Colors.white,
@@ -131,11 +154,11 @@ class ShotScreen extends StatelessWidget {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              title: Text('08-04-22'),
-                              subtitle: Text('0:06'),
+                              title: const Text('08-04-22'),
+                              subtitle: const Text('0:06'),
                             ),
                           ),
-                          SizedBox(height: 15.0),
+                          const SizedBox(height: 15.0),
                         ],
                       ),
                     ),
@@ -144,6 +167,56 @@ class ShotScreen extends StatelessWidget {
               ],
             ),
           ),
-        ));
+        )
+    );
+  }
+  void _showShotTypeDropdown(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+      ),
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Select Shot Type',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 12.0),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: shotTypes.length,
+                    itemBuilder: (context, index) => ListTile(
+                      title: Text(
+                        shotTypes[index],
+                        style: const TextStyle(fontSize: 16.0),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          selectedShotType = shotTypes[index];
+                        });
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }
+
+
