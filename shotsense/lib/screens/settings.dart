@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shotsense/services/flutter-firebase-auth.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
@@ -18,10 +17,14 @@ class SettingsPage extends StatelessWidget {
       appBar: CustomAppBar(title: "Settings"),
       body: Center(
         child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: const Color.fromARGB(255, 38, 5, 116),
+            textStyle: const TextStyle(fontSize: 20),
+          ),
           onPressed: () {
             signout(context);
           },
-          child: const Text('Signout'),
+          child: const Text('Sign Out', style: TextStyle(fontSize: 15, color: Colors.white)),
         ),
       ),
     );

@@ -4,7 +4,6 @@ import 'package:shotsense/screens/homepage.dart';
 import 'package:shotsense/screens/sessions.dart';
 import 'package:shotsense/screens/shots.dart';
 import 'package:shotsense/screens/settings.dart';
-import 'package:shotsense/screens/shots.dart';
 
 void main() => runApp(const BottomNavigationBarExampleApp());
 
