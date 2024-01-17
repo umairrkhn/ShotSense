@@ -1,16 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shotsense/screens/sessionDetail.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
 
 class SessionPage extends StatefulWidget {
-  const SessionPage({Key? key}) : super(key: key);
+  SessionPage({Key? key}) : super(key: key);
   static const routeName = '/sessions';
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController sessionName = TextEditingController();
 
   @override
   _SessionPageState createState() => _SessionPageState();
 }
 
 class _SessionPageState extends State<SessionPage> {
+
+  User? user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +34,45 @@ class _SessionPageState extends State<SessionPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Create New Session'),
+                        content: TextField(
+                          controller: widget.sessionName,
+                          decoration: const InputDecoration(
+                            hintText: 'Enter Session Name',
+                          ),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              widget.sessionName.clear();
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              widget._firestore.collection('sessions').add({
+                                'sessionName': widget.sessionName.text,
+                                'userId': widget._auth.currentUser!.uid,
+                                'createdAt': Timestamp.now(),
+                                'balls': [],
+                                'completed': false,
+                              });
+                              widget.sessionName.clear();
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Create'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xff221D55),
                   shape: RoundedRectangleBorder(
