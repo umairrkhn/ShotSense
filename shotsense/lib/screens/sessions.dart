@@ -149,30 +149,27 @@ class _SessionPageState extends State<SessionPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Column(
-                            children: Sessions.length >= 0
-                                ? Sessions.map((Session) {
-                                    return smallCard(
-                                      name: Session.name,
-                                      date: DateFormat('d MMM y')
-                                          .format(Session.createdAt.toDate()),
-                                      sessionId: Session.id,
-                                    );
-                                  }).toList()
-                                : [
-                                    Container(
-                                      child: Text("No sesion Added"),
-                                    )
-                                  ],
+                            children: Sessions.map((Session) {
+                              if (Session.completed == false) {
+                                return smallCard(
+                                  name: Session.name,
+                                  date: DateFormat('d MMM y')
+                                      .format(Session.createdAt.toDate()),
+                                  sessionId: Session.id,
+                                );
+                              } else {
+                                return Container();
+                              }
+                            }).toList(),
                           ),
-                          if (_previousSessionsExist == true)
-                            const Padding(
-                              padding: EdgeInsets.all(5.0),
-                              child: Text("Previous Sessions",
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 79, 79, 79))),
-                            ),
+                          const Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: Text("Previous Sessions",
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(255, 79, 79, 79))),
+                          ),
                           Column(
                             children: Sessions.map((Session) {
                               if (Session.completed == true) {

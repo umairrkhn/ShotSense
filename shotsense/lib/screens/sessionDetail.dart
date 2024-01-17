@@ -65,6 +65,13 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         .update(updatedData);
   }
 
+  Future<void> deleteSession(String sessionId) async {
+    await FirebaseFirestore.instance
+        .collection('sessions')
+        .doc(sessionId)
+        .delete();
+  }
+
   Future<void> _recordVideo() async {
     final pickedFile = await _imagePicker.pickVideo(source: ImageSource.camera);
     if (pickedFile != null) {
@@ -272,6 +279,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                       isCompleted = true;
                     });
                     updateSession(widget.sessionID, {'completed': true});
+                    Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xff221D55),
@@ -291,7 +299,32 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                     ),
                   ),
                 )
-              : Container()),
+              : ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      isCompleted = true;
+                    });
+                    deleteSession(widget.sessionID);
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 165, 17, 0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                    child: Text(
+                      'Delete Session',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                )),
     );
   }
 
