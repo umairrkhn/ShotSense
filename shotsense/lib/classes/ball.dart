@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ball{
+class ball {
   late String sessionID;
   late String userID;
   late String URI;
@@ -13,8 +13,8 @@ class ball{
     required this.prediction,
   });
 
-  Map<String, dynamic> toMap(){
-    return{
+  Map<String, dynamic> toMap() {
+    return {
       'sessionID': sessionID,
       'userID': userID,
       'URI': URI,
@@ -22,12 +22,21 @@ class ball{
     };
   }
 
-  factory ball.fromMap(Map<String, dynamic> map){
+  factory ball.fromMap(Map<String, dynamic> map) {
     return ball(
       sessionID: map['sessionID'],
       userID: map['userID'],
       URI: map['URI'],
       prediction: map['prediction'],
+    );
+  }
+
+  static fromJson(item) {
+    return ball(
+      sessionID: item['sessionID'],
+      userID: item['userID'],
+      URI: item['URI'],
+      prediction: item['prediction'],
     );
   }
 }

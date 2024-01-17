@@ -4,6 +4,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shotsense/screens/sessionDetail.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shotsense/widgets/small_card.dart';
+import 'package:shotsense/classes/session.dart';
+import 'package:shotsense/classes/ball.dart';
+import 'package:intl/intl.dart';
 
 class SessionPage extends StatefulWidget {
   SessionPage({Key? key}) : super(key: key);
@@ -17,9 +22,11 @@ class SessionPage extends StatefulWidget {
 }
 
 class _SessionPageState extends State<SessionPage> {
-
   User? user = FirebaseAuth.instance.currentUser;
+  bool _previousSessionsExist = false;
 
+  final CollectionReference _sessions =
+      FirebaseFirestore.instance.collection('sessions');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +92,8 @@ class _SessionPageState extends State<SessionPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.add_box_rounded, size: 25, color: Colors.white),
+                      Icon(Icons.add_box_rounded,
+                          size: 25, color: Colors.white),
                       SizedBox(width: 4.0),
                       Text(
                         'Create New Session',
@@ -109,225 +117,65 @@ class _SessionPageState extends State<SessionPage> {
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 79, 79, 79))),
               ),
-              Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 15.0),
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(8.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                            color: Colors.white,
+              StreamBuilder(
+                  stream: _sessions.snapshots(),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+
+                    List<session> Sessions = snapshot.data!.docs.map((doc) {
+                      List<ball> ballsList = List<ball>.from(
+                          doc["balls"].map((item) => ball.fromJson(item)));
+                      return session(
+                          name: doc['name'],
+                          userID: doc['userId'],
+                          createdAt: doc['createdAt'],
+                          completed: doc['completed'],
+                          balls: ballsList);
+                    }).toList();
+
+                    return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            children: Sessions.map((Session) {
+                              return smallCard(
+                                name: Session.name,
+                                date: DateFormat('d MMM y')
+                                    .format(Session.createdAt.toDate()),
+                              );
+                            }).toList(),
                           ),
-                          child: ListTile(
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(
-                                builder: (context) {
-                                  return const SessionDetailScreen();
-                                },
-                              ));
-                            },
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.asset(
-                                'assets/images/ShotSense-logo.png',
-                                width: 80,
-                                height: 45,
-                                fit: BoxFit.cover,
-                              ),
+                          if (_previousSessionsExist == true)
+                            const Padding(
+                              padding: EdgeInsets.all(5.0),
+                              child: Text("Previous Sessions",
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 79, 79, 79))),
                             ),
-                            title: const Text('Batting Training'),
-                            subtitle: const Text('8th Dec 2023'),
+                          Column(
+                            children: Sessions.map((Session) {
+                              if (Session.completed == true) {
+                                _previousSessionsExist = true;
+                                return smallCard(
+                                  name: Session.name,
+                                  date: DateFormat('d MMM y')
+                                      .format(Session.createdAt.toDate()),
+                                );
+                              } else {
+                                return Container();
+                              }
+                            }).toList(),
                           ),
-                        ),
-                        const SizedBox(height: 15.0),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const Padding(
-                padding: EdgeInsets.all(5.0),
-                child: Text("Previous Sessions",
-                    style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 79, 79, 79))
-                ),
-              ),
-              Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(8.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                            color: Colors.white,
-                          ),
-                          child: ListTile(
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.asset(
-                                'assets/images/ShotSense-logo.png',
-                                width: 80,
-                                height: 45,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            title: const Text('Session 1'),
-                            subtitle: const Text('2nd Nov 2023'),
-                          ),
-                        ),
-                        const SizedBox(height: 15.0),
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(8.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                            color: Colors.white,
-                          ),
-                          child: ListTile(
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.asset(
-                                'assets/images/ShotSense-logo.png',
-                                width: 80,
-                                height: 45,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            title: const Text('Session 2'),
-                            subtitle: const Text('10th Nov 2023'),
-                          ),
-                        ),
-                        const SizedBox(height: 15.0),
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(8.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                            color: Colors.white,
-                          ),
-                          child: ListTile(
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.asset(
-                                'assets/images/ShotSense-logo.png',
-                                width: 80,
-                                height: 45,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            title: const Text('Session 3'),
-                            subtitle: const Text('4th Dec 2023'),
-                          ),
-                        ),
-                        const SizedBox(height: 15.0),
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(8.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                            color: Colors.white,
-                          ),
-                          child: ListTile(
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.asset(
-                                'assets/images/ShotSense-logo.png',
-                                width: 80,
-                                height: 45,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            title: const Text('Session 4'),
-                            subtitle: const Text('8th Dec 2023'),
-                          ),
-                        ),
-                        const SizedBox(height: 15.0),
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(8.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                            color: Colors.white,
-                          ),
-                          child: ListTile(
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.asset(
-                                'assets/images/ShotSense-logo.png',
-                                width: 80,
-                                height: 45,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            title: const Text('Session 5'),
-                            subtitle: const Text('12th Dec 2023'),
-                          ),
-                        ),
-                        const SizedBox(height: 15.0),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                        ]);
+                  }),
             ],
           ),
         ),
