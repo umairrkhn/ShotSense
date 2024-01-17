@@ -67,6 +67,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '623073582912',
     projectId: 'shotsense-f8806',
     storageBucket: 'shotsense-f8806.appspot.com',
+    androidClientId: '623073582912-lp1vbtu8j8apgdf6snho3ca2jdh6utot.apps.googleusercontent.com',
     iosClientId: '623073582912-180p75sa4h2fi3vkvp3p05jm5oje7sua.apps.googleusercontent.com',
     iosBundleId: 'com.example.shotsense',
   );
@@ -77,6 +78,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '623073582912',
     projectId: 'shotsense-f8806',
     storageBucket: 'shotsense-f8806.appspot.com',
+    androidClientId: '623073582912-lp1vbtu8j8apgdf6snho3ca2jdh6utot.apps.googleusercontent.com',
     iosClientId: '623073582912-ru7d0hrmbcbv722o8gjak3b33u589qgq.apps.googleusercontent.com',
     iosBundleId: 'com.example.shotsense.RunnerTests',
   );

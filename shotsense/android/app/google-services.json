@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "623073582912-lp1vbtu8j8apgdf6snho3ca2jdh6utot.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.shotsense",
+            "certificate_hash": "f1606da1d561d243640656abb58b928434cb73bf"
+          }
+        },
+        {
           "client_id": "623073582912-pumou40l78ln4golff96q74ontvku1o4.apps.googleusercontent.com",
           "client_type": 3
         }
