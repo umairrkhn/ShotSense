@@ -73,11 +73,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyDTBaUaRtrzjuARON6OmKqz3FWAdihDrg0',
-    appId: '1:623073582912:ios:8b56567084d4af8aec24a5',
+    appId: '1:623073582912:ios:cba4e53cd29fd357ec24a5',
     messagingSenderId: '623073582912',
     projectId: 'shotsense-f8806',
     storageBucket: 'shotsense-f8806.appspot.com',
-    iosClientId: '623073582912-180p75sa4h2fi3vkvp3p05jm5oje7sua.apps.googleusercontent.com',
-    iosBundleId: 'com.example.shotsense',
+    iosClientId: '623073582912-ru7d0hrmbcbv722o8gjak3b33u589qgq.apps.googleusercontent.com',
+    iosBundleId: 'com.example.shotsense.RunnerTests',
   );
 }

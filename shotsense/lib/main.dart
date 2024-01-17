@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         routes: {
           SettingsPage.routeName: (context) => const SettingsPage(),
           ShotScreen.routeName: (context) => const ShotScreen(),
-          SignUpScreen.routeName: (context) => SignUpScreen(),
+          SignUpScreen.routeName: (context) => const SignUpScreen(),
         },
       ),
     );

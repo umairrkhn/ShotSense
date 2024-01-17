@@ -1,8 +1,40 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_appBar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomePage extends StatefulWidget {
+  HomePage({Key? key}) : super(key: key);
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final CollectionReference users = FirebaseFirestore.instance.collection('users');
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  late User? user;
+  String? displayName;
+
+  @override
+  void initState() {
+    super.initState();
+    user = _auth.currentUser;
+    if (user != null) {
+      fetchDisplayName();
+    }
+  }
+
+  Future<void> fetchDisplayName() async {
+    try {
+      DocumentSnapshot userDoc = await users.doc(user!.uid).get();
+      setState(() {
+        displayName = userDoc['displayName'];
+      });
+    } catch (e) {
+      print('Error fetching display name: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,17 +60,19 @@ class HomePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         const SizedBox(height: 15.0),
-                        const Text("Welcome Back, Fahad!",
-                            style: TextStyle(
+                        Text("Welcome Back, $displayName!",
+                            style: const TextStyle(
                                 fontSize: 35,
                                 fontWeight: FontWeight.w900,
-                                color: Color(0xff221D55))),
+                                color: Color(0xff221D55))
+                        ),
                         const SizedBox(height: 15.0),
                         const Text("Overall Stats",
                             style: TextStyle(
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 79, 79, 79))),
+                                color: Color.fromARGB(255, 79, 79, 79))
+                        ),
                         const SizedBox(height: 15.0),
                         Container(
                           decoration: BoxDecoration(
@@ -209,6 +243,7 @@ class HomePage extends StatelessWidget {
               ),
             ],
           ),
-        )));
+        ))
+    );
   }
 }

@@ -16,13 +16,22 @@ class EmailPasswordLogin extends StatefulWidget {
 class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool isLoading = false; // Flag to track loading state
 
-  void loginUser() {
-    context.read<FirebaseAuthMethods>().loginWithEmail(
+  void loginUser() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    await context.read<FirebaseAuthMethods>().loginWithEmail(
       email: emailController.text,
       password: passwordController.text,
       context: context,
     );
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void navigateToSignUp() {
@@ -64,8 +73,10 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                 ),
               ),
               SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: loginUser,
+              isLoading
+                  ? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 38, 5, 116),),)
+                  : ElevatedButton(
+                onPressed: isLoading ? null : loginUser,
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
                     Color.fromARGB(255, 38, 5, 116),
