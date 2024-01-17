@@ -23,6 +23,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late String sessionName = '';
   late Timestamp sessionDate = Timestamp.now();
+  late bool isCompleted = false;
   File? _video;
   final ImagePicker _imagePicker = ImagePicker();
   final List<VideoPlayerController> _videoPlayerControllers = [];
@@ -47,11 +48,21 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
               (sessionSnapshot.data() as Map<String, dynamic>)['name'];
           sessionDate = (sessionSnapshot.data()
               as Map<String, dynamic>)['createdAt'] as Timestamp;
+          isCompleted = (sessionSnapshot.data()
+              as Map<String, dynamic>)['completed'] as bool;
         });
       }
     } catch (e) {
       print('Error fetching session data: $e');
     }
+  }
+
+  Future<void> updateSession(
+      String sessionId, Map<String, dynamic> updatedData) async {
+    await FirebaseFirestore.instance
+        .collection('sessions')
+        .doc(sessionId)
+        .update(updatedData);
   }
 
   Future<void> _recordVideo() async {
@@ -253,30 +264,34 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         ),
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xff221D55),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-          ),
-          child: const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-            child: Text(
-              'Finish Session',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
-      ),
+          padding: const EdgeInsets.all(16.0),
+          child: (isCompleted == false)
+              ? ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      isCompleted = true;
+                    });
+                    updateSession(widget.sessionID, {'completed': true});
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff221D55),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                    child: Text(
+                      'Finish Session',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                )
+              : Container()),
     );
   }
 
@@ -344,14 +359,16 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   ),
                   const Icon(Icons.arrow_drop_down_rounded, size: 50),
                   const SizedBox(width: 200),
-                  GestureDetector(
-                    onTap: () => _showImagePickerBottomSheet(),
-                    child: const Icon(
-                      Icons.add_circle,
-                      size: 35,
-                      color: Color.fromARGB(255, 11, 51, 84),
-                    ),
-                  ),
+                  isCompleted
+                      ? Container()
+                      : GestureDetector(
+                          onTap: () => _showImagePickerBottomSheet(),
+                          child: const Icon(
+                            Icons.add_circle,
+                            size: 35,
+                            color: Color.fromARGB(255, 11, 51, 84),
+                          ),
+                        ),
                 ],
               ),
             ),
