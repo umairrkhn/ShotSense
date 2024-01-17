@@ -20,6 +20,7 @@ class smallCard extends StatefulWidget {
 }
 
 class _smallCardState extends State<smallCard> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
