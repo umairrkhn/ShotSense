@@ -19,11 +19,11 @@ class SessionDetailScreen extends StatefulWidget {
 class _SessionDetailScreenState extends State<SessionDetailScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  late String sessionName;
-  late Timestamp sessionDate;
+  String sessionName = '';
+  Timestamp sessionDate = Timestamp.now();
   File? _video;
   final ImagePicker _imagePicker = ImagePicker();
-  List<VideoPlayerController> _videoPlayerControllers = [];
+  final List<VideoPlayerController> _videoPlayerControllers = [];
 
   Future<void> fetchSessionData() async {
     try {
