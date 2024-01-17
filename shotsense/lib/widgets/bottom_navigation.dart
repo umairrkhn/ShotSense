@@ -32,7 +32,7 @@ class _BottomNavigationBarExampleState
 
   static final List<Widget> _widgetOptions = <Widget>[
     HomePage(),
-    const SessionPage(),
+    SessionPage(),
     const ShotScreen(),
     const SettingsPage(),
   ];
