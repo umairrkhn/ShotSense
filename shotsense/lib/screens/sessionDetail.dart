@@ -6,10 +6,12 @@ import 'package:shotsense/widgets/custom_appBar.dart';
 import 'dart:io';
 import 'package:video_player/video_player.dart';
 import 'package:shotsense/classes/session.dart';
+import 'package:intl/intl.dart';
 
 class SessionDetailScreen extends StatefulWidget {
   final String sessionID;
-  const SessionDetailScreen({Key? key, required this.sessionID}) : super(key: key);
+  const SessionDetailScreen({Key? key, required this.sessionID})
+      : super(key: key);
   static const routeName = '/sessionDetail';
 
   @override
@@ -19,27 +21,32 @@ class SessionDetailScreen extends StatefulWidget {
 class _SessionDetailScreenState extends State<SessionDetailScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  late String sessionName;
-  late Timestamp sessionDate;
+  late String sessionName = '';
+  late Timestamp sessionDate = Timestamp.now();
   File? _video;
   final ImagePicker _imagePicker = ImagePicker();
   List<VideoPlayerController> _videoPlayerControllers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchSessionData();
+  }
 
   Future<void> fetchSessionData() async {
     try {
       User? user = _auth.currentUser;
 
       if (user != null) {
-        DocumentSnapshot sessionSnapshot = await _firestore
-            .collection('sessions')
-            .doc(widget.sessionID)
-            .get();
+        DocumentSnapshot sessionSnapshot =
+            await _firestore.collection('sessions').doc(widget.sessionID).get();
 
-        session sessionData = session.fromMap(sessionSnapshot.data() as Map<String, dynamic>);
-
+        // print((sessionSnapshot.data() as Map<String, dynamic>)['name']);
         setState(() {
-          sessionName = sessionData.name;
-          sessionDate = sessionData.createdAt;
+          sessionName =
+              (sessionSnapshot.data() as Map<String, dynamic>)['name'];
+          sessionDate = (sessionSnapshot.data()
+              as Map<String, dynamic>)['createdAt'] as Timestamp;
         });
       }
     } catch (e) {
@@ -210,8 +217,8 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                 color: Colors.white,
               ),
               child: ListTile(
-                contentPadding:
-                    const EdgeInsets.only(top: 6, bottom: 0, left: 20, right: 20),
+                contentPadding: const EdgeInsets.only(
+                    top: 6, bottom: 0, left: 20, right: 20),
                 title: Text(
                   sessionName,
                   style: const TextStyle(
@@ -221,7 +228,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   ),
                 ),
                 subtitle: Text(
-                  sessionDate.toString(),
+                  DateFormat('d MMM y').format(sessionDate.toDate()),
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
@@ -250,7 +257,6 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         child: ElevatedButton(
           onPressed: () {
             Navigator.pop(context);
-
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xff221D55),
