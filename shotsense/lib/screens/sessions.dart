@@ -57,11 +57,11 @@ class _SessionPageState extends State<SessionPage> {
                           TextButton(
                             onPressed: () {
                               widget._firestore.collection('sessions').add({
-                                'sessionName': widget.sessionName.text,
+                                'name': widget.sessionName.text,
                                 'userId': widget._auth.currentUser!.uid,
                                 'createdAt': Timestamp.now(),
-                                'balls': [],
                                 'completed': false,
+                                'balls': [],
                               });
                               widget.sessionName.clear();
                               Navigator.pop(context);
@@ -166,7 +166,8 @@ class _SessionPageState extends State<SessionPage> {
                     style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 79, 79, 79))),
+                        color: Color.fromARGB(255, 79, 79, 79))
+                ),
               ),
               Column(
                 children: [

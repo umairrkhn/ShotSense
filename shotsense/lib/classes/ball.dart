@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ball {
+class ball{
   late String sessionID;
   late String userID;
   late String URI;
