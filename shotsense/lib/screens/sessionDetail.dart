@@ -25,7 +25,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   late Timestamp sessionDate = Timestamp.now();
   File? _video;
   final ImagePicker _imagePicker = ImagePicker();
-  List<VideoPlayerController> _videoPlayerControllers = [];
+  final List<VideoPlayerController> _videoPlayerControllers = [];
 
   @override
   void initState() {
