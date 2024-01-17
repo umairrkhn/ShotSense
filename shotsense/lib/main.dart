@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:shotsense/screens/sessionDetail.dart';
 import 'package:shotsense/services/flutter-firebase-auth.dart';
 import 'package:shotsense/screens/settings.dart';
 import 'package:shotsense/widgets/bottom_navigation.dart';

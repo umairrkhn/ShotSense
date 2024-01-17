@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shotsense/services/flutter-firebase-auth.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
@@ -17,12 +16,12 @@ class SingleBallPage extends StatelessWidget {
     return Scaffold(
         appBar: CustomAppBar(title: "Ball 1/6"),
         body: Container(
-            padding: EdgeInsets.all(16.0),
-            color: Color(0xFFF5F5F5),
+            padding: const EdgeInsets.all(16.0),
+            color: const Color(0xFFF5F5F5),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 15.0),
+                  const SizedBox(height: 15.0),
                   Container(
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.white),
@@ -32,7 +31,7 @@ class SingleBallPage extends StatelessWidget {
                             color: Colors.black.withOpacity(0.15),
                             spreadRadius: 1,
                             blurRadius: 8,
-                            offset: Offset(0, 2),
+                            offset: const Offset(0, 2),
                           ),
                         ],
                         color: Colors.white,
@@ -73,10 +72,10 @@ class SingleBallPage extends StatelessWidget {
                           ],
                         ),
                       )),
-                  SizedBox(height: 15.0),
+                  const SizedBox(height: 15.0),
                   Container(
                       height: 200,
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.white),
                         borderRadius: BorderRadius.circular(20.0),
@@ -85,7 +84,7 @@ class SingleBallPage extends StatelessWidget {
                             color: Colors.black.withOpacity(0.15),
                             spreadRadius: 1,
                             blurRadius: 8,
-                            offset: Offset(0, 2),
+                            offset: const Offset(0, 2),
                           ),
                         ],
                         color: Colors.white,
@@ -99,7 +98,7 @@ class SingleBallPage extends StatelessWidget {
                               color: Colors.black.withOpacity(0.15),
                               spreadRadius: 1,
                               blurRadius: 8,
-                              offset: Offset(0, 2),
+                              offset: const Offset(0, 2),
                             ),
                           ],
                           color: Colors.white,
@@ -112,7 +111,7 @@ class SingleBallPage extends StatelessWidget {
                           ),
                         ),
                       )),
-                  SizedBox(height: 15.0),
+                  const SizedBox(height: 15.0),
                   Container(
                       child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -129,7 +128,7 @@ class SingleBallPage extends StatelessWidget {
                                 color: Colors.black.withOpacity(0.15),
                                 spreadRadius: 1,
                                 blurRadius: 8,
-                                offset: Offset(0, 2),
+                                offset: const Offset(0, 2),
                               ),
                             ],
                             color: Colors.white,
@@ -170,7 +169,7 @@ class SingleBallPage extends StatelessWidget {
                                 color: Colors.black.withOpacity(0.15),
                                 spreadRadius: 1,
                                 blurRadius: 8,
-                                offset: Offset(0, 2),
+                                offset: const Offset(0, 2),
                               ),
                             ],
                             color: Colors.white,

@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shotsense/services/flutter-firebase-auth.dart';
 import 'package:shotsense/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shotsense/screens/signup.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_button/sign_in_button.dart';
 
 class EmailPasswordLogin extends StatefulWidget {
   static String routeName = '/login-email-password';
@@ -14,6 +18,10 @@ class EmailPasswordLogin extends StatefulWidget {
 }
 
 class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
+  final _firestore = FirebaseFirestore.instance;
+  final _auth = FirebaseAuth.instance;
+  final _googleSignIn = GoogleSignIn();
+
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool isLoading = false; // Flag to track loading state
@@ -38,6 +46,84 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
     Navigator.pushNamed(context, SignUpScreen.routeName);
   }
 
+  Future<void> googleSignIn() async {
+    try {
+      if (!mounted) {
+        // Check if the widget is still mounted before proceeding
+        return;
+      }
+
+      setState(() {
+        isLoading = true;
+      });
+
+      GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
+      if (googleSignInAccount == null || !mounted) {
+        setState(() {
+          isLoading = false;
+        });
+        return;
+      }
+
+      GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+
+      OAuthCredential googleAuthCredential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      UserCredential userCredential = await _auth.signInWithCredential(googleAuthCredential);
+
+      User? user = userCredential.user;
+
+      if (user != null && mounted) {
+        try {
+          var userSnapshot = await _firestore.collection('users').doc(user.uid).get();
+          if (!userSnapshot.exists) {
+            await _firestore.collection('users').doc(user.uid).set({
+              'email': user.email,
+              'name': user.displayName,
+              'photoUrl': user.photoURL,
+              'createdAt': FieldValue.serverTimestamp(),
+            });
+            Navigator.pop(context);
+          }
+        } catch (e) {
+          // Handle Firestore write errors
+          print('Error during Firestore write: $e');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error during Firestore write: $e', style: const TextStyle(fontSize: 14, color: Colors.white)),
+              backgroundColor: const Color.fromARGB(255, 38, 5, 116),
+            ),
+          );
+        }
+      } else {
+        print('Error during sign in: User object is null or widget is not mounted.');
+      }
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error during sign in: $e', style: const TextStyle(fontSize: 14, color: Colors.white)),
+          backgroundColor: const Color.fromARGB(255, 38, 5, 116),
+        ),
+      );
+      print('Error during sign in: $e');
+    } finally {
+      if (mounted) {
+        // Check if the widget is still mounted before calling setState
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +140,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                   width: MediaQuery.of(context).size.width * 0.5,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: CustomTextField(
@@ -63,7 +149,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                   visible: false,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: CustomTextField(
@@ -72,26 +158,26 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                   visible: true,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               isLoading
-                  ? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 38, 5, 116),),)
+                  ? const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 38, 5, 116),),)
                   : ElevatedButton(
                 onPressed: isLoading ? null : loginUser,
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
-                    Color.fromARGB(255, 38, 5, 116),
+                    const Color.fromARGB(255, 38, 5, 116),
                   ),
                   textStyle: MaterialStateProperty.all(
-                    TextStyle(color: Colors.white),
+                    const TextStyle(color: Colors.white),
                   ),
                 ),
-                child: Text('Log In', style: TextStyle(fontSize: 14)),
+                child: const Text('Log In', style: TextStyle(fontSize: 14)),
               ),
-              SizedBox(height: 20),
-              Row(
+              const SizedBox(height: 15),
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 150,
                     child: Divider(
                       color: Colors.grey,
@@ -101,7 +187,7 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                   SizedBox(width: 8),
                   Text('OR', style: TextStyle(color: Colors.grey, fontSize: 12)),
                   SizedBox(width: 8),
-                  Container(
+                  SizedBox(
                     width: 150,
                     child: Divider(
                       color: Colors.grey,
@@ -110,14 +196,22 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 15),
+              SignInButton(
+                Buttons.google,
+                text: "Log In with Google",
+                onPressed: googleSignIn,
+                elevation: 2,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              const SizedBox(height: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Don\'t have an account? '),
+                  const Text('Don\'t have an account? '),
                   GestureDetector(
                     onTap: navigateToSignUp,
-                    child: Text(
+                    child: const Text(
                       "Sign Up",
                       style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
                     ),
