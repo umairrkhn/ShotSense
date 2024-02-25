@@ -121,16 +121,16 @@ class SingleBallPage extends StatelessWidget {
 
   Widget _buildVideoPlayer() {
     final VideoPlayerController videoPlayerController =
-    VideoPlayerController.asset(
+        VideoPlayerController.asset(
       'assets/videos/pull_04.mp4',
       package: 'video_player',
     );
 
     final ChewieController chewieController = ChewieController(
       videoPlayerController: videoPlayerController,
-      aspectRatio: 3 / 2, // Adjust as needed
-      autoPlay: true,
-      looping: true,
+      aspectRatio: 3 / 2,
+      // autoPlay: true,
+      // looping: true,
       autoInitialize: true,
       errorBuilder: (context, errorMessage) {
         return Center(
