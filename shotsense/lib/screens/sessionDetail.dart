@@ -208,9 +208,13 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       },
     );
   }
-
+var height;
+var width;
   @override
   Widget build(BuildContext context) {
+    height=MediaQuery.of(context).size.height;
+    width=MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: const CustomAppBar(title: "Session Details"),
       body: Container(
@@ -239,8 +243,8 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                     top: 6, bottom: 0, left: 20, right: 20),
                 title: Text(
                   sessionName,
-                  style: const TextStyle(
-                    fontSize: 25,
+                  style:  TextStyle(
+                    fontSize: height*0.03,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),

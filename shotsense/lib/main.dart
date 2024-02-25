@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Shot Sense',
         theme: ThemeData(
           primarySwatch: Colors.blue,
