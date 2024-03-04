@@ -29,7 +29,7 @@ def upload_file():
         return jsonify({"message": "File uploaded successfully", "filename": filename})
 
 
-@app.route("/predict", methods=["GET"])
+@app.route("/predict", methods=["POST"])
 def predict():
 
     labels = [
@@ -45,17 +45,21 @@ def predict():
         "sweep",
     ]
 
-    video_path = os.path.join(
-        app.config["UPLOAD_FOLDER"], "uploads\cover_0170_vertical.avi"
-    )
+    file = request.files["file"]
+
+    if file.filename == "":
+        return jsonify({"error": "No selected file"})
+
+    if file:
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
 
     # Define the parameters for FrameGenerator
     frames = VideoFrameGenerator(
         batch_size=1,
         nb_frames=15,
-        glob_pattern="uploads\sweep_0177_vertical.avi",
+        glob_pattern=f"uploads/{filename}",
     )
-
 
     # Load the model
     model = keras.models.load_model("models/vgg16_gru_model")
