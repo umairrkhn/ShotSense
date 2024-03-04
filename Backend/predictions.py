@@ -32,7 +32,16 @@ def upload_file():
 @app.route("/predict", methods=["POST"])
 def predict():
 
-    labels = ["Cover Drive", "Cut Shot", "Defense", "Flick Shot", "Hook Shot", "Pull Shot", "Straight Drive", "Sweep"]
+    labels = [
+        "Cover Drive",
+        "Cut Shot",
+        "Defense",
+        "Flick Shot",
+        "Hook Shot",
+        "Pull Shot",
+        "Straight Drive",
+        "Sweep",
+    ]
 
     file = request.files["file"]
 
