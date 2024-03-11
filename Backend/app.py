@@ -56,7 +56,7 @@ def predict():
     # Get the name of the predicted label
     predicted_label = labels[predicted_label_index]
 
-    return jsonify({"predictiogn": predicted_label})
+    return jsonify({"prediction": predicted_label})
 
 
 if __name__ == "__main__":
