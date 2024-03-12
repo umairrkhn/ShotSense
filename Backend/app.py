@@ -7,7 +7,7 @@ import numpy as np
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = "/video"
+UPLOAD_FOLDER = "video"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 # Load the model
