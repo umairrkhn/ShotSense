@@ -9,6 +9,7 @@ firebase-debug.*.log*
 
 # Firebase cache
 .firebase/
+.venv
 
 # Firebase config
 
@@ -64,3 +65,6 @@ node_modules/
 
 # dotenv environment variables file
 .env
+./Backend/.venv/pyvenv.cfg
+
+Backend/__pycache__/app.cpython-311.pyc

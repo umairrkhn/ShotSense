@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shotsense/services/predictions.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
 import 'dart:io';
 import 'package:video_player/video_player.dart';
@@ -27,6 +28,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   File? _video;
   final ImagePicker _imagePicker = ImagePicker();
   final List<VideoPlayerController> _videoPlayerControllers = [];
+  late var _prediction = "";
 
   @override
   void initState() {
@@ -96,7 +98,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       }));
   }
 
-  void _showVideoConfirmationDialog() {
+  void _showVideoConfirmationDialog() async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -146,9 +148,18 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   const SizedBox(width: 4),
                   ElevatedButton(
                     onPressed: () {
-                      setState(() {
-                        _videoPlayerControllers.last.pause();
-                      });
+                      // setState(() {
+                      //   _videoPlayerControllers.last.pause();
+                      // });
+                      Future<void> fetchData() async {
+                        String data = await sendFileToServer(
+                            _video!); // This will not cause an error
+                        setState(() {
+                          _prediction = data;
+                        });
+                      }
+
+                      fetchData();
                       Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
@@ -208,12 +219,13 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       },
     );
   }
-var height;
-var width;
+
+  var height;
+  var width;
   @override
   Widget build(BuildContext context) {
-    height=MediaQuery.of(context).size.height;
-    width=MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: const CustomAppBar(title: "Session Details"),
@@ -243,8 +255,8 @@ var width;
                     top: 6, bottom: 0, left: 20, right: 20),
                 title: Text(
                   sessionName,
-                  style:  TextStyle(
-                    fontSize: height*0.03,
+                  style: TextStyle(
+                    fontSize: height * 0.03,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
@@ -457,7 +469,7 @@ var width;
             ),
           ),
         ),
-        const Padding(
+        Padding(
           padding: EdgeInsets.only(left: 20, right: 10, bottom: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -465,7 +477,7 @@ var width;
               SizedBox(
                 width: 280,
                 child: Text(
-                  "Defense Shot",
+                  _prediction, // Removed 'const' keyword
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,

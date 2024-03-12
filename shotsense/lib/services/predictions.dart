@@ -1,21 +1,24 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
-Future<void> sendVideoToServer(String videoFile) async {
-  var file = File(videoFile);
-  if (!file.existsSync()) {
-    print('File does not exist at path: $videoFile');
-    return;
-  }
-  print(videoFile);
-  var request =
-      http.MultipartRequest('POST', Uri.parse('http://127.0.0.1:5000/uploads'));
+Future<String> sendFileToServer(File file) async {
+  var url = Uri.parse('http://10.0.2.2:8000/predict');
+
+  print('File path: ${file.path}');
+  print(file);
+  var request = http.MultipartRequest('POST', url);
   request.files.add(await http.MultipartFile.fromPath('file', file.path));
 
   var response = await request.send();
+  var responseBody = await response.stream.bytesToString();
+  print(jsonDecode(responseBody));
   if (response.statusCode == 200) {
-    print('Video uploaded successfully');
+    print('File uploaded successfully');
   } else {
-    print('Failed to upload video. Error: ${response.reasonPhrase}');
+    print('Error uploading file. Status code: ${response.statusCode}');
   }
+  //add prediction to correct over in firebase
+
+  return jsonDecode(responseBody)['prediction'];
 }
