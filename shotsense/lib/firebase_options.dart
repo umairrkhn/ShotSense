@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,43 +49,20 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyB9qo-RgXdwPHXbxRl93W6CFynbCRiOXok',
-    appId: '1:623073582912:web:ab2e48817961287aec24a5',
-    messagingSenderId: '623073582912',
-    projectId: 'shotsense-f8806',
-    authDomain: 'shotsense-f8806.firebaseapp.com',
-    storageBucket: 'shotsense-f8806.appspot.com',
-    measurementId: 'G-H5JK688WKP',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAv8B8QJgkSkfv0z65w9zenGXzE5Tlkmmw',
-    appId: '1:623073582912:android:10569da00c00b5b5ec24a5',
-    messagingSenderId: '623073582912',
-    projectId: 'shotsense-f8806',
-    storageBucket: 'shotsense-f8806.appspot.com',
+    apiKey: 'AIzaSyAzd8OZeINZ1cMhsGDdMlQJpDZkgQW0z-o',
+    appId: '1:422454591798:android:05d5ed66c28493983e3397',
+    messagingSenderId: '422454591798',
+    projectId: 'shotsense-ai',
+    storageBucket: 'shotsense-ai.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDTBaUaRtrzjuARON6OmKqz3FWAdihDrg0',
-    appId: '1:623073582912:ios:8b56567084d4af8aec24a5',
-    messagingSenderId: '623073582912',
-    projectId: 'shotsense-f8806',
-    storageBucket: 'shotsense-f8806.appspot.com',
-    androidClientId: '623073582912-lp1vbtu8j8apgdf6snho3ca2jdh6utot.apps.googleusercontent.com',
-    iosClientId: '623073582912-180p75sa4h2fi3vkvp3p05jm5oje7sua.apps.googleusercontent.com',
+    apiKey: 'AIzaSyAgumk9rJwBSQN3xfx0Ubwqtdy6QSKGigc',
+    appId: '1:422454591798:ios:b8cf36fdd058f7113e3397',
+    messagingSenderId: '422454591798',
+    projectId: 'shotsense-ai',
+    storageBucket: 'shotsense-ai.appspot.com',
     iosBundleId: 'com.example.shotsense',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDTBaUaRtrzjuARON6OmKqz3FWAdihDrg0',
-    appId: '1:623073582912:ios:cba4e53cd29fd357ec24a5',
-    messagingSenderId: '623073582912',
-    projectId: 'shotsense-f8806',
-    storageBucket: 'shotsense-f8806.appspot.com',
-    androidClientId: '623073582912-lp1vbtu8j8apgdf6snho3ca2jdh6utot.apps.googleusercontent.com',
-    iosClientId: '623073582912-ru7d0hrmbcbv722o8gjak3b33u589qgq.apps.googleusercontent.com',
-    iosBundleId: 'com.example.shotsense.RunnerTests',
   );
 }
