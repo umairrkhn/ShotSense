@@ -1,7 +1,7 @@
 {
   "file_generated_by": "FlutterFire CLI",
   "purpose": "FirebaseAppID & ProjectID for this Firebase app in this directory",
-  "GOOGLE_APP_ID": "1:623073582912:ios:8b56567084d4af8aec24a5",
-  "FIREBASE_PROJECT_ID": "shotsense-f8806",
-  "GCM_SENDER_ID": "623073582912"
+  "GOOGLE_APP_ID": "1:422454591798:ios:b8cf36fdd058f7113e3397",
+  "FIREBASE_PROJECT_ID": "shotsense-ai",
+  "GCM_SENDER_ID": "422454591798"
 }

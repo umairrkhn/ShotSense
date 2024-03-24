@@ -1,51 +1,26 @@
 {
   "project_info": {
-    "project_number": "623073582912",
-    "project_id": "shotsense-f8806",
-    "storage_bucket": "shotsense-f8806.appspot.com"
+    "project_number": "422454591798",
+    "project_id": "shotsense-ai",
+    "storage_bucket": "shotsense-ai.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:623073582912:android:10569da00c00b5b5ec24a5",
+        "mobilesdk_app_id": "1:422454591798:android:05d5ed66c28493983e3397",
         "android_client_info": {
           "package_name": "com.example.shotsense"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "623073582912-lp1vbtu8j8apgdf6snho3ca2jdh6utot.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.shotsense",
-            "certificate_hash": "f1606da1d561d243640656abb58b928434cb73bf"
-          }
-        },
-        {
-          "client_id": "623073582912-pumou40l78ln4golff96q74ontvku1o4.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAv8B8QJgkSkfv0z65w9zenGXzE5Tlkmmw"
+          "current_key": "AIzaSyAzd8OZeINZ1cMhsGDdMlQJpDZkgQW0z-o"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "108762979413888974958",
-              "client_type": 3
-            },
-            {
-              "client_id": "623073582912-180p75sa4h2fi3vkvp3p05jm5oje7sua.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.shotsense"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
