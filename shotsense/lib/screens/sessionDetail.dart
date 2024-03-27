@@ -91,6 +91,9 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
     }
   }
 
+  ///////
+
+////////
   void _initializeAndShowVideoConfirmationDialog() {
     _videoPlayerControllers.add(VideoPlayerController.file(_video!)
       ..initialize().then((_) {
@@ -147,19 +150,124 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   ),
                   const SizedBox(width: 4),
                   ElevatedButton(
-                    onPressed: () {
-                      // setState(() {
-                      //   _videoPlayerControllers.last.pause();
-                      // });
+                    onPressed: () async {
+                      // DocumentReference ballCollection = firestore
+                      //     .collection('sessions')
+                      //     .doc(widget.sessionID)
+                      //     .collection('overs')
+                      //     .doc("4")
+                      //     .collection('balls')
+                      //     .doc("3");
+
+                      // Future<void> fetchData() async {
+                      //   String data = await sendFileToServer(_video!);
+                      //   setState(() {
+                      //     _prediction = data;
+                      //   });
+                      //   Map<String, dynamic> ball = {
+                      //     'prediction': data,
+                      //     'URI': "URL FROM CLOUD STORAGE",
+                      //     'sessionID': widget.sessionID,
+                      //     'userID': _auth.currentUser!.uid
+                      //   };
+                      //   ballCollection.set(ball);
+                      // }
+
                       Future<void> fetchData() async {
-                        String data = await sendFileToServer(
-                            _video!); // This will not cause an error
-                        setState(() {
-                          _prediction = data;
-                        });
+                        FirebaseFirestore firestore =
+                            FirebaseFirestore.instance;
+                        var overSnapshot;
+                        // Step 1: Get the latest over
+                        overSnapshot = await FirebaseFirestore.instance
+                            .collection('sessions')
+                            .doc(widget.sessionID)
+                            .collection('overs')
+                            .get();
+
+                        var latestOverDoc;
+
+                        if (overSnapshot.docs.isNotEmpty) {
+                          print(overSnapshot.docs.last.id);
+                          latestOverDoc = overSnapshot.docs.last;
+                        } else {
+                          Map<String, Object> dummyMap = {'dummy': 'dummy'};
+                          // If the latest over doesn't exist, create a new one
+                          await firestore
+                              .collection('sessions')
+                              .doc(widget.sessionID)
+                              .collection('overs')
+                              .doc("1")
+                              .set(dummyMap);
+                          latestOverDoc = await firestore
+                              .collection('sessions')
+                              .doc(widget.sessionID)
+                              .collection('overs')
+                              .doc("1")
+                              .get();
+                        }
+
+                        // Step 2: Get the latest ball within the latest over
+                        QuerySnapshot ballSnapshot = await firestore
+                            .collection('sessions')
+                            .doc(widget.sessionID)
+                            .collection('overs')
+                            .doc(latestOverDoc.id)
+                            .collection('balls')
+                            .get();
+
+                        int nextBall =
+                            1; // Default value if there are no existing balls
+                        if (ballSnapshot.docs.isNotEmpty) {
+                          // Extract the last ball's ID and increment it
+                          int latestBall = int.parse(ballSnapshot.docs.last.id);
+                          print(latestBall);
+                          nextBall = latestBall + 1;
+                          if (nextBall > 6) {
+                            // If the next ball exceeds 6, increment the over by 1
+                            // and reset the ball count to 1
+                            Map<String, Object> dummyMap = {'dummy': 'dummy'};
+                            await firestore
+                                .collection('sessions')
+                                .doc(widget.sessionID)
+                                .collection('overs')
+                                .doc((int.parse(latestOverDoc.id) + 1)
+                                    .toString())
+                                .set(dummyMap);
+                            latestOverDoc = await firestore
+                                .collection('sessions')
+                                .doc(widget.sessionID)
+                                .collection('overs')
+                                .doc((int.parse(latestOverDoc.id) + 1)
+                                    .toString())
+                                .get();
+                            nextBall = 1;
+                          }
+                        }
+                        print(latestOverDoc.id);
+                        print(nextBall);
+                        // Step 3: Create a new document for the next ball
+                        DocumentReference ballCollection = firestore
+                            .collection('sessions')
+                            .doc(widget.sessionID)
+                            .collection('overs')
+                            .doc(latestOverDoc.id)
+                            .collection('balls')
+                            .doc(nextBall.toString());
+
+                        String data = await sendFileToServer(_video!);
+                        _prediction = data;
+                        Map<String, dynamic> ball = {
+                          'prediction': data,
+                          'URI': "URL FROM CLOUD STORAGE",
+                          'sessionID': widget.sessionID,
+                          'userID': _auth.currentUser!.uid,
+                        };
+
+                        await ballCollection.set(ball);
                       }
 
                       fetchData();
+
                       Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
@@ -407,7 +515,8 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                     ),
                   ),
                   const Icon(Icons.arrow_drop_down_rounded, size: 50),
-                  const SizedBox(width: 200),
+                  // const SizedBox(width: double.infinity, height: 0),
+                  const SizedBox(width: 200, height: 0),
                   isCompleted
                       ? Container()
                       : GestureDetector(
