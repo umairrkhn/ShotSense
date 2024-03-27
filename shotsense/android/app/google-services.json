@@ -12,7 +12,12 @@
           "package_name": "com.example.shotsense"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "422454591798-rj7t15qfpdrbk78cm9rnf8m41hg8liha.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAzd8OZeINZ1cMhsGDdMlQJpDZkgQW0z-o"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "422454591798-rj7t15qfpdrbk78cm9rnf8m41hg8liha.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "422454591798-3hsaeh0r0s4skc9j3g856tlceq1ps77f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.shotsense"
+              }
+            }
+          ]
         }
       }
     }

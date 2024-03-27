@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -49,6 +43,16 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyC0IbwfFm5iAONWe3EoP1AcsiFztwsUECc',
+    appId: '1:422454591798:web:dfb3a009aae6bad83e3397',
+    messagingSenderId: '422454591798',
+    projectId: 'shotsense-ai',
+    authDomain: 'shotsense-ai.firebaseapp.com',
+    storageBucket: 'shotsense-ai.appspot.com',
+    measurementId: 'G-35776FLDYM',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAzd8OZeINZ1cMhsGDdMlQJpDZkgQW0z-o',
     appId: '1:422454591798:android:05d5ed66c28493983e3397',
@@ -63,6 +67,16 @@ class DefaultFirebaseOptions {
     messagingSenderId: '422454591798',
     projectId: 'shotsense-ai',
     storageBucket: 'shotsense-ai.appspot.com',
+    iosClientId: '422454591798-3hsaeh0r0s4skc9j3g856tlceq1ps77f.apps.googleusercontent.com',
     iosBundleId: 'com.example.shotsense',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyAgumk9rJwBSQN3xfx0Ubwqtdy6QSKGigc',
+    appId: '1:422454591798:ios:680a03fc999e27783e3397',
+    messagingSenderId: '422454591798',
+    projectId: 'shotsense-ai',
+    storageBucket: 'shotsense-ai.appspot.com',
+    iosBundleId: 'com.example.shotsense.RunnerTests',
   );
 }
