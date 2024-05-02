@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shotsense/services/predictions.dart';
+import 'package:shotsense/services/Inferences.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
 import 'dart:io';
 import 'package:video_player/video_player.dart';
@@ -28,7 +30,8 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   File? _video;
   final ImagePicker _imagePicker = ImagePicker();
   final List<VideoPlayerController> _videoPlayerControllers = [];
-  late var _prediction = "";
+  late Map<String, dynamic> _inference = {};
+  late Map<String, dynamic> _annotation = {};
 
   @override
   void initState() {
@@ -151,28 +154,6 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   const SizedBox(width: 4),
                   ElevatedButton(
                     onPressed: () async {
-                      // DocumentReference ballCollection = firestore
-                      //     .collection('sessions')
-                      //     .doc(widget.sessionID)
-                      //     .collection('overs')
-                      //     .doc("4")
-                      //     .collection('balls')
-                      //     .doc("3");
-
-                      // Future<void> fetchData() async {
-                      //   String data = await sendFileToServer(_video!);
-                      //   setState(() {
-                      //     _prediction = data;
-                      //   });
-                      //   Map<String, dynamic> ball = {
-                      //     'prediction': data,
-                      //     'URI': "URL FROM CLOUD STORAGE",
-                      //     'sessionID': widget.sessionID,
-                      //     'userID': _auth.currentUser!.uid
-                      //   };
-                      //   ballCollection.set(ball);
-                      // }
-
                       Future<void> fetchData() async {
                         FirebaseFirestore firestore =
                             FirebaseFirestore.instance;
@@ -254,11 +235,17 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                             .collection('balls')
                             .doc(nextBall.toString());
 
-                        String data = await sendFileToServer(_video!);
-                        _prediction = data;
+                        String inference = await getInference(_video!);
+                        _inference = json.decode(inference);
+
+                        String annotation = await getAnnotation(_video!);
+                        _annotation = json.decode(annotation);
+
                         Map<String, dynamic> ball = {
-                          'prediction': data,
-                          'URI': "URL FROM CLOUD STORAGE",
+                          'prediction': _inference['prediction'],
+                          'uri': _inference['video_uri'],
+                          'annotated_uri': _annotation['annotated_uri'],
+                          'recommendation': _inference['recommendation'],
                           'sessionID': widget.sessionID,
                           'userID': _auth.currentUser!.uid,
                         };
@@ -586,7 +573,8 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
               SizedBox(
                 width: 280,
                 child: Text(
-                  _prediction, // Removed 'const' keyword
+                  _inference["prediction"]
+                      .toString(), // Removed 'const' keyword
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
