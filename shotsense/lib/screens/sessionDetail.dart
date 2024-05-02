@@ -1,9 +1,10 @@
 import 'dart:convert';
-
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shotsense/classes/ball.dart';
 import 'package:shotsense/services/Inferences.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
 import 'dart:io';
@@ -242,6 +243,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                         _annotation = json.decode(annotation);
 
                         Map<String, dynamic> ball = {
+                          'ball_id': Random().nextInt(1000000).toString(),
                           'prediction': _inference['prediction'],
                           'uri': _inference['video_uri'],
                           'annotated_uri': _annotation['annotated_uri'],
