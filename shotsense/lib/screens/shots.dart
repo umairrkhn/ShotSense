@@ -79,12 +79,18 @@ class _ShotScreenState extends State<ShotScreen> {
         .where('userID', isEqualTo: _auth.currentUser!.uid)
         .get();
 
+    // Session data of the ball
+    balls.docs.forEach((ball) async {
+      var parentData = await ball.reference.parent.parent!.parent.parent!.get();
+      print(parentData.data());
+    });
     var filteredballs = balls.docs.where((ball) {
       if (selectedShotType == 'All') {
         return true;
       }
       return ball.data()['prediction'] == selectedShotType;
     }).toList();
+
     return filteredballs;
   }
 
@@ -131,7 +137,7 @@ class _ShotScreenState extends State<ShotScreen> {
                       ),
                       child: Column(
                         children: [
-                          const SizedBox(height: 15.0),
+                          const SizedBox(height: 10.0),
                           FutureBuilder<List>(
                             future: gettingBalls(),
                             builder: (context, snapshot) {
