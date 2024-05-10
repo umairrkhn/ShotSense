@@ -6,6 +6,7 @@ import 'package:shotsense/screens/singleBall.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ShotScreen extends StatefulWidget {
   const ShotScreen({Key? key}) : super(key: key);
@@ -80,7 +81,7 @@ class _ShotScreenState extends State<ShotScreen> {
         .get();
 
     // Session data of the ball
-    balls.docs.forEach((ball) async {
+    balls.docs.map((ball) async {
       var parentData = await ball.reference.parent.parent!.parent.parent!.get();
       print(parentData.data());
     });
@@ -175,27 +176,40 @@ class _ShotScreenState extends State<ShotScreen> {
                                         color: Colors.white,
                                       ),
                                       child: ListTile(
-                                        onTap: () {
-                                          Navigator.push(context,
-                                              MaterialPageRoute(
-                                            builder: (context) {
-                                              return SingleBallPage();
-                                            },
-                                          ));
-                                        },
-                                        leading: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                          child: Image.asset(
-                                            'assets/images/ShotSense-logo.png',
-                                            width: 80,
-                                            height: 45,
-                                            fit: BoxFit.cover,
+                                          onTap: () async {
+                                            final gsReference = FirebaseStorage
+                                                .instance
+                                                .refFromURL(
+                                                    ballData["annotated_uri"]);
+                                            final url = await gsReference
+                                                .getDownloadURL();
+                                            Navigator.push(context,
+                                                MaterialPageRoute(
+                                              builder: (context) {
+                                                return SingleBallPage(
+                                                    ballData: ballData,
+                                                    url: url);
+                                              },
+                                            ));
+                                          },
+                                          leading: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            child: Image.asset(
+                                              'assets/images/ShotSense-logo.png',
+                                              width: 80,
+                                              height: 45,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
-                                        ),
-                                        title: Text(ballData["prediction"]),
-                                        subtitle: Text("subtitle"),
-                                      ),
+                                          title: Text(ballData["prediction"]),
+                                          subtitle: Text(
+                                            "subtitel",
+                                            style: const TextStyle(
+                                              fontSize: 12.0,
+                                              color: Colors.grey,
+                                            ),
+                                          )),
                                     );
                                   },
                                 );

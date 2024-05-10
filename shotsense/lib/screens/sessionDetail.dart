@@ -1,14 +1,18 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shotsense/screens/singleBall.dart';
 import 'package:shotsense/services/Inferences.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
 import 'dart:io';
 import 'package:video_player/video_player.dart';
 import 'package:intl/intl.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class SessionDetailScreen extends StatefulWidget {
   final String sessionID;
@@ -34,6 +38,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   late List<String> _oversInSession = [];
   late List<Map<String, dynamic>> _ballsInSession = [];
   late String selectedOver = '1';
+  late String isgettingInferece = "false";
 
   @override
   void initState() {
@@ -186,7 +191,15 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                     onPressed: () async {
                       _videoPlayerControllers.last.dispose();
                       _videoPlayerControllers.removeLast();
-                      fetchData();
+                      setState(() {
+                        isgettingInferece = "true";
+                      });
+                      fetchData().then((value) {
+                        setState(() {
+                          isgettingInferece = "false";
+                        });
+                        fetchBalls();
+                      });
                       fetchBalls();
                       Navigator.of(context).pop();
                     },
@@ -584,30 +597,65 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   }
 
   Widget _buildVideosSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (_ballsInSession.isNotEmpty)
-          for (var index = 0; index < _ballsInSession.length; index++)
-            Container(
-              margin: const EdgeInsets.only(bottom: 10),
-              padding: const EdgeInsets.only(bottom: 5, top: 5),
-              decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(
-                          color: Color.fromARGB(159, 158, 158, 158)))),
-              child: _buildVideoItem(index),
-            ),
-        if (_ballsInSession.isEmpty)
-          Container(
-            padding: const EdgeInsets.all(
-              100,
-            ),
-            child: const Text("No Videos added for this over"),
-          ),
-        const SizedBox(height: 15.0),
-      ],
-    );
+    return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (_ballsInSession.isNotEmpty)
+              for (var index = 0; index < _ballsInSession.length; index++)
+                InkWell(
+                  onTap: () async {
+                    final gsReference = FirebaseStorage.instance
+                        .refFromURL(_ballsInSession[index]["uri"]);
+                    final url = await gsReference.getDownloadURL();
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) {
+                        return SingleBallPage(
+                            ballData: _ballsInSession[index], url: url);
+                      },
+                    ));
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(bottom: 5, top: 5),
+                    decoration: const BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(
+                                color: Color.fromARGB(159, 158, 158, 158)))),
+                    child: _buildVideoItem(index),
+                  ),
+                ),
+            if (isgettingInferece == "true")
+              Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  padding: const EdgeInsets.only(bottom: 5, top: 5),
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              color: Color.fromARGB(159, 158, 158, 158)))),
+                  child: Skeletonizer(
+                    enabled: isgettingInferece == "true",
+                    child: _buildVideoLoader(),
+                  )),
+            if (isgettingInferece == "true")
+              const Text(
+                "Getting Inference, It will take a few minutes...",
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Color.fromARGB(255, 142, 142, 142),
+                ),
+              ),
+            if (_ballsInSession.isEmpty && isgettingInferece == "false")
+              Container(
+                padding: const EdgeInsets.all(
+                  100,
+                ),
+                child: const Text("No Videos added for this over"),
+              ),
+            const SizedBox(height: 15.0),
+          ],
+        ));
   }
 
   Widget _buildVideoItem(int index) {
@@ -655,6 +703,65 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                 children: [
                   Text(
                     "Jan 1 2024",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color.fromARGB(187, 21, 30, 35),
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildVideoLoader() {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.only(bottom: 5),
+          width: 45,
+          height: 45,
+          decoration: BoxDecoration(
+            image: const DecorationImage(
+              image: AssetImage('assets/images/BallIcon.png'),
+              fit: BoxFit.cover,
+            ),
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          child: const Center(
+            child: Text(
+              "",
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+        const Padding(
+          padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 280,
+                child: Text(
+                  "Getting Inference", // Removed 'const' keyword
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color.fromARGB(255, 102, 102, 102),
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  Text(
+                    "--- - ----",
                     style: TextStyle(
                       fontSize: 12,
                       color: Color.fromARGB(187, 21, 30, 35),

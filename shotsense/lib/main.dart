@@ -9,12 +9,14 @@ import 'package:shotsense/screens/settings.dart';
 import 'package:shotsense/widgets/bottom_navigation.dart';
 import 'package:shotsense/screens/shots.dart';
 import 'package:shotsense/screens/signup.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseAppCheck.instance.activate();
 
   runApp(const MyApp());
 }
