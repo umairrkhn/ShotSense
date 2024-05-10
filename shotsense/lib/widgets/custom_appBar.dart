@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final String? isgettingInferece;
 
-  const CustomAppBar({super.key, required this.title});
+  const CustomAppBar({super.key, required this.title, this.isgettingInferece});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     icon: const Icon(Icons.arrow_back_ios_new,
                         color: Color.fromARGB(255, 29, 20, 118)),
                     iconSize: 26,
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: () {
+                      if (isgettingInferece == "true") {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                'Please wait for the inference to complete'),
+                          ),
+                        );
+                      } else {
+                        Navigator.of(context).pop();
+                      }
+                    },
                   ))
               : (title == 'ShotSense')
                   ? Container(

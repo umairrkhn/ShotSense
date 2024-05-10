@@ -16,8 +16,10 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 class SessionDetailScreen extends StatefulWidget {
   final String sessionID;
-  const SessionDetailScreen({Key? key, required this.sessionID})
-      : super(key: key);
+  const SessionDetailScreen({
+    Key? key,
+    required this.sessionID,
+  }) : super(key: key);
   static const routeName = '/sessionDetail';
 
   @override
@@ -37,14 +39,13 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   late Map<String, dynamic> _annotation = {};
   late List<String> _oversInSession = [];
   late List<Map<String, dynamic>> _ballsInSession = [];
-  late String selectedOver = '1';
+  late String selectedOver = "1";
   late String isgettingInferece = "false";
 
   @override
   void initState() {
     super.initState();
-    fetchSessionData();
-    fetchBalls();
+    fetchSessionData().then((value) => fetchBalls());
   }
 
   Future<void> fetchSessionData() async {
@@ -63,6 +64,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
 
         setState(() {
           _oversInSession = oversInSession.docs.map((doc) => doc.id).toList();
+          selectedOver = _oversInSession.last;
         });
 
         // print((sessionSnapshot.data() as Map<String, dynamic>)['name']);
@@ -360,156 +362,178 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      appBar: const CustomAppBar(title: "Session Details"),
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        color: const Color(0xFFF5F5F5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 15.0),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.white),
-                borderRadius: BorderRadius.circular(20.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.15),
-                    spreadRadius: 1,
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+    return PopScope(
+        canPop: (isgettingInferece == "false"),
+        child: Scaffold(
+          appBar: CustomAppBar(
+              title: "Session Details", isgettingInferece: isgettingInferece),
+          body: Container(
+            padding: const EdgeInsets.all(16.0),
+            color: const Color(0xFFF5F5F5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 15.0),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(20.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.15),
+                        spreadRadius: 1,
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                    color: Colors.white,
                   ),
-                ],
-                color: Colors.white,
-              ),
-              child: ListTile(
-                contentPadding: const EdgeInsets.only(
-                    top: 6, bottom: 0, left: 20, right: 20),
-                title: Text(
-                  sessionName,
-                  style: TextStyle(
-                    fontSize: height * 0.03,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                subtitle: Text(
-                  DateFormat('d MMM y').format(sessionDate.toDate()),
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 123, 123, 123),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 15.0),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.white),
-                borderRadius: BorderRadius.circular(20.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.15),
-                    spreadRadius: 1,
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-                color: Colors.white,
-              ),
-              child: ListTile(
-                contentPadding: const EdgeInsets.only(
-                    top: 6, bottom: 0, left: 20, right: 20),
-                title: Text(
-                  "Cover Drive",
-                  style: TextStyle(
-                    fontSize: height * 0.03,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                subtitle: const Text(
-                  "Most Frequent Shot",
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 123, 123, 123),
-                  ),
-                ),
-              ),
-            ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     // _buildStatContainer("Ball Hit Accuracy", "84%"),
-            //     // _buildStatContainer("Frequent Shot Type", "Cover Drive"),
-            //   ],
-            // ),
-            // const SizedBox(height: 15.0),
-            _buildOverSection(),
-            const SizedBox(height: 15.0),
-            _buildVideosSection(),
-          ],
-        ),
-      ),
-      floatingActionButton: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: (isCompleted == false)
-              ? ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      isCompleted = true;
-                    });
-                    updateSession(widget.sessionID, {'completed': true});
-                    Navigator.of(context).pop();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff221D55),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                    child: Text(
-                      'Finish Session',
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.only(
+                        top: 6, bottom: 0, left: 20, right: 20),
+                    title: Text(
+                      sessionName,
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: height * 0.03,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Colors.black,
+                      ),
+                    ),
+                    subtitle: Text(
+                      DateFormat('d MMM y').format(sessionDate.toDate()),
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 123, 123, 123),
                       ),
                     ),
                   ),
-                )
-              : ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      isCompleted = true;
-                    });
-                    deleteSession(widget.sessionID);
-                    Navigator.of(context).pop();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 165, 17, 0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
+                ),
+                const SizedBox(height: 15.0),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(20.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.15),
+                        spreadRadius: 1,
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                    color: Colors.white,
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                    child: Text(
-                      'Delete Session',
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.only(
+                        top: 6, bottom: 0, left: 20, right: 20),
+                    title: Text(
+                      "Cover Drive",
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: height * 0.03,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Colors.black,
+                      ),
+                    ),
+                    subtitle: const Text(
+                      "Most Frequent Shot",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 123, 123, 123),
                       ),
                     ),
                   ),
-                )),
-    );
+                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     // _buildStatContainer("Ball Hit Accuracy", "84%"),
+                //     // _buildStatContainer("Frequent Shot Type", "Cover Drive"),
+                //   ],
+                // ),
+                // const SizedBox(height: 15.0),
+                _buildOverSection(),
+                const SizedBox(height: 15.0),
+                _buildVideosSection(),
+              ],
+            ),
+          ),
+          floatingActionButton: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: (isCompleted == false)
+                  ? ElevatedButton(
+                      onPressed: () {
+                        if (isgettingInferece == "true") {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'Please wait for the inference to complete'),
+                            ),
+                          );
+                        } else {
+                          setState(() {
+                            isCompleted = true;
+                          });
+                          updateSession(widget.sessionID, {'completed': true});
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: isgettingInferece == "false"
+                            ? (const Color(0xff221D55))
+                            : (Color.fromARGB(255, 167, 167, 167)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      child: const Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                        child: Text(
+                          'Finish Session',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    )
+                  : ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          isCompleted = true;
+                        });
+                        deleteSession(widget.sessionID);
+                        Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content:
+                                Text('Session has been deleted successfully!'),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 165, 17, 0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      child: const Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                        child: Text(
+                          'Delete Session',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    )),
+        ));
   }
 
   Widget _buildStatContainer(String label, String value) {
@@ -554,46 +578,107 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   }
 
   Widget _buildOverSection() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 15.0),
-        Row(
-          children: [
-            InkWell(
-              onTap: () => {_showOverDropdown(context)},
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Over $selectedOver",
-                    style: const TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 11, 11, 11),
+    if (isgettingInferece == "false") {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 15.0),
+          Row(
+            children: [
+              InkWell(
+                onTap: () => {_showOverDropdown(context)},
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Over $selectedOver",
+                      style: const TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 11, 11, 11),
+                      ),
                     ),
-                  ),
-                  const Icon(Icons.arrow_drop_down_rounded, size: 50),
-                  // const SizedBox(width: double.infinity, height: 0),
-                  const SizedBox(width: 200, height: 0),
-                  isCompleted
-                      ? Container()
-                      : GestureDetector(
-                          onTap: () => _showImagePickerBottomSheet(),
-                          child: const Icon(
-                            Icons.add_circle,
-                            size: 35,
-                            color: Color.fromARGB(255, 11, 51, 84),
+                    const Icon(Icons.arrow_drop_down_rounded, size: 50),
+                    // const SizedBox(width: double.infinity, height: 0),
+                    const SizedBox(width: 200, height: 0),
+                    isCompleted
+                        ? Container()
+                        : GestureDetector(
+                            onTap: () => _showImagePickerBottomSheet(),
+                            child: const Icon(
+                              Icons.add_circle,
+                              size: 35,
+                              color: Color.fromARGB(255, 11, 51, 84),
+                            ),
                           ),
-                        ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-      ],
-    );
+            ],
+          ),
+        ],
+      );
+    } else {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 15.0),
+          Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content:
+                          Text('Please wait for the inference to complete'),
+                    ),
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Over $selectedOver",
+                      style: const TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 160, 160, 160),
+                      ),
+                    ),
+                    const Icon(
+                      Icons.arrow_drop_down_rounded,
+                      size: 50,
+                      color: Color.fromARGB(255, 160, 160, 160),
+                    ),
+                    // const SizedBox(width: double.infinity, height: 0),
+                    const SizedBox(width: 200, height: 0),
+                    isCompleted
+                        ? Container()
+                        : GestureDetector(
+                            onTap: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'Please wait for the inference to complete'),
+                                ),
+                              );
+                            },
+                            child: const Icon(
+                              Icons.add_circle,
+                              size: 35,
+                              color: Color.fromARGB(255, 160, 160, 160),
+                            ),
+                          ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    }
   }
 
   Widget _buildVideosSection() {
@@ -606,15 +691,25 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
               for (var index = 0; index < _ballsInSession.length; index++)
                 InkWell(
                   onTap: () async {
-                    final gsReference = FirebaseStorage.instance
-                        .refFromURL(_ballsInSession[index]["uri"]);
-                    final url = await gsReference.getDownloadURL();
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) {
-                        return SingleBallPage(
-                            ballData: _ballsInSession[index], url: url);
-                      },
-                    ));
+                    if (isgettingInferece == "true") {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content:
+                              Text('Please wait for the inference to complete'),
+                        ),
+                      );
+                      return;
+                    } else {
+                      final gsReference = FirebaseStorage.instance
+                          .refFromURL(_ballsInSession[index]["uri"]);
+                      final url = await gsReference.getDownloadURL();
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          return SingleBallPage(
+                              ballData: _ballsInSession[index], url: url);
+                        },
+                      ));
+                    }
                   },
                   child: Container(
                     margin: const EdgeInsets.only(bottom: 10),
