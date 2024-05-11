@@ -98,38 +98,40 @@ class _ShotScreenState extends State<ShotScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const CustomAppBar(title: "Shots"),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      selectedShotType,
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            fontSize: 30,
-                            fontWeight: FontWeight.w900,
-                            color: const Color.fromARGB(255, 38, 5, 116),
-                          ),
+      appBar: const CustomAppBar(title: "Shots"),
+      body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    selectedShotType,
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w900,
+                          color: const Color.fromARGB(255, 38, 5, 116),
+                        ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _showShotTypeDropdown(context);
+                    },
+                    child: const FaIcon(
+                      FontAwesomeIcons.filter,
+                      size: 22,
+                      color: Color.fromARGB(255, 38, 5, 116),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        _showShotTypeDropdown(context);
-                      },
-                      child: const FaIcon(
-                        FontAwesomeIcons.filter,
-                        size: 22,
-                        color: Color.fromARGB(255, 38, 5, 116),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8.0),
-                Column(
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8.0),
+              Expanded(
+                  child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
                   children: [
                     Container(
                       decoration: BoxDecoration(
@@ -221,10 +223,10 @@ class _ShotScreenState extends State<ShotScreen> {
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-        ));
+              )),
+            ],
+          )),
+    );
   }
 
   void _showShotTypeDropdown(BuildContext context) {
@@ -251,7 +253,7 @@ class _ShotScreenState extends State<ShotScreen> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.5,
                   child: ListView.builder(
-                    shrinkWrap: true,
+                    // shrinkWrap: true,
                     itemCount: shotTypes.length,
                     itemBuilder: (context, index) => ListTile(
                       title: Text(

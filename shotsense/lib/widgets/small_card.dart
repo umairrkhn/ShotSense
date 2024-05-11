@@ -48,7 +48,8 @@ class _smallCardState extends State<smallCard> {
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
-                    return SessionDetailScreen(sessionID: widget.sessionId);
+                    return SessionDetailScreen(
+                        sessionID: widget.sessionId, sessionName: widget.name);
                   },
                 ));
               },

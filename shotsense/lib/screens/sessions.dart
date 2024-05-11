@@ -153,7 +153,7 @@ class _SessionPageState extends State<SessionPage> {
                               if (Session.completed == false) {
                                 return smallCard(
                                   name: Session.name,
-                                  date: DateFormat('d MMM y')
+                                  date: DateFormat('d MMM, y')
                                       .format(Session.createdAt.toDate()),
                                   sessionId: Session.id,
                                 );
@@ -176,7 +176,7 @@ class _SessionPageState extends State<SessionPage> {
                                 _previousSessionsExist = true;
                                 return smallCard(
                                   name: Session.name,
-                                  date: DateFormat('d MMM y')
+                                  date: DateFormat('d MMM, y')
                                       .format(Session.createdAt.toDate()),
                                   sessionId: Session.id,
                                 );

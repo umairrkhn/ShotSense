@@ -16,10 +16,10 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 class SessionDetailScreen extends StatefulWidget {
   final String sessionID;
-  const SessionDetailScreen({
-    Key? key,
-    required this.sessionID,
-  }) : super(key: key);
+  final String? sessionName;
+  const SessionDetailScreen(
+      {Key? key, required this.sessionID, this.sessionName})
+      : super(key: key);
   static const routeName = '/sessionDetail';
 
   @override
@@ -41,11 +41,15 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   late List<Map<String, dynamic>> _ballsInSession = [];
   late String selectedOver = "1";
   late String isgettingInferece = "false";
+  late List _sessionStats = [];
 
   @override
   void initState() {
     super.initState();
-    fetchSessionData().then((value) => fetchBalls());
+    fetchSessionData().then((value) {
+      fetchBalls();
+    });
+    // updateShotTypeStat();
   }
 
   Future<void> fetchSessionData() async {
@@ -71,6 +75,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         setState(() {
           sessionName =
               (sessionSnapshot.data() as Map<String, dynamic>)['name'];
+
           sessionDate = (sessionSnapshot.data()
               as Map<String, dynamic>)['createdAt'] as Timestamp;
           isCompleted = (sessionSnapshot.data()
@@ -95,6 +100,13 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       setState(() {
         _ballsInSession = ballsInSession.docs.map((doc) => doc.data()).toList();
       });
+      ballsInSession.docs.map((doc) => doc.data()).toList().length != 0
+          ? getFrequentShotTypeForSession(false).then((value) {
+              setState(() {
+                _sessionStats = value;
+              });
+            })
+          : null;
     } catch (e) {
       print('Error fetching balls: $e');
     }
@@ -109,10 +121,48 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   }
 
   Future<void> deleteSession(String sessionId) async {
-    await FirebaseFirestore.instance
-        .collection('sessions')
-        .doc(sessionId)
-        .delete();
+    try {
+      await FirebaseFirestore.instance
+          .collection('sessions')
+          .doc(sessionId)
+          .delete();
+      QuerySnapshot<Map<String, dynamic>> oversSnapshot =
+          await FirebaseFirestore.instance
+              .collection('sessions')
+              .doc(sessionId)
+              .collection('overs')
+              .get();
+      for (QueryDocumentSnapshot<Map<String, dynamic>> overSnapshot
+          in oversSnapshot.docs) {
+        QuerySnapshot<Map<String, dynamic>> ballsSnapshot =
+            await FirebaseFirestore.instance
+                .collection('sessions')
+                .doc(sessionId)
+                .collection('overs')
+                .doc(overSnapshot.id)
+                .collection('balls')
+                .get();
+        for (QueryDocumentSnapshot<Map<String, dynamic>> ballSnapshot
+            in ballsSnapshot.docs) {
+          await FirebaseFirestore.instance
+              .collection('sessions')
+              .doc(sessionId)
+              .collection('overs')
+              .doc(overSnapshot.id)
+              .collection('balls')
+              .doc(ballSnapshot.id)
+              .delete();
+        }
+        await FirebaseFirestore.instance
+            .collection('sessions')
+            .doc(sessionId)
+            .collection('overs')
+            .doc(overSnapshot.id)
+            .delete();
+      }
+    } catch (e) {
+      print('Error deleting session: $e');
+    }
   }
 
   Future<void> _recordVideo() async {
@@ -200,9 +250,20 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                         setState(() {
                           isgettingInferece = "false";
                         });
-                        fetchBalls();
+                        getFrequentShotTypeForSession(true).then((value) {
+                          setState(() {
+                            _sessionStats = value;
+                          });
+                        });
+                        updateShotTypeStat();
+                        fetchSessionData().then((value) {
+                          setState(() {
+                            selectedOver = _oversInSession.last;
+                          });
+                          fetchBalls();
+                        });
                       });
-                      fetchBalls();
+
                       Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
@@ -348,11 +409,167 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       'uri': _inference['video_uri'],
       'annotated_uri': _annotation['annotated_uri'],
       'recommendation': _inference['recommendation'],
+      'ratings': _inference['ratings'],
       'sessionID': widget.sessionID,
       'userID': _auth.currentUser!.uid,
     };
 
     await ballCollection.set(ball);
+  }
+
+  Future<void> updateShotTypeStat() async {
+    int coverDriveCount = 0;
+    int defenceCount = 0;
+    int pullShotCount = 0;
+    int ballHitCount = 0;
+    String highestShotType = '';
+    int highestCount = 0;
+
+    QuerySnapshot<Map<String, dynamic>> balls = await _firestore
+        .collectionGroup('balls')
+        .where('userID', isEqualTo: _auth.currentUser!.uid)
+        .get();
+
+    for (QueryDocumentSnapshot<Map<String, dynamic>> ball in balls.docs) {
+      if (ball.data()["ratings"]["shot"] == "hit") {
+        ballHitCount++;
+      }
+      if (ball.data()['prediction'] == 'Cover Drive') {
+        coverDriveCount++;
+      }
+      if (ball.data()['prediction'] == 'Defense') {
+        defenceCount++;
+      }
+      if (ball.data()['prediction'] == 'Pull Shot') {
+        pullShotCount++;
+      }
+    }
+
+    Map<String, int> counts = {
+      'coverDriveCount': coverDriveCount,
+      'defenceCount': defenceCount,
+      'pullShotCount': pullShotCount,
+    };
+
+    counts.forEach((shotType, count) {
+      if (count > highestCount) {
+        highestCount = count;
+        switch (shotType) {
+          case 'coverDriveCount':
+            highestShotType = 'Cover Drive';
+            break;
+          case 'defenceCount':
+            highestShotType = 'Defense';
+            break;
+          case 'pullShotCount':
+            highestShotType = 'Pull Shot';
+            break;
+        }
+      }
+    });
+
+    Map<String, dynamic> allData = {
+      'coverDriveCount': coverDriveCount,
+      'defenceCount': defenceCount,
+      'pullShotCount': pullShotCount,
+      'highestShotType': highestShotType,
+      'ballHitCount': ballHitCount,
+      'totalBalls': balls.docs.length,
+    };
+
+    await FirebaseFirestore.instance
+        .collection('ShotTypeStats')
+        .doc(_auth.currentUser!.uid)
+        .set(allData, SetOptions(merge: true));
+  }
+
+  Future<List<Object>> getFrequentShotTypeForSession(bool newUpload) async {
+    try {
+      int coverDriveCount = 0;
+      int defenceCount = 0;
+      int pullShotCount = 0;
+      int ballHitCount = 0;
+      String highestShotType = '';
+      int highestCount = 0;
+      int totalBalls = 0;
+
+      QuerySnapshot<Map<String, dynamic>> overs = await FirebaseFirestore
+          .instance
+          .collection('sessions')
+          .doc(widget.sessionID)
+          .collection('overs')
+          .get();
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> over in overs.docs) {
+        QuerySnapshot<Map<String, dynamic>> balls = await FirebaseFirestore
+            .instance
+            .collection('sessions')
+            .doc(widget.sessionID)
+            .collection('overs')
+            .doc(over.id)
+            .collection('balls')
+            .get();
+
+        for (QueryDocumentSnapshot<Map<String, dynamic>> ball in balls.docs) {
+          if (ball.data()["ratings"]["shot"] == "hit") {
+            ballHitCount++;
+          }
+          if (ball.data()['prediction'] == 'Cover Drive') {
+            coverDriveCount++;
+          }
+          if (ball.data()['prediction'] == 'Defense') {
+            defenceCount++;
+          }
+          if (ball.data()['prediction'] == 'Pull Shot') {
+            pullShotCount++;
+          }
+          totalBalls++;
+        }
+      }
+
+      Map<String, int> counts = {
+        'coverDriveCount': coverDriveCount,
+        'defenceCount': defenceCount,
+        'pullShotCount': pullShotCount,
+      };
+
+      counts.forEach((shotType, count) {
+        if (count > highestCount) {
+          highestCount = count;
+          switch (shotType) {
+            case 'coverDriveCount':
+              highestShotType = 'Cover Drive';
+              break;
+            case 'defenceCount':
+              highestShotType = 'Defense';
+              break;
+            case 'pullShotCount':
+              highestShotType = 'Pull Shot';
+              break;
+          }
+        }
+      });
+
+      Map<String, dynamic> allData = {
+        'coverDriveCount': coverDriveCount,
+        'defenceCount': defenceCount,
+        'pullShotCount': pullShotCount,
+        'highestShotType': highestShotType,
+        'ballHitCount': ballHitCount,
+        'totalBalls': totalBalls,
+      };
+      if (newUpload) {
+        await FirebaseFirestore.instance
+            .collection('sessions')
+            .doc(widget.sessionID)
+            .update(allData);
+      }
+
+      return [highestShotType, ballHitCount, totalBalls];
+    } catch (e) {
+      print('Error getting shot type stats: $e');
+      return [];
+    }
   }
 
   var height;
@@ -392,7 +609,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                     contentPadding: const EdgeInsets.only(
                         top: 6, bottom: 0, left: 20, right: 20),
                     title: Text(
-                      sessionName,
+                      widget.sessionName!,
                       style: TextStyle(
                         fontSize: height * 0.03,
                         fontWeight: FontWeight.bold,
@@ -400,7 +617,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                       ),
                     ),
                     subtitle: Text(
-                      DateFormat('d MMM y').format(sessionDate.toDate()),
+                      DateFormat('d MMM, y').format(sessionDate.toDate()),
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -410,52 +627,70 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   ),
                 ),
                 const SizedBox(height: 15.0),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(20.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.15),
-                        spreadRadius: 1,
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                    color: Colors.white,
-                  ),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.only(
-                        top: 6, bottom: 0, left: 20, right: 20),
-                    title: Text(
-                      "Cover Drive",
-                      style: TextStyle(
-                        fontSize: height * 0.03,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    subtitle: const Text(
-                      "Most Frequent Shot",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 123, 123, 123),
-                      ),
-                    ),
-                  ),
-                ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     // _buildStatContainer("Ball Hit Accuracy", "84%"),
-                //     // _buildStatContainer("Frequent Shot Type", "Cover Drive"),
-                //   ],
+                // Container(
+                //   decoration: BoxDecoration(
+                //     border: Border.all(color: Colors.white),
+                //     borderRadius: BorderRadius.circular(20.0),
+                //     boxShadow: [
+                //       BoxShadow(
+                //         color: Colors.black.withOpacity(0.15),
+                //         spreadRadius: 1,
+                //         blurRadius: 8,
+                //         offset: const Offset(0, 2),
+                //       ),
+                //     ],
+                //     color: Colors.white,
+                //   ),
+                //   child: ListTile(
+                //     contentPadding: const EdgeInsets.only(
+                //         top: 6, bottom: 0, left: 20, right: 20),
+                //     title: _sessionStats.isNotEmpty
+                //         ? Text(
+                //             _sessionStats[0],
+                //             style: TextStyle(
+                //               fontSize: height * 0.03,
+                //               fontWeight: FontWeight.bold,
+                //               color: Colors.black,
+                //             ),
+                //           )
+                //         : Text(
+                //             'Loading...',
+                //             style: TextStyle(
+                //               fontSize: height * 0.03,
+                //               fontWeight: FontWeight.bold,
+                //               color: Colors.black,
+                //             ),
+                //           ),
+                //     subtitle: const Text(
+                //       "Most Frequent Shot",
+                //       style: TextStyle(
+                //         fontSize: 15,
+                //         fontWeight: FontWeight.bold,
+                //         color: Color.fromARGB(255, 123, 123, 123),
+                //       ),
+                //     ),
+                //   ),
                 // ),
+                // const SizedBox(height: 15.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _sessionStats.isNotEmpty
+                        ? _buildStatContainer("Ball Hit Accuracy",
+                            "${((_sessionStats[1] / _sessionStats[2]) * 100).floor()}%")
+                        : _buildStatContainer("Ball Hit Accuracy", "..."),
+                    _sessionStats.isNotEmpty
+                        ? _buildStatContainer(
+                            "Frequent Shot Type", _sessionStats[0])
+                        : _buildStatContainer("Frequent Shot Type", "..."),
+                  ],
+                ),
                 // const SizedBox(height: 15.0),
                 _buildOverSection(),
                 const SizedBox(height: 15.0),
-                _buildVideosSection(),
+                Expanded(
+                  child: _buildVideosSection(),
+                )
               ],
             ),
           ),
@@ -539,7 +774,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   Widget _buildStatContainer(String label, String value) {
     return Container(
       width: MediaQuery.of(context).size.width / 2.3,
-      height: 192,
+      height: MediaQuery.of(context).size.height / 8.3,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.white),
         borderRadius: BorderRadius.circular(20.0),
@@ -564,14 +799,13 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
               color: Colors.black,
             ),
           ),
-          const SizedBox(height: 30),
           Text(
             label,
             style: const TextStyle(
               color: Colors.black,
             ),
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
         ],
       ),
     );
@@ -748,7 +982,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                 ),
                 child: const Text("No Videos added for this over"),
               ),
-            const SizedBox(height: 15.0),
+            const SizedBox(height: 70.0),
           ],
         ));
   }

@@ -44,9 +44,8 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
           .doc(widget.ballData["sessionID"])
           .get();
 
-      // print((sessionSnapshot.data() as Map<String, dynamic>)['name']);
       setState(() {
-        sessionName = (sessionSnapshot.data() as Map<String, dynamic>)['name'];
+        sessionName = (sessionSnapshot.data() as Map<String, dynamic>)?['name'];
         sessionDate = (sessionSnapshot.data()
             as Map<String, dynamic>)['createdAt'] as Timestamp;
         isCompleted = (sessionSnapshot.data()
