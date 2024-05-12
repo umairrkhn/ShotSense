@@ -33,11 +33,13 @@ class _ShotScreenState extends State<ShotScreen> {
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  Object? _sessionsData;
+  User? user = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
     super.initState();
-    gettingBalls();
+    // getBalls();
     // printBalls();
   }
 
@@ -74,23 +76,32 @@ class _ShotScreenState extends State<ShotScreen> {
   //   });
   // }
 
-  Future<List> gettingBalls() async {
+  Future<List> getBalls() async {
+    List<String> sessionNames = [];
     QuerySnapshot<Map<String, dynamic>> balls = await _firestore
         .collectionGroup('balls')
-        .where('userID', isEqualTo: _auth.currentUser!.uid)
+        .where('userID', isEqualTo: user!.uid)
         .get();
 
-    // Session data of the ball
-    balls.docs.map((ball) async {
-      var parentData = await ball.reference.parent.parent!.parent.parent!.get();
-      print(parentData.data());
+    balls.docs.forEach((ball) async {
+      DocumentSnapshot sessionSnapshot = await _firestore
+          .collection('sessions')
+          .doc(ball.data()['sessionID'])
+          .get();
+      var sessionName =
+          await (sessionSnapshot.data() as Map<String, dynamic>)['name'];
+
+      sessionNames.add(sessionName);
     });
+
     var filteredballs = balls.docs.where((ball) {
       if (selectedShotType == 'All') {
         return true;
       }
       return ball.data()['prediction'] == selectedShotType;
     }).toList();
+
+    // print([filteredballs, sessionNames]);
 
     return filteredballs;
   }
@@ -142,15 +153,29 @@ class _ShotScreenState extends State<ShotScreen> {
                         children: [
                           const SizedBox(height: 10.0),
                           FutureBuilder<List>(
-                            future: gettingBalls(),
+                            future: getBalls(),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                return CircularProgressIndicator();
+                                return const Center(
+                                    child: Padding(
+                                        padding: EdgeInsets.only(top: 100.0),
+                                        child:
+                                            const CircularProgressIndicator()));
                               } else if (snapshot.hasError) {
                                 return Text('Error: ${snapshot.error}');
-                              } else if (!snapshot.hasData) {
-                                return Text('No data available');
+                              } else if (snapshot.data!.isEmpty) {
+                                return const Padding(
+                                  padding:
+                                      EdgeInsets.only(top: 30.0, left: 16.0),
+                                  child: Text(
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                      'All recorded balls will appear here! You can manage and check annotated videos and performance stats.\n\nClick "Create New Session" button in the sessions tab to create a new session and add balls.'),
+                                );
                               } else {
                                 List balls = snapshot.data as List;
                                 return ListView.separated(
@@ -161,6 +186,7 @@ class _ShotScreenState extends State<ShotScreen> {
                                   itemBuilder: (context, index) {
                                     Map<String, dynamic> ballData =
                                         balls[index].data();
+
                                     return Container(
                                       decoration: BoxDecoration(
                                         border: Border.all(color: Colors.white),
@@ -204,10 +230,10 @@ class _ShotScreenState extends State<ShotScreen> {
                                               fit: BoxFit.cover,
                                             ),
                                           ),
-                                          title: Text(ballData["prediction"]),
-                                          subtitle: Text(
-                                            "subtitel",
-                                            style: const TextStyle(
+                                          title: Text(ballData["sessionName"]),
+                                          subtitle: const Text(
+                                            "subtite",
+                                            style: TextStyle(
                                               fontSize: 12.0,
                                               color: Colors.grey,
                                             ),

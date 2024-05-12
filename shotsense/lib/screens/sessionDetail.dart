@@ -46,10 +46,9 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   @override
   void initState() {
     super.initState();
-    fetchSessionData().then((value) {
-      fetchBalls();
-    });
-    // updateShotTypeStat();
+    fetchSessionData();
+    fetchBalls();
+    updateShotTypeStat();
   }
 
   Future<void> fetchSessionData() async {
@@ -71,7 +70,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
           selectedOver = _oversInSession.last;
         });
 
-        // print((sessionSnapshot.data() as Map<String, dynamic>)['name']);
+        print((sessionSnapshot.data()));
         setState(() {
           sessionName =
               (sessionSnapshot.data() as Map<String, dynamic>)['name'];
@@ -411,6 +410,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       'recommendation': _inference['recommendation'],
       'ratings': _inference['ratings'],
       'sessionID': widget.sessionID,
+      'sessionName': widget.sessionName,
       'userID': _auth.currentUser!.uid,
     };
 
@@ -421,9 +421,16 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
     int coverDriveCount = 0;
     int defenceCount = 0;
     int pullShotCount = 0;
+    int straightCount = 0;
+    int hookCount = 0;
+    int cutCount = 0;
+    int sweepCount = 0;
+    int flickCount = 0;
+
     int ballHitCount = 0;
-    String highestShotType = '';
     int highestCount = 0;
+
+    String highestShotType = '';
 
     QuerySnapshot<Map<String, dynamic>> balls = await _firestore
         .collectionGroup('balls')
@@ -431,17 +438,34 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         .get();
 
     for (QueryDocumentSnapshot<Map<String, dynamic>> ball in balls.docs) {
+      switch (ball.data()['prediction']) {
+        case 'Cover Drive':
+          coverDriveCount++;
+          break;
+        case 'Defense':
+          defenceCount++;
+          break;
+        case 'Pull Shot':
+          pullShotCount++;
+          break;
+        case 'Straight':
+          straightCount++;
+          break;
+        case 'Hook':
+          hookCount++;
+          break;
+        case 'Cut':
+          cutCount++;
+          break;
+        case 'Sweep':
+          sweepCount++;
+          break;
+        case 'Flick':
+          flickCount++;
+          break;
+      }
       if (ball.data()["ratings"]["shot"] == "hit") {
         ballHitCount++;
-      }
-      if (ball.data()['prediction'] == 'Cover Drive') {
-        coverDriveCount++;
-      }
-      if (ball.data()['prediction'] == 'Defense') {
-        defenceCount++;
-      }
-      if (ball.data()['prediction'] == 'Pull Shot') {
-        pullShotCount++;
       }
     }
 
@@ -449,6 +473,11 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       'coverDriveCount': coverDriveCount,
       'defenceCount': defenceCount,
       'pullShotCount': pullShotCount,
+      'straightCount': straightCount,
+      'hookCount': hookCount,
+      'cutCount': cutCount,
+      'sweepCount': sweepCount,
+      'flickCount': flickCount,
     };
 
     counts.forEach((shotType, count) {
@@ -464,6 +493,21 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
           case 'pullShotCount':
             highestShotType = 'Pull Shot';
             break;
+          case 'straightCount':
+            highestShotType = 'Straight';
+            break;
+          case 'hookCount':
+            highestShotType = 'Hook';
+            break;
+          case 'cutCount':
+            highestShotType = 'Cut';
+            break;
+          case 'sweepCount':
+            highestShotType = 'Sweep';
+            break;
+          case 'flickCount':
+            highestShotType = 'Flick';
+            break;
         }
       }
     });
@@ -472,6 +516,11 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       'coverDriveCount': coverDriveCount,
       'defenceCount': defenceCount,
       'pullShotCount': pullShotCount,
+      'straightCount': straightCount,
+      'hookCount': hookCount,
+      'cutCount': cutCount,
+      'sweepCount': sweepCount,
+      'flickCount': flickCount,
       'highestShotType': highestShotType,
       'ballHitCount': ballHitCount,
       'totalBalls': balls.docs.length,
@@ -488,10 +537,18 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       int coverDriveCount = 0;
       int defenceCount = 0;
       int pullShotCount = 0;
+      int straightCount = 0;
+      int hookCount = 0;
+      int cutCount = 0;
+      int sweepCount = 0;
+      int flickCount = 0;
+
       int ballHitCount = 0;
-      String highestShotType = '';
       int highestCount = 0;
+
       int totalBalls = 0;
+
+      String highestShotType = '';
 
       QuerySnapshot<Map<String, dynamic>> overs = await FirebaseFirestore
           .instance
@@ -511,17 +568,34 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
             .get();
 
         for (QueryDocumentSnapshot<Map<String, dynamic>> ball in balls.docs) {
+          switch (ball.data()['prediction']) {
+            case 'Cover Drive':
+              coverDriveCount++;
+              break;
+            case 'Defense':
+              defenceCount++;
+              break;
+            case 'Pull Shot':
+              pullShotCount++;
+              break;
+            case 'Straight':
+              straightCount++;
+              break;
+            case 'Hook':
+              hookCount++;
+              break;
+            case 'Cut':
+              cutCount++;
+              break;
+            case 'Sweep':
+              sweepCount++;
+              break;
+            case 'Flick':
+              flickCount++;
+              break;
+          }
           if (ball.data()["ratings"]["shot"] == "hit") {
             ballHitCount++;
-          }
-          if (ball.data()['prediction'] == 'Cover Drive') {
-            coverDriveCount++;
-          }
-          if (ball.data()['prediction'] == 'Defense') {
-            defenceCount++;
-          }
-          if (ball.data()['prediction'] == 'Pull Shot') {
-            pullShotCount++;
           }
           totalBalls++;
         }
@@ -531,6 +605,11 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         'coverDriveCount': coverDriveCount,
         'defenceCount': defenceCount,
         'pullShotCount': pullShotCount,
+        'straightCount': straightCount,
+        'hookCount': hookCount,
+        'cutCount': cutCount,
+        'sweepCount': sweepCount,
+        'flickCount': flickCount,
       };
 
       counts.forEach((shotType, count) {
@@ -546,6 +625,21 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
             case 'pullShotCount':
               highestShotType = 'Pull Shot';
               break;
+            case 'straightCount':
+              highestShotType = 'Straight';
+              break;
+            case 'hookCount':
+              highestShotType = 'Hook';
+              break;
+            case 'cutCount':
+              highestShotType = 'Cut';
+              break;
+            case 'sweepCount':
+              highestShotType = 'Sweep';
+              break;
+            case 'flickCount':
+              highestShotType = 'Flick';
+              break;
           }
         }
       });
@@ -554,6 +648,11 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         'coverDriveCount': coverDriveCount,
         'defenceCount': defenceCount,
         'pullShotCount': pullShotCount,
+        'straightCount': straightCount,
+        'hookCount': hookCount,
+        'cutCount': cutCount,
+        'sweepCount': sweepCount,
+        'flickCount': flickCount,
         'highestShotType': highestShotType,
         'ballHitCount': ballHitCount,
         'totalBalls': totalBalls,
@@ -706,6 +805,13 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                                   'Please wait for the inference to complete'),
                             ),
                           );
+                        } else if (_oversInSession.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'Please add a video to the session before finishing it'),
+                            ),
+                          );
                         } else {
                           setState(() {
                             isCompleted = true;
@@ -715,9 +821,9 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: isgettingInferece == "false"
+                        backgroundColor: (isgettingInferece == "false")
                             ? (const Color(0xff221D55))
-                            : (Color.fromARGB(255, 167, 167, 167)),
+                            : (const Color.fromARGB(255, 167, 167, 167)),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -740,7 +846,8 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                         setState(() {
                           isCompleted = true;
                         });
-                        deleteSession(widget.sessionID);
+                        deleteSession(widget.sessionID)
+                            .then((value) => updateShotTypeStat());
                         Navigator.of(context).pop();
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
