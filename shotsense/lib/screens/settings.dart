@@ -18,13 +18,14 @@ class SettingsPage extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: const Color.fromARGB(255, 38, 5, 116),
+            backgroundColor: const Color.fromARGB(255, 38, 5, 116),
             textStyle: const TextStyle(fontSize: 20),
           ),
           onPressed: () {
             signout(context);
           },
-          child: const Text('Sign Out', style: TextStyle(fontSize: 15, color: Colors.white)),
+          child: const Text('Sign Out',
+              style: TextStyle(fontSize: 15, color: Colors.white)),
         ),
       ),
     );
