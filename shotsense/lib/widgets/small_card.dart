@@ -53,15 +53,16 @@ class _smallCardState extends State<smallCard> {
                   },
                 ));
               },
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Image.asset(
-                  'assets/images/ShotSense-logo.png',
-                  width: 80,
-                  height: 45,
-                  fit: BoxFit.cover,
-                ),
-              ),
+              // leading: ClipRRect(
+              //   borderRadius: BorderRadius.circular(8.0),
+              //   child: Image.asset(
+              //     'assets/images/ShotSense-logo.png',
+              //     width: 80,
+              //     height: 45,
+              //     fit: BoxFit.cover,
+              //   ),
+              // ),
+              leading: Icon(Icons.sports_cricket, size: 35),
               title: Text(widget.name),
               subtitle: Text(widget.date),
             ),

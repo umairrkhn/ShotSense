@@ -24,7 +24,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           elevation: 0,
           leading: Navigator.canPop(context)
               ? Padding(
-                  padding: const EdgeInsets.only(top: 18),
+                  padding: const EdgeInsets.only(top: 16),
                   child: IconButton(
                     icon: const Icon(Icons.arrow_back_ios_new,
                         color: Color.fromARGB(255, 29, 20, 118)),
@@ -72,7 +72,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     title,
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 26,
+                      fontSize: 34,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
