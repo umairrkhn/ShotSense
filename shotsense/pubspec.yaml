@@ -23,7 +23,8 @@ dependencies:
   image_picker: ^1.0.5
   video_player: ^2.8.1
   intl: ^0.19.0
-  chewie: ^1.7.4
+  firebase_app_check: ^0.2.1+8
+  skeletonizer: ^1.1.2+1
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import '../widgets/custom_appBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,18 +13,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final CollectionReference users = FirebaseFirestore.instance.collection('users');
+  final CollectionReference users =
+      FirebaseFirestore.instance.collection('users');
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late User? user;
   String? displayName;
+  String? _mostFrequentShot;
+  int? _totalBalls;
+  int? _totalHits;
+  Object? _lastSession;
+  String? _date;
 
   @override
   void initState() {
     super.initState();
     user = _auth.currentUser;
-    if (user != null) {
-      fetchDisplayName();
-    }
+
+    fetchDisplayName();
+    fetchStats();
+    fetchSessions();
   }
 
   Future<void> fetchDisplayName() async {
@@ -30,6 +40,44 @@ class _HomePageState extends State<HomePage> {
       DocumentSnapshot userDoc = await users.doc(user!.uid).get();
       setState(() {
         displayName = userDoc['displayName'];
+      });
+    } catch (e) {
+      print('Error fetching display name: $e');
+    }
+  }
+
+  Future<void> fetchSessions() async {
+    try {
+      QuerySnapshot sessions = await _firestore
+          .collection('sessions')
+          .where('userId', isEqualTo: user!.uid)
+          .get();
+
+      var data = sessions.docs.last.data();
+
+      print((data as Map<String, dynamic>)['ballHitCount']);
+      setState(() {
+        _date = DateFormat('d MMM, y')
+            .format((data as Map<String, dynamic>)['createdAt'].toDate());
+        print(_date);
+        _lastSession = data as Map<String, dynamic>;
+      });
+    } catch (e) {
+      print('Error fetching Session: $e');
+    }
+  }
+
+  Future<void> fetchStats() async {
+    try {
+      DocumentSnapshot stats =
+          await _firestore.collection('ShotTypeStats').doc(user!.uid).get();
+
+      var data = stats.data();
+
+      setState(() {
+        _mostFrequentShot = (data as Map<String, dynamic>)['highestShotType'];
+        _totalBalls = data['totalBalls'];
+        _totalHits = data['ballHitCount'];
       });
     } catch (e) {
       print('Error fetching display name: $e');
@@ -49,32 +97,11 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+              (displayName != null)
+                  ? Column(
                       children: [
-                        const SizedBox(height: 15.0),
-                        Text("Welcome Back, $displayName!",
-                            style: const TextStyle(
-                                fontSize: 35,
-                                fontWeight: FontWeight.w900,
-                                color: Color(0xff221D55))
-                        ),
-                        const SizedBox(height: 15.0),
-                        const Text("Overall Stats",
-                            style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 79, 79, 79))
-                        ),
-                        const SizedBox(height: 15.0),
                         Container(
+<<<<<<< HEAD
 <<<<<<< Updated upstream
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.white),
@@ -202,6 +229,8 @@ class _HomePageState extends State<HomePage> {
                                             Color.fromARGB(255, 79, 79, 79),
                                           fontWeight: FontWeight.w600,
 =======
+=======
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.white),
                               borderRadius: BorderRadius.circular(8.0),
@@ -431,7 +460,11 @@ class _HomePageState extends State<HomePage> {
                                                                         79)),
                                                           )
                                                         : const Text(
+<<<<<<< HEAD
                                                             'Play a ball in the previously created session to get stats',
+=======
+                                                            'Play a session to get stats',
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
                                                             style: TextStyle(
                                                                 fontSize: 15,
                                                                 fontWeight:
@@ -576,51 +609,46 @@ class _HomePageState extends State<HomePage> {
                                                   .size
                                                   .width *
                                               0.02,
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
                                         ),
-                                      ),
-                                      TextSpan(
-                                        text: 'balls hit',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color:
-                                              Color.fromARGB(255, 79, 79, 79),
+                                        padding: EdgeInsets.all(20),
+                                        decoration: BoxDecoration(
+                                          border:
+                                              Border.all(color: Colors.white),
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black
+                                                  .withOpacity(0.15),
+                                              spreadRadius: 1,
+                                              blurRadius: 8,
+                                              offset: const Offset(0, 2),
+                                            ),
+                                          ],
+                                          color: Colors.white,
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              // add one for the date
-                              const ListTile(
-                                // leading: ClipRRect(
-                                //   child: Text('1'),
-                                // ),
-                                title: Text('Date',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color.fromARGB(255, 123, 123, 123))),
-                                subtitle: Text(
-                                  '11/04/2023',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Color.fromARGB(255, 79, 79, 79),
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
+                                        child: const Text(
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              // fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                            'This the homepage, you can view your stats here!\n\nOverall performance and stats will be displayed here.\n\nGo to the Sessions tab and "Create New Session" and record a ball to view your stats'),
+                                      )
+                              ],
+                            )),
                       ],
-                    ),
-                  ),
-                ],
-              ),
+                    )
+                  : const Center(
+                      child: Padding(
+                          padding: EdgeInsets.only(top: 150.0),
+                          child: const CircularProgressIndicator()))
             ],
           ),
-        ))
-    );
+        )));
   }
 }

@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 import 'package:shotsense/screens/sessionDetail.dart';
 =======
 import 'package:flutter/widgets.dart';
 >>>>>>> Stashed changes
+=======
+import 'package:flutter/widgets.dart';
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
 import 'package:shotsense/widgets/custom_appBar.dart';
 import 'package:shotsense/widgets/small_card.dart';
 import 'package:shotsense/classes/session.dart';
@@ -24,6 +28,7 @@ class SessionPage extends StatefulWidget {
 
 class _SessionPageState extends State<SessionPage> {
   User? user = FirebaseAuth.instance.currentUser;
+<<<<<<< HEAD
 <<<<<<< Updated upstream
   bool _previousSessionsExist = false;
 
@@ -32,11 +37,14 @@ class _SessionPageState extends State<SessionPage> {
 =======
   String _selectedSession = 'current';
 >>>>>>> Stashed changes
+=======
+  String _selectedSession = 'current';
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
 
   Stream<QuerySnapshot> getSessionsStream() {
     return FirebaseFirestore.instance
         .collection('sessions')
-        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where('userId', isEqualTo: user!.uid)
         .snapshots();
   }
 
@@ -118,14 +126,63 @@ class _SessionPageState extends State<SessionPage> {
                 ),
               ),
               const SizedBox(height: 15.0),
-              const Padding(
-                padding: EdgeInsets.all(5.0),
-                child: Text("Current Session",
-                    style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 79, 79, 79))),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _selectedSession = 'current';
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        backgroundColor: _selectedSession == 'current'
+                            ? Color.fromARGB(255, 205, 32, 109)
+                            : null,
+                      ),
+                      child: Text(
+                        'Current Sessions',
+                        style: TextStyle(
+                          color: _selectedSession == 'current'
+                              ? Colors.white
+                              : null,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _selectedSession = 'previous';
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        backgroundColor: _selectedSession == 'previous'
+                            ? Color.fromARGB(255, 205, 32, 109)
+                            : null,
+                      ),
+                      child: Text(
+                        'Previous Sessions',
+                        style: TextStyle(
+                          color: _selectedSession == 'previous'
+                              ? Colors.white
+                              : null,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
+              const SizedBox(height: 10.0),
               StreamBuilder(
                   stream: getSessionsStream(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -150,6 +207,7 @@ class _SessionPageState extends State<SessionPage> {
                     return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+<<<<<<< HEAD
 <<<<<<< Updated upstream
                           Column(
                             children: Sessions.map((Session) {
@@ -171,6 +229,8 @@ class _SessionPageState extends State<SessionPage> {
                                 style: TextStyle(
                                     fontSize: 25,
 =======
+=======
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
                           if (Sessions.isNotEmpty)
                             (_selectedSession == 'current')
                                 ? Column(
@@ -227,25 +287,15 @@ class _SessionPageState extends State<SessionPage> {
                               child: Text(
                                   style: TextStyle(
                                     fontSize: 20,
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
                                     fontWeight: FontWeight.bold,
-                                    color: Color.fromARGB(255, 79, 79, 79))),
-                          ),
-                          Column(
-                            children: Sessions.map((Session) {
-                              if (Session.completed == true) {
-                                _previousSessionsExist = true;
-                                return smallCard(
-                                  name: Session.name,
-                                  date: DateFormat('d MMM y')
-                                      .format(Session.createdAt.toDate()),
-                                  sessionId: Session.id,
-                                );
-                              } else {
-                                return Container();
-                              }
-                            }).toList(),
-                          ),
+                                    color: Colors.black,
+                                  ),
+                                  'All sessions will appear here! You can manage and record videos of your playing sessions.\n\nClick on the "Create New Session" button above to create a new session!'),
+                            )
                         ]);
                   }),
             ],

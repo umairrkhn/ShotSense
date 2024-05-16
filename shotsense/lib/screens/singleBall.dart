@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 import 'package:flutter/material.dart';
 =======
@@ -5,20 +6,58 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 >>>>>>> Stashed changes
+=======
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
 import 'package:video_player/video_player.dart';
-import 'package:chewie/chewie.dart';
-import 'package:provider/provider.dart';
-import 'package:shotsense/services/flutter-firebase-auth.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
 
-class SingleBallPage extends StatelessWidget {
-  const SingleBallPage({Key? key}) : super(key: key);
-  static const routeName = '/singleBall';
+List<Color> getRatingColors(String rating) {
+  switch (rating) {
+    case 'bad':
+      return [
+        Colors.red.shade400,
+        Colors.red.shade300,
+        Colors.red.shade200,
+        Colors.red.shade100,
+        Colors.red.shade50,
+      ];
+    case 'ok':
+      return [
+        Colors.yellow.shade400,
+      ];
+    case 'good':
+      return [
+        const Color.fromARGB(255, 165, 255, 62),
+        const Color.fromARGB(255, 165, 255, 62),
+        const Color.fromARGB(255, 165, 255, 62),
+        const Color.fromARGB(255, 165, 255, 62),
+        const Color.fromARGB(255, 165, 255, 62),
+      ];
+    case 'ideal':
+      return [
+        Colors.blue.shade400,
+        Colors.blue.shade400,
+        Colors.blue.shade400,
+        Colors.blue.shade400,
+        Colors.blue.shade400,
+      ];
+    default:
+      return [
+        Colors.grey.shade400,
+      ];
+  }
+}
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
   void signout(BuildContext context) async {
     await context.read<FirebaseAuthMethods>().signOut(context);
 =======
+=======
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
 class SingleBallPage extends StatefulWidget {
   final Map<String, dynamic> ballData;
   final String url;
@@ -66,12 +105,16 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
     } catch (e) {
       print('Error fetching session data: $e');
     }
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+<<<<<<< HEAD
 <<<<<<< Updated upstream
       appBar: CustomAppBar(title: "Ball 1/6"),
       body: Container(
@@ -92,6 +135,8 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
                     blurRadius: 8,
                     offset: const Offset(0, 2),
 =======
+=======
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
         appBar: const CustomAppBar(title: "Ball Details"),
         body: SingleChildScrollView(
             child: Container(
@@ -108,6 +153,7 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
                     .format(sessionDate.toDate())
                     .toString(),
                 true,
+<<<<<<< HEAD
               ),
               // const SizedBox(height: 15.0),
               // buildContainer(
@@ -252,14 +298,113 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
             Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+=======
+              ),
+              // const SizedBox(height: 15.0),
+              // buildContainer(
+              //     context, widget.ballData["prediction"], "Shot Type", false),
+              const SizedBox(height: 15.0),
+              Row(
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
                 children: [
-                  _buildStatBox(context, "Ball Hit", "Ball Hit/Miss"),
-                  _buildStatBox(context, "Sweep", "Shot Type"),
+                  _buildStatBox(
+                      context, widget.ballData["prediction"], "Shot Type"),
+                  const SizedBox(width: 15.0),
+                  _buildStatBox(
+                      context,
+                      widget.ballData["ratings"]["shot"].toUpperCase(),
+                      "Hit/Miss"),
                 ],
               ),
+<<<<<<< HEAD
             ),
           ],
 =======
+=======
+              const SizedBox(height: 15.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _selectedVideo = 'video';
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        backgroundColor: _selectedVideo == 'video'
+                            ? Color.fromARGB(255, 205, 32, 109)
+                            : null,
+                      ),
+                      child: Text(
+                        'Original Video',
+                        style: TextStyle(
+                          color:
+                              _selectedVideo == 'video' ? Colors.white : null,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _selectedVideo = 'annotated';
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        backgroundColor: _selectedVideo == 'annotated'
+                            ? Color.fromARGB(255, 205, 32, 109)
+                            : null,
+                      ),
+                      child: Text(
+                        'Annotated Video',
+                        style: TextStyle(
+                          color: _selectedVideo == 'annotated'
+                              ? Colors.white
+                              : null,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15.0),
+              Column(
+                children: [
+                  Container(
+                    height: 620,
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(20.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.15),
+                          spreadRadius: 1,
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                      color: Colors.white,
+                    ),
+                    child: _selectedVideo == "video"
+                        ? _buildVideoPlayer()
+                        : widget.annotated_url == ""
+                            ? _buildVideoPlayerAnnotated(true)
+                            : _buildVideoPlayerAnnotated(false),
+                  ),
+                ],
+              ),
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
               const SizedBox(height: 15.0),
               Container(
                   height: 100,
@@ -328,19 +473,19 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
           _videoPlayerController.value.isPlaying
               ? Icons.pause
               : Icons.play_arrow,
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
         ),
       ),
     );
   }
 
-  Widget _buildVideoPlayer() {
-    final VideoPlayerController videoPlayerController =
-        VideoPlayerController.asset(
-      'assets/videos/pull_04.mp4',
-      package: 'video_player',
-    );
+  Widget _buildVideoPlayerAnnotated(bool isProcessing) {
+    // !isProcessing ? _videoPlayerControllerAnnotated.play() : null;
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
     final ChewieController chewieController = ChewieController(
       videoPlayerController: videoPlayerController,
@@ -360,6 +505,8 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
 
     return Chewie(controller: chewieController);
 =======
+=======
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
     return !isProcessing
         ? Scaffold(
             body: ClipRRect(
@@ -402,13 +549,16 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
                   "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExODc2YXBlNGYwNWUwMTMzbTF6cWZ4aTAydDY5YmF5aWdubnNwbTRlYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gf5UHCBpCgkz2X2wu0/giphy.gif"),
             ],
           );
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
   }
 
   Widget _buildStatBox(BuildContext context, String title, String subtitle) {
     return Container(
       width: MediaQuery.of(context).size.width / 2.3,
-      height: 192,
+      height: MediaQuery.of(context).size.width / 3,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.white),
         borderRadius: BorderRadius.circular(20.0),
@@ -434,7 +584,7 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
             ),
           ),
           const SizedBox(
-            height: 30,
+            height: 15,
           ),
           Text(
             subtitle,
@@ -444,15 +594,18 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
             ),
           ),
           const SizedBox(
-            height: 30,
+            height: 20,
           ),
         ],
       ),
     );
   }
 }
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
+=======
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
 
 Widget buildContainer(BuildContext context, String titleName, String subtitle,
     bool isFirstContainer) {
@@ -562,4 +715,7 @@ Widget buildRatingContainer(context, rating, ratingName) {
     )),
   );
 }
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c

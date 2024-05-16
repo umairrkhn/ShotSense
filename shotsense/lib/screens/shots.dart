@@ -1,7 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:shotsense/screens/singleBall.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ShotScreen extends StatefulWidget {
   const ShotScreen({super.key});
@@ -12,9 +18,10 @@ class ShotScreen extends StatefulWidget {
 }
 
 class _ShotScreenState extends State<ShotScreen> {
-  String selectedShotType = 'Cover Drive';
+  String selectedShotType = 'All';
 
   List<String> shotTypes = [
+    'All',
     'Cover Drive',
     'Straight',
     'Defence',
@@ -25,8 +32,11 @@ class _ShotScreenState extends State<ShotScreen> {
     'Flick',
   ];
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
+=======
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   User? user = FirebaseAuth.instance.currentUser;
@@ -120,82 +130,58 @@ class _ShotScreenState extends State<ShotScreen> {
     return filteredballs;
   }
 
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: const CustomAppBar(title: "Shots"),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      selectedShotType,
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w900,
-                        color: const Color.fromARGB(255, 38, 5, 116),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        _showShotTypeDropdown(context);
-                      },
-                      child: const FaIcon(FontAwesomeIcons.filter, size: 22),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8.0),
-                Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 15.0),
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white),
-                              borderRadius: BorderRadius.circular(8.0),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  spreadRadius: 2,
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                              color: Colors.white,
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ballsExist
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              selectedShotType,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w900,
+                                    color:
+                                        const Color.fromARGB(255, 38, 5, 116),
+                                  ),
                             ),
-                            child: ListTile(
+                            GestureDetector(
                               onTap: () {
-                                Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) {
-                                    return const SingleBallPage();
-                                  },
-                                ));
+                                _showShotTypeDropdown(context);
                               },
-                              leading: ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: Image.asset(
-                                  'assets/images/ShotSense-logo.png',
-                                  width: 80,
-                                  height: 45,
-                                  fit: BoxFit.cover,
-                                ),
+                              child: const FaIcon(
+                                FontAwesomeIcons.filter,
+                                size: 22,
+                                color: Color.fromARGB(255, 38, 5, 116),
                               ),
-                              title: const Text('11-04-22'),
-                              subtitle: const Text('0:13'),
                             ),
+                          ],
+                        )
+                      : Container(),
+                  const SizedBox(height: 8.0),
+                  Column(
+                    children: [
+                      Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
+<<<<<<< HEAD
 <<<<<<< Updated upstream
                           const SizedBox(height: 15.0),
                           Container(
@@ -222,6 +208,8 @@ class _ShotScreenState extends State<ShotScreen> {
                                   fit: BoxFit.cover,
                                 ),
 =======
+=======
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
                           child: Column(
                             children: [
                               const SizedBox(height: 10.0),
@@ -392,53 +380,21 @@ class _ShotScreenState extends State<ShotScreen> {
                                     );
                                   }
                                 },
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> cc0769ba895e596388ad96808d7c8a27a694b88c
                               ),
-                              title: const Text('11-04-22'),
-                              subtitle: const Text('0:15'),
-                            ),
-                          ),
-                          const SizedBox(height: 15.0),
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white),
-                              borderRadius: BorderRadius.circular(8.0),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  spreadRadius: 2,
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                              color: Colors.white,
-                            ),
-                            child: ListTile(
-                              leading: ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: Image.asset(
-                                  'assets/images/ShotSense-logo.png',
-                                  width: 80,
-                                  height: 45,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              title: const Text('08-04-22'),
-                              subtitle: const Text('0:06'),
-                            ),
-                          ),
-                          const SizedBox(height: 15.0),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        )
-    );
+                            ],
+                          )),
+                    ],
+                  ),
+                  // )),
+                ],
+              )),
+        ));
   }
+
   void _showShotTypeDropdown(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -447,8 +403,9 @@ class _ShotScreenState extends State<ShotScreen> {
       ),
       builder: (BuildContext context) {
         return SingleChildScrollView(
+          scrollDirection: Axis.vertical,
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            padding: const EdgeInsets.symmetric(vertical: 25.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -463,7 +420,7 @@ class _ShotScreenState extends State<ShotScreen> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.5,
                   child: ListView.builder(
-                    shrinkWrap: true,
+                    // shrinkWrap: true,
                     itemCount: shotTypes.length,
                     itemBuilder: (context, index) => ListTile(
                       title: Text(
@@ -487,5 +444,3 @@ class _ShotScreenState extends State<ShotScreen> {
     );
   }
 }
-
-
