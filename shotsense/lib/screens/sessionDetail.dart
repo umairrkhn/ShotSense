@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shotsense/screens/singleBall.dart';
+import 'package:shotsense/screens/shotTypeStats.dart';
 import 'package:shotsense/services/Inferences.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
 import 'dart:io';
@@ -36,12 +36,12 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   final ImagePicker _imagePicker = ImagePicker();
   final List<VideoPlayerController> _videoPlayerControllers = [];
   late Map<String, dynamic> _inference = {};
-  late Map<String, dynamic> _annotation = {};
   late List<String> _oversInSession = [];
   late List<Map<String, dynamic>> _ballsInSession = [];
   late String selectedOver = "1";
   late String isgettingInferece = "false";
   late List _sessionStats = [];
+  late Map<String, dynamic> sessionData = {};
 
   @override
   void initState() {
@@ -74,6 +74,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
 
         print((sessionSnapshot.data()));
         setState(() {
+          sessionData = sessionSnapshot.data() as Map<String, dynamic>;
           sessionName =
               (sessionSnapshot.data() as Map<String, dynamic>)['name'];
 
@@ -779,12 +780,23 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _sessionStats.isNotEmpty
-                        ? _buildStatContainer("Ball Hit Accuracy",
+                        ? _buildStatContainer(
+                            "Ball Hit Accuracy \n\t(${_sessionStats[2]} Balls Played)",
                             "${((_sessionStats[1] / _sessionStats[2]) * 100).floor()}%")
                         : _buildStatContainer("Ball Hit Accuracy", "..."),
                     _sessionStats.isNotEmpty
-                        ? _buildStatContainer(
-                            "Frequent Shot Type", _sessionStats[0])
+                        ? InkWell(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) {
+                                  return ShotTypeStats(
+                                    sessionStats: sessionData,
+                                  );
+                                },
+                              ));
+                            },
+                            child: _buildStatContainer(
+                                "Frequent Shot Type", _sessionStats[0]))
                         : _buildStatContainer("Frequent Shot Type", "..."),
                   ],
                 ),
@@ -885,7 +897,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   Widget _buildStatContainer(String label, String value) {
     return Container(
       width: MediaQuery.of(context).size.width / 2.3,
-      height: MediaQuery.of(context).size.height / 8.3,
+      height: MediaQuery.of(context).size.height / 6.3,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.white),
         borderRadius: BorderRadius.circular(20.0),
@@ -916,7 +928,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
               color: Colors.black,
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 30),
         ],
       ),
     );
@@ -1034,44 +1046,85 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
           children: [
             if (_ballsInSession.isNotEmpty)
               for (var index = 0; index < _ballsInSession.length; index++)
-                InkWell(
-                  onTap: () async {
-                    if (isgettingInferece == "true") {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content:
-                              Text('Please wait for the inference to complete'),
-                        ),
-                      );
-                      return;
-                    } else {
-                      final gsReference = FirebaseStorage.instance
-                          .refFromURL(_ballsInSession[index]["annotated_uri"]);
-                      final url = await gsReference.getDownloadURL();
-                      final gsvideoReference = FirebaseStorage.instance
-                          .refFromURL(_ballsInSession[index]["uri"]);
-                      final urlVideo = await gsvideoReference.getDownloadURL();
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) {
-                          return SingleBallPage(
-                            ballData: _ballsInSession[index],
-                            url: urlVideo,
-                            annotated_url: url,
-                          );
+                _ballsInSession[index]["annotated_uri"] == null
+                    ? InkWell(
+                        onTap: () async {
+                          if (isgettingInferece == "true") {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'Please wait for the inference to complete'),
+                              ),
+                            );
+                            return;
+                          } else {
+                            final gsvideoReference = FirebaseStorage.instance
+                                .refFromURL(_ballsInSession[index]["uri"]);
+                            final urlVideo =
+                                await gsvideoReference.getDownloadURL();
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) {
+                                return SingleBallPage(
+                                  ballData: _ballsInSession[index],
+                                  url: urlVideo,
+                                  annotated_url: "",
+                                );
+                              },
+                            ));
+                          }
                         },
-                      ));
-                    }
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 10),
-                    padding: const EdgeInsets.only(bottom: 5, top: 5),
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                                color: Color.fromARGB(159, 158, 158, 158)))),
-                    child: _buildVideoItem(index),
-                  ),
-                ),
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.only(bottom: 5, top: 5),
+                          decoration: const BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      color:
+                                          Color.fromARGB(159, 158, 158, 158)))),
+                          child: _buildVideoItem(index),
+                        ),
+                      )
+                    : InkWell(
+                        onTap: () async {
+                          if (isgettingInferece == "true") {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'Please wait for the inference to complete'),
+                              ),
+                            );
+                            return;
+                          } else {
+                            final gsReference = FirebaseStorage.instance
+                                .refFromURL(
+                                    _ballsInSession[index]["annotated_uri"]);
+                            final url = await gsReference.getDownloadURL();
+                            final gsvideoReference = FirebaseStorage.instance
+                                .refFromURL(_ballsInSession[index]["uri"]);
+                            final urlVideo =
+                                await gsvideoReference.getDownloadURL();
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) {
+                                return SingleBallPage(
+                                  ballData: _ballsInSession[index],
+                                  url: urlVideo,
+                                  annotated_url: url,
+                                );
+                              },
+                            ));
+                          }
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.only(bottom: 5, top: 5),
+                          decoration: const BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      color:
+                                          Color.fromARGB(159, 158, 158, 158)))),
+                          child: _buildVideoItem(index),
+                        ),
+                      ),
             if (isgettingInferece == "true")
               Container(
                   margin: const EdgeInsets.only(bottom: 10),

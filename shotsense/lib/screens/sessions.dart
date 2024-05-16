@@ -1,14 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:shotsense/screens/sessionDetail.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shotsense/widgets/small_card.dart';
 import 'package:shotsense/classes/session.dart';
-import 'package:shotsense/classes/ball.dart';
 import 'package:intl/intl.dart';
 
 class SessionPage extends StatefulWidget {
@@ -24,7 +20,6 @@ class SessionPage extends StatefulWidget {
 
 class _SessionPageState extends State<SessionPage> {
   User? user = FirebaseAuth.instance.currentUser;
-  bool _previousSessionsExist = false;
   String _selectedSession = 'current';
 
   Stream<QuerySnapshot> getSessionsStream() {
@@ -72,7 +67,6 @@ class _SessionPageState extends State<SessionPage> {
                                 'userId': widget._auth.currentUser!.uid,
                                 'createdAt': Timestamp.now(),
                                 'completed': false,
-                                'balls': [],
                               });
                               widget.sessionName.clear();
                               Navigator.pop(context);
@@ -182,15 +176,13 @@ class _SessionPageState extends State<SessionPage> {
                     }
 
                     List<session> Sessions = snapshot.data!.docs.map((doc) {
-                      List<ball> ballsList = List<ball>.from(
-                          doc["balls"].map((item) => ball.fromJson(item)));
                       return session(
-                          id: doc.id,
-                          name: doc['name'],
-                          userID: doc['userId'],
-                          createdAt: doc['createdAt'],
-                          completed: doc['completed'],
-                          balls: ballsList);
+                        id: doc.id,
+                        name: doc['name'],
+                        userID: doc['userId'],
+                        createdAt: doc['createdAt'],
+                        completed: doc['completed'],
+                      );
                     }).toList();
 
                     return Column(
@@ -225,7 +217,6 @@ class _SessionPageState extends State<SessionPage> {
                                 : Column(
                                     children: Sessions.map((Session) {
                                       if (Session.completed == true) {
-                                        _previousSessionsExist = true;
                                         return smallCard(
                                           name: Session.name,
                                           date: DateFormat('d MMM, y').format(

@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class ball {
   late String ball_id;
   late String sessionID;
