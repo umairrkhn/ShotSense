@@ -4,7 +4,7 @@ import 'package:shotsense/screens/singleBall.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
 
 class ShotScreen extends StatefulWidget {
-  const ShotScreen({Key? key}) : super(key: key);
+  const ShotScreen({super.key});
   static const routeName = '/shots';
 
   @override
@@ -25,6 +25,102 @@ class _ShotScreenState extends State<ShotScreen> {
     'Flick',
   ];
 
+<<<<<<< Updated upstream
+=======
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  User? user = FirebaseAuth.instance.currentUser;
+  bool ballsExist = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getBalls().then((value) => setState(() {
+          if (value.isNotEmpty) {
+            ballsExist = true;
+          } else {
+            ballsExist = false;
+          }
+
+          if (value.isNotEmpty) {
+            List<String> predictions = [];
+            value.forEach((ball) {
+              predictions.add(ball.data()['prediction']);
+            });
+            shotTypes = ['All', ...predictions.toSet()];
+          }
+        }));
+    // printBalls();
+  }
+
+  // void printBalls() async {
+  //   QuerySnapshot<Map<String, dynamic>> Sessions =
+  //       // getting balls from the collection of overs in the collection of sessions
+
+  //       await _firestore
+  //           .collection('sessions')
+  //           .where('userId', isEqualTo: _auth.currentUser!.uid)
+  //           .get();
+  //   QuerySnapshot<Map<String, dynamic>> overs;
+  //   QuerySnapshot<Map<String, dynamic>> balls;
+  //   Sessions.docs.forEach((session) async {
+  //     overs = await _firestore
+  //         .collection('sessions')
+  //         .doc(session.id)
+  //         .collection('overs')
+  //         .get();
+
+  //     overs.docs.forEach((over) async {
+  //       balls = await _firestore
+  //           .collection('sessions')
+  //           .doc(session.id)
+  //           .collection('overs')
+  //           .doc(over.id)
+  //           .collection('balls')
+  //           .get();
+  //       balls.docs.forEach((ball) {
+  //         print(ball.data());
+  //       });
+  //       // return balls.docs;
+  //     });
+  //   });
+  // }
+
+  Future<List> getBalls() async {
+    // List<String> sessionNames = [];
+    QuerySnapshot<Map<String, dynamic>> balls = await _firestore
+        .collectionGroup('balls')
+        .where('userID', isEqualTo: user!.uid)
+        .get();
+
+    // balls.docs.forEach((ball) async {
+    //   DocumentSnapshot sessionSnapshot = await _firestore
+    //       .collection('sessions')
+    //       .doc(ball.data()['sessionID'])
+    //       .get();
+    //   // var sessionName =
+    //   //     await (sessionSnapshot.data() as Map<String, dynamic>)['name'];
+
+    //   // sessionNames.add(sessionName);
+    // });
+
+    if (balls.docs.isEmpty) {
+      return [];
+    }
+
+    var filteredballs = balls.docs.where((ball) {
+      if (selectedShotType == 'All') {
+        return true;
+      }
+      return ball.data()['prediction'] == selectedShotType;
+    }).toList();
+
+    // print([filteredballs, sessionNames]);
+
+    return filteredballs;
+  }
+
+>>>>>>> Stashed changes
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,6 +196,7 @@ class _ShotScreenState extends State<ShotScreen> {
                               subtitle: const Text('0:13'),
                             ),
                           ),
+<<<<<<< Updated upstream
                           const SizedBox(height: 15.0),
                           Container(
                             decoration: BoxDecoration(
@@ -124,6 +221,178 @@ class _ShotScreenState extends State<ShotScreen> {
                                   height: 45,
                                   fit: BoxFit.cover,
                                 ),
+=======
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 10.0),
+                              FutureBuilder<List>(
+                                future: getBalls(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Center(
+                                        child: Padding(
+                                            padding:
+                                                EdgeInsets.only(top: 100.0),
+                                            child:
+                                                const CircularProgressIndicator()));
+                                  } else if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                  } else if (snapshot.data!.isEmpty) {
+                                    return const Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 30.0, left: 16.0),
+                                      child: Text(
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                          'All recorded balls will appear here! You can manage and check annotated videos and performance stats.\n\nClick "Create New Session" button in the sessions tab to create a new session and add balls.'),
+                                    );
+                                  } else {
+                                    List balls = snapshot.data as List;
+                                    return ListView.separated(
+                                      scrollDirection: Axis.vertical,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: balls.length,
+                                      separatorBuilder: (context, index) =>
+                                          SizedBox(height: 10.0),
+                                      itemBuilder: (context, index) {
+                                        Map<String, dynamic> ballData =
+                                            balls[index].data();
+
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.white),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black
+                                                    .withOpacity(0.2),
+                                                spreadRadius: 2,
+                                                blurRadius: 10,
+                                                offset: const Offset(0, 2),
+                                              ),
+                                            ],
+                                            color: Colors.white,
+                                          ),
+                                          child: ballData["annotated_uri"] ==
+                                                  null
+                                              ? ListTile(
+                                                  onTap: () async {
+                                                    final gsReference =
+                                                        FirebaseStorage.instance
+                                                            .refFromURL(
+                                                                ballData[
+                                                                    "uri"]);
+                                                    final url =
+                                                        await gsReference
+                                                            .getDownloadURL();
+                                                    Navigator.push(context,
+                                                        MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return SingleBallPage(
+                                                            ballData: ballData,
+                                                            url: url,
+                                                            annotated_url: "");
+                                                      },
+                                                    ));
+                                                  },
+                                                  // leading: ClipRRect(
+                                                  //   borderRadius:
+                                                  //       BorderRadius.circular(
+                                                  //           8.0),
+                                                  //   child: Image.asset(
+                                                  //     'assets/images/ShotSense-logo.png',
+                                                  //     width: 80,
+                                                  //     height: 45,
+                                                  //     fit: BoxFit.cover,
+                                                  //   ),
+                                                  // ),
+                                                  leading: const Icon(
+                                                    Icons.sports_cricket,
+                                                    size: 40,
+                                                    color: Color.fromARGB(
+                                                        255, 78, 78, 78),
+                                                  ),
+                                                  title: Text(
+                                                      "From \b${ballData["sessionName"]}"),
+                                                  subtitle: Text(
+                                                    // "From ${ballData["createdAt"]}",
+                                                    "${DateFormat("MMMM d, yyyy").format(ballData["createdAt"].toDate()).toString()}",
+                                                    style: const TextStyle(
+                                                      fontSize: 12.0,
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                                )
+                                              : // if ball is annotated, show the annotated video
+
+                                              ListTile(
+                                                  onTap: () async {
+                                                    final gsAnotattedReference =
+                                                        FirebaseStorage.instance
+                                                            .refFromURL(ballData[
+                                                                "annotated_uri"]);
+                                                    final url =
+                                                        await gsAnotattedReference
+                                                            .getDownloadURL();
+                                                    final gsvideoReference =
+                                                        FirebaseStorage.instance
+                                                            .refFromURL(
+                                                                ballData[
+                                                                    "uri"]);
+                                                    final urlVideo =
+                                                        await gsvideoReference
+                                                            .getDownloadURL();
+                                                    Navigator.push(context,
+                                                        MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return SingleBallPage(
+                                                            ballData: ballData,
+                                                            url: urlVideo,
+                                                            annotated_url: url);
+                                                      },
+                                                    ));
+                                                  },
+                                                  // leading: ClipRRect(
+                                                  //   borderRadius:
+                                                  //       BorderRadius.circular(
+                                                  //           8.0),
+                                                  //   child: Image.asset(
+                                                  //     'assets/images/ShotSense-logo.png',
+                                                  //     width: 80,
+                                                  //     height: 45,
+                                                  //     fit: BoxFit.cover,
+                                                  //   ),
+                                                  // ),
+                                                  leading: const Icon(
+                                                    Icons.circle_rounded,
+                                                    size: 40,
+                                                    color: Color.fromARGB(
+                                                        255, 78, 78, 78),
+                                                  ),
+                                                  title: Text(
+                                                      "From \b${ballData["sessionName"]}"),
+                                                  subtitle: Text(
+                                                    // "From ${ballData["createdAt"]}",
+                                                    "${DateFormat("MMMM d, yyyy").format(ballData["createdAt"].toDate()).toString()}",
+                                                    style: const TextStyle(
+                                                      fontSize: 12.0,
+                                                      color: Colors.grey,
+                                                    ),
+                                                  )),
+                                        );
+                                      },
+                                    );
+                                  }
+                                },
+>>>>>>> Stashed changes
                               ),
                               title: const Text('11-04-22'),
                               subtitle: const Text('0:15'),

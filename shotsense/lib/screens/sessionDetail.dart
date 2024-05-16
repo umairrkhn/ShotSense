@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +48,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
 
         // print((sessionSnapshot.data() as Map<String, dynamic>)['name']);
         setState(() {
+          sessionData = sessionSnapshot.data() as Map<String, dynamic>;
           sessionName =
               (sessionSnapshot.data() as Map<String, dynamic>)['name'];
           sessionDate = (sessionSnapshot.data()
@@ -524,20 +524,122 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   }
 
   Widget _buildVideosSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (_videoPlayerControllers.isNotEmpty)
-          for (var index = 0; index < _videoPlayerControllers.length; index++)
-            _buildVideoItem(index),
-        if (_videoPlayerControllers.isEmpty)
-          Container(
-            padding: const EdgeInsets.all(100),
-            child: const Text("No Videos added for this over"),
-          ),
-        const SizedBox(height: 15.0),
-      ],
-    );
+    return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (_ballsInSession.isNotEmpty)
+              for (var index = 0; index < _ballsInSession.length; index++)
+                _ballsInSession[index]["annotated_uri"] == null
+                    ? InkWell(
+                        onTap: () async {
+                          if (isgettingInferece == "true") {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'Please wait for the inference to complete'),
+                              ),
+                            );
+                            return;
+                          } else {
+                            final gsvideoReference = FirebaseStorage.instance
+                                .refFromURL(_ballsInSession[index]["uri"]);
+                            final urlVideo =
+                                await gsvideoReference.getDownloadURL();
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) {
+                                return SingleBallPage(
+                                  ballData: _ballsInSession[index],
+                                  url: urlVideo,
+                                  annotated_url: "",
+                                );
+                              },
+                            ));
+                          }
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.only(bottom: 5, top: 5),
+                          decoration: const BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      color:
+                                          Color.fromARGB(159, 158, 158, 158)))),
+                          child: _buildVideoItem(index),
+                        ),
+                      )
+                    : InkWell(
+                        onTap: () async {
+                          if (isgettingInferece == "true") {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'Please wait for the inference to complete'),
+                              ),
+                            );
+                            return;
+                          } else {
+                            final gsReference = FirebaseStorage.instance
+                                .refFromURL(
+                                    _ballsInSession[index]["annotated_uri"]);
+                            final url = await gsReference.getDownloadURL();
+                            final gsvideoReference = FirebaseStorage.instance
+                                .refFromURL(_ballsInSession[index]["uri"]);
+                            final urlVideo =
+                                await gsvideoReference.getDownloadURL();
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) {
+                                return SingleBallPage(
+                                  ballData: _ballsInSession[index],
+                                  url: urlVideo,
+                                  annotated_url: url,
+                                );
+                              },
+                            ));
+                          }
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.only(bottom: 5, top: 5),
+                          decoration: const BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      color:
+                                          Color.fromARGB(159, 158, 158, 158)))),
+                          child: _buildVideoItem(index),
+                        ),
+                      ),
+            if (isgettingInferece == "true")
+              Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  padding: const EdgeInsets.only(bottom: 5, top: 5),
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              color: Color.fromARGB(159, 158, 158, 158)))),
+                  child: Skeletonizer(
+                    enabled: isgettingInferece == "true",
+                    child: _buildVideoLoader(),
+                  )),
+            if (isgettingInferece == "true")
+              const Text(
+                "Getting Inference, It will take a few minutes...",
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Color.fromARGB(255, 142, 142, 142),
+                ),
+              ),
+            if (_ballsInSession.isEmpty && isgettingInferece == "false")
+              Container(
+                padding: const EdgeInsets.all(
+                  100,
+                ),
+                child: const Text("No Videos added for this over"),
+              ),
+            const SizedBox(height: 70.0),
+          ],
+        ));
   }
 
   Widget _buildVideoItem(int index) {

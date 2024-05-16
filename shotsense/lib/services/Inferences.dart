@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
@@ -21,6 +20,11 @@ Future<String> getInference(File file) async {
   }
   //add prediction to correct over in firebase
 
+<<<<<<< Updated upstream
+=======
+  getAnnotation(file, sessionID, over, ball);
+
+>>>>>>> Stashed changes
   return responseBody;
 }
 

@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shotsense/screens/sessionDetail.dart';
-import 'package:intl/intl.dart';
 
 class smallCard extends StatefulWidget {
   final String name;

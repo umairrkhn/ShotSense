@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+<<<<<<< Updated upstream
 import 'package:shotsense/screens/sessionDetail.dart';
+=======
+import 'package:flutter/widgets.dart';
+>>>>>>> Stashed changes
 import 'package:shotsense/widgets/custom_appBar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shotsense/widgets/small_card.dart';
 import 'package:shotsense/classes/session.dart';
-import 'package:shotsense/classes/ball.dart';
 import 'package:intl/intl.dart';
 
 class SessionPage extends StatefulWidget {
@@ -23,10 +24,14 @@ class SessionPage extends StatefulWidget {
 
 class _SessionPageState extends State<SessionPage> {
   User? user = FirebaseAuth.instance.currentUser;
+<<<<<<< Updated upstream
   bool _previousSessionsExist = false;
 
   final CollectionReference _sessions =
       FirebaseFirestore.instance.collection('sessions');
+=======
+  String _selectedSession = 'current';
+>>>>>>> Stashed changes
 
   Stream<QuerySnapshot> getSessionsStream() {
     return FirebaseFirestore.instance
@@ -73,7 +78,6 @@ class _SessionPageState extends State<SessionPage> {
                                 'userId': widget._auth.currentUser!.uid,
                                 'createdAt': Timestamp.now(),
                                 'completed': false,
-                                'balls': [],
                               });
                               widget.sessionName.clear();
                               Navigator.pop(context);
@@ -134,20 +138,19 @@ class _SessionPageState extends State<SessionPage> {
                     }
 
                     List<session> Sessions = snapshot.data!.docs.map((doc) {
-                      List<ball> ballsList = List<ball>.from(
-                          doc["balls"].map((item) => ball.fromJson(item)));
                       return session(
-                          id: doc.id,
-                          name: doc['name'],
-                          userID: doc['userId'],
-                          createdAt: doc['createdAt'],
-                          completed: doc['completed'],
-                          balls: ballsList);
+                        id: doc.id,
+                        name: doc['name'],
+                        userID: doc['userId'],
+                        createdAt: doc['createdAt'],
+                        completed: doc['completed'],
+                      );
                     }).toList();
 
                     return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+<<<<<<< Updated upstream
                           Column(
                             children: Sessions.map((Session) {
                               if (Session.completed == false) {
@@ -167,6 +170,64 @@ class _SessionPageState extends State<SessionPage> {
                             child: Text("Previous Sessions",
                                 style: TextStyle(
                                     fontSize: 25,
+=======
+                          if (Sessions.isNotEmpty)
+                            (_selectedSession == 'current')
+                                ? Column(
+                                    children: Sessions.map((Session) {
+                                      if (Session.completed == false) {
+                                        return smallCard(
+                                          name: Session.name,
+                                          date: DateFormat('d MMM, y').format(
+                                              Session.createdAt.toDate()),
+                                          sessionId: Session.id,
+                                        );
+                                      } else {
+                                        return Container(
+                                            alignment: Alignment.center,
+                                            margin: const EdgeInsets.only(
+                                                top: 30.0),
+                                            child: const Text(
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
+                                                'No current playing session yet'));
+                                      }
+                                    }).toList(),
+                                  )
+                                : Column(
+                                    children: Sessions.map((Session) {
+                                      if (Session.completed == true) {
+                                        return smallCard(
+                                          name: Session.name,
+                                          date: DateFormat('d MMM, y').format(
+                                              Session.createdAt.toDate()),
+                                          sessionId: Session.id,
+                                        );
+                                      } else {
+                                        return Container(
+                                            alignment: Alignment.center,
+                                            margin: const EdgeInsets.only(
+                                                top: 30.0),
+                                            child: const Text(
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
+                                                'No session completed yet'));
+                                      }
+                                    }).toList(),
+                                  )
+                          else
+                            const Padding(
+                              padding: EdgeInsets.only(top: 30.0, left: 16.0),
+                              child: Text(
+                                  style: TextStyle(
+                                    fontSize: 20,
+>>>>>>> Stashed changes
                                     fontWeight: FontWeight.bold,
                                     color: Color.fromARGB(255, 79, 79, 79))),
                           ),
