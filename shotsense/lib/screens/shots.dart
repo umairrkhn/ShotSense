@@ -10,7 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class ShotScreen extends StatefulWidget {
-  const ShotScreen({Key? key}) : super(key: key);
+  const ShotScreen({super.key});
   static const routeName = '/shots';
 
   @override
@@ -41,18 +41,18 @@ class _ShotScreenState extends State<ShotScreen> {
   void initState() {
     super.initState();
     getBalls().then((value) => setState(() {
-          if (value.isNotEmpty)
+          if (value.isNotEmpty) {
             ballsExist = true;
-          else
+          } else {
             ballsExist = false;
+          }
 
           if (value.isNotEmpty) {
-            print(value[0].data()['prediction']);
             List<String> predictions = [];
             value.forEach((ball) {
               predictions.add(ball.data()['prediction']);
             });
-            shotTypes = ['All', ...predictions.toSet().toList()];
+            shotTypes = ['All', ...predictions.toSet()];
           }
         }));
     // printBalls();
@@ -98,16 +98,16 @@ class _ShotScreenState extends State<ShotScreen> {
         .where('userID', isEqualTo: user!.uid)
         .get();
 
-    balls.docs.forEach((ball) async {
-      DocumentSnapshot sessionSnapshot = await _firestore
-          .collection('sessions')
-          .doc(ball.data()['sessionID'])
-          .get();
-      // var sessionName =
-      //     await (sessionSnapshot.data() as Map<String, dynamic>)['name'];
+    // balls.docs.forEach((ball) async {
+    //   DocumentSnapshot sessionSnapshot = await _firestore
+    //       .collection('sessions')
+    //       .doc(ball.data()['sessionID'])
+    //       .get();
+    //   // var sessionName =
+    //   //     await (sessionSnapshot.data() as Map<String, dynamic>)['name'];
 
-      // sessionNames.add(sessionName);
-    });
+    //   // sessionNames.add(sessionName);
+    // });
 
     if (balls.docs.isEmpty) {
       return [];
@@ -253,16 +253,22 @@ class _ShotScreenState extends State<ShotScreen> {
                                                       },
                                                     ));
                                                   },
-                                                  leading: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.0),
-                                                    child: Image.asset(
-                                                      'assets/images/ShotSense-logo.png',
-                                                      width: 80,
-                                                      height: 45,
-                                                      fit: BoxFit.cover,
-                                                    ),
+                                                  // leading: ClipRRect(
+                                                  //   borderRadius:
+                                                  //       BorderRadius.circular(
+                                                  //           8.0),
+                                                  //   child: Image.asset(
+                                                  //     'assets/images/ShotSense-logo.png',
+                                                  //     width: 80,
+                                                  //     height: 45,
+                                                  //     fit: BoxFit.cover,
+                                                  //   ),
+                                                  // ),
+                                                  leading: const Icon(
+                                                    Icons.sports_cricket,
+                                                    size: 40,
+                                                    color: Color.fromARGB(
+                                                        255, 78, 78, 78),
                                                   ),
                                                   title: Text(
                                                       "From \b${ballData["sessionName"]}"),
@@ -304,16 +310,22 @@ class _ShotScreenState extends State<ShotScreen> {
                                                       },
                                                     ));
                                                   },
-                                                  leading: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.0),
-                                                    child: Image.asset(
-                                                      'assets/images/ShotSense-logo.png',
-                                                      width: 80,
-                                                      height: 45,
-                                                      fit: BoxFit.cover,
-                                                    ),
+                                                  // leading: ClipRRect(
+                                                  //   borderRadius:
+                                                  //       BorderRadius.circular(
+                                                  //           8.0),
+                                                  //   child: Image.asset(
+                                                  //     'assets/images/ShotSense-logo.png',
+                                                  //     width: 80,
+                                                  //     height: 45,
+                                                  //     fit: BoxFit.cover,
+                                                  //   ),
+                                                  // ),
+                                                  leading: const Icon(
+                                                    Icons.circle_rounded,
+                                                    size: 40,
+                                                    color: Color.fromARGB(
+                                                        255, 78, 78, 78),
                                                   ),
                                                   title: Text(
                                                       "From \b${ballData["sessionName"]}"),

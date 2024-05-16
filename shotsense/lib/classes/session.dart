@@ -7,7 +7,6 @@ class session {
   late String userID;
   late Timestamp createdAt;
   late bool completed = false;
-  List<ball> balls = [];
 
   session({
     required this.id,
@@ -15,7 +14,6 @@ class session {
     required this.userID,
     required this.createdAt,
     required this.completed,
-    required this.balls,
   });
 
   Map<String, dynamic> toMap() {
@@ -25,7 +23,6 @@ class session {
       'userID': userID,
       'createdAt': createdAt,
       'completed': completed,
-      'balls': balls.map((e) => e.toMap()).toList(),
     };
   }
 
@@ -36,7 +33,6 @@ class session {
       userID: map['userID'],
       createdAt: map['createdAt'],
       completed: map['completed'],
-      balls: map['balls'],
     );
   }
 }

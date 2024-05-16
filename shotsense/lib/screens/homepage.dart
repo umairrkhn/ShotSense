@@ -366,7 +366,13 @@ class _HomePageState extends State<HomePage> {
                                                                     context)
                                                                 .style,
                                                         children: <TextSpan>[
-                                                          _lastSession != null
+                                                          _lastSession !=
+                                                                      null &&
+                                                                  (_lastSession as Map<
+                                                                          String,
+                                                                          dynamic>)
+                                                                      .containsKey(
+                                                                          'highestShotType')
                                                               ? TextSpan(
                                                                   text:
                                                                       '${(_lastSession as Map<String, dynamic>)['ballHitCount']}/${(_lastSession as Map<String, dynamic>)['totalBalls']} ',

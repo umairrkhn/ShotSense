@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 List<Color> getRatingColors(String rating) {
   switch (rating) {
@@ -85,7 +82,7 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
           .get();
 
       setState(() {
-        sessionName = (sessionSnapshot.data() as Map<String, dynamic>)?['name'];
+        sessionName = (sessionSnapshot.data() as Map<String, dynamic>)['name'];
         sessionDate = (widget.ballData["createdAt"] as Timestamp);
       });
     } catch (e) {
@@ -96,7 +93,7 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(title: "Ball Details"),
+        appBar: const CustomAppBar(title: "Ball Details"),
         body: SingleChildScrollView(
             child: Container(
           padding: const EdgeInsets.all(16.0),
@@ -113,14 +110,14 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
                     .toString(),
                 true,
               ),
-              const SizedBox(height: 15.0),
-              buildContainer(
-                  context, widget.ballData["prediction"], "Shot Type", false),
+              // const SizedBox(height: 15.0),
+              // buildContainer(
+              //     context, widget.ballData["prediction"], "Shot Type", false),
               const SizedBox(height: 15.0),
               Row(
                 children: [
                   _buildStatBox(
-                      context, "Shot Type", widget.ballData["prediction"]),
+                      context, widget.ballData["prediction"], "Shot Type"),
                   const SizedBox(width: 15.0),
                   _buildStatBox(
                       context,
@@ -270,9 +267,9 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            _videoPlayerController!.value.isPlaying
-                ? _videoPlayerController!.pause()
-                : _videoPlayerController!.play();
+            _videoPlayerController.value.isPlaying
+                ? _videoPlayerController.pause()
+                : _videoPlayerController.play();
           });
         },
         child: Icon(
@@ -298,9 +295,9 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 setState(() {
-                  _videoPlayerControllerAnnotated!.value.isPlaying
-                      ? _videoPlayerControllerAnnotated!.pause()
-                      : _videoPlayerControllerAnnotated!.play();
+                  _videoPlayerControllerAnnotated.value.isPlaying
+                      ? _videoPlayerControllerAnnotated.pause()
+                      : _videoPlayerControllerAnnotated.play();
                 });
               },
               child: Icon(
@@ -416,7 +413,7 @@ Widget buildContainer(BuildContext context, String titleName, String subtitle,
               : const SizedBox(height: 0),
           Text(
             titleName,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 25,
               fontWeight: FontWeight.bold,
               color: Colors.black,
@@ -429,13 +426,13 @@ Widget buildContainer(BuildContext context, String titleName, String subtitle,
         children: [
           Text(
             subtitle,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.bold,
               color: Color.fromARGB(255, 123, 123, 123),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
         ],

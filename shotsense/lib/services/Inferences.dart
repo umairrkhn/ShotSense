@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
@@ -22,7 +21,7 @@ Future<String> getInference(
   }
   //add prediction to correct over in firebase
 
-  getAnnotation(file!, sessionID, over, ball);
+  getAnnotation(file, sessionID, over, ball);
 
   return responseBody;
 }
