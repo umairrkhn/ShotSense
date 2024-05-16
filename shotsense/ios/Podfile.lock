@@ -634,6 +634,9 @@ PODS:
   - AppAuth/Core (1.6.2)
   - AppAuth/ExternalUserAgent (1.6.2):
     - AppAuth/Core
+  - AppCheckCore (10.18.2):
+    - GoogleUtilities/Environment (~> 7.11)
+    - PromisesObjC (~> 2.3)
   - BoringSSL-GRPC (0.0.24):
     - BoringSSL-GRPC/Implementation (= 0.0.24)
     - BoringSSL-GRPC/Interface (= 0.0.24)
@@ -659,6 +662,11 @@ PODS:
   - Firebase/Storage (10.18.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 10.18.0)
+  - firebase_app_check (0.2.1-8):
+    - Firebase/CoreOnly (~> 10.18.0)
+    - firebase_core
+    - FirebaseAppCheck (~> 10.18.0-beta)
+    - Flutter
   - firebase_auth (4.16.0):
     - Firebase/Auth (= 10.18.0)
     - firebase_core
@@ -674,6 +682,12 @@ PODS:
     - Firebase/Storage (= 10.18.0)
     - firebase_core
     - Flutter
+  - FirebaseAppCheck (10.18.0):
+    - AppCheckCore (~> 10.18)
+    - FirebaseAppCheckInterop (~> 10.17)
+    - FirebaseCore (~> 10.0)
+    - GoogleUtilities/Environment (~> 7.8)
+    - PromisesObjC (~> 2.1)
   - FirebaseAppCheckInterop (10.19.0)
   - FirebaseAuth (10.18.0):
     - FirebaseAppCheckInterop (~> 10.17)
@@ -830,19 +844,16 @@ PODS:
     - nanopb/encode (= 2.30909.1)
   - nanopb/decode (2.30909.1)
   - nanopb/encode (2.30909.1)
-  - package_info_plus (0.4.5):
-    - Flutter
   - PromisesObjC (2.3.1)
   - RecaptchaInterop (100.0.0)
   - SwiftProtobuf (1.25.2)
   - video_player_avfoundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - wakelock_plus (0.0.1):
-    - Flutter
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
+  - firebase_app_check (from `.symlinks/plugins/firebase_app_check/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_ml_model_downloader (from `.symlinks/plugins/firebase_ml_model_downloader/ios`)
@@ -850,16 +861,16 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
-  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/darwin`)
-  - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
 
 SPEC REPOS:
   trunk:
     - abseil
     - AppAuth
+    - AppCheckCore
     - BoringSSL-GRPC
     - Firebase
+    - FirebaseAppCheck
     - FirebaseAppCheckInterop
     - FirebaseAuth
     - FirebaseAuthInterop
@@ -888,6 +899,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
+  firebase_app_check:
+    :path: ".symlinks/plugins/firebase_app_check/ios"
   firebase_auth:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
@@ -902,23 +915,22 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/google_sign_in_ios/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
-  package_info_plus:
-    :path: ".symlinks/plugins/package_info_plus/ios"
   video_player_avfoundation:
     :path: ".symlinks/plugins/video_player_avfoundation/darwin"
-  wakelock_plus:
-    :path: ".symlinks/plugins/wakelock_plus/ios"
 
 SPEC CHECKSUMS:
   abseil: 926fb7a82dc6d2b8e1f2ed7f3a718bce691d1e46
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
+  AppCheckCore: ef7a5f4ae432941d2835c7c9ba14131028aa33bd
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   cloud_firestore: 73eece22ce25a0565238c283ee9990f1618d8063
   Firebase: 414ad272f8d02dfbf12662a9d43f4bba9bec2a06
+  firebase_app_check: 375d2482bc2219ef06df67f2ad659c377b2c1075
   firebase_auth: 8e9ec02991ca4659111cc671c84d0c010b6bfb26
   firebase_core: 0af4a2b24f62071f9bf283691c0ee41556dcb3f5
   firebase_ml_model_downloader: b19786418d4dd08f4522b83fa1a8fd73dc018967
   firebase_storage: 2b932fa5461f4efac36a2dcfbe240898b190b5b1
+  FirebaseAppCheck: f34226df40cf6057dc54916ab5a5d461bb51ee68
   FirebaseAppCheckInterop: 37884781f3e16a1ba47e7ec80a1e805f987788e3
   FirebaseAuth: 12314b438fa76048540c8fb86d6cfc9e08595176
   FirebaseAuthInterop: 6142981334978f7942ff0e8a6f8966c3b3c8ff37
@@ -931,7 +943,7 @@ SPEC CHECKSUMS:
   FirebaseMLModelDownloader: 7af44a55ae52f76eccbb8d732bb55acfb7bc1d02
   FirebaseSharedSwift: 2fbf73618288b7a36b2014b957745dcdd781389e
   FirebaseStorage: 8333c4b183764cdd170d9539a61322b71c23adff
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   google_sign_in_ios: 8115e3fbe097e6509beb819ed602d47369d9011f
   GoogleDataTransport: 57c22343ab29bc686febbf7cbb13bad167c2d8fe
   GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
@@ -943,13 +955,11 @@ SPEC CHECKSUMS:
   image_picker_ios: 99dfe1854b4fa34d0364e74a78448a0151025425
   leveldb-library: f03246171cce0484482ec291f88b6d563699ee06
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
-  package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   SwiftProtobuf: 407a385e97fd206c4fbe880cc84123989167e0d1
   video_player_avfoundation: e9e6f9cae7d7a6d9b43519b0aab382bca60fcfd1
-  wakelock_plus: 8b09852c8876491e4b6d179e17dfe2a0b5f60d47
 
-PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
+PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
 
 COCOAPODS: 1.14.3

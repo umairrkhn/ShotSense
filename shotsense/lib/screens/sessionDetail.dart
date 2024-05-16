@@ -46,8 +46,10 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   @override
   void initState() {
     super.initState();
-    fetchSessionData();
-    fetchBalls();
+    fetchSessionData().then((value) {
+      fetchBalls();
+    });
+
     updateShotTypeStat();
   }
 
@@ -245,10 +247,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                       setState(() {
                         isgettingInferece = "true";
                       });
-                      fetchData().then((value) {
-                        setState(() {
-                          isgettingInferece = "false";
-                        });
+                      fetchData().then((value) async {
                         getFrequentShotTypeForSession(true).then((value) {
                           setState(() {
                             _sessionStats = value;
@@ -260,6 +259,9 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                             selectedOver = _oversInSession.last;
                           });
                           fetchBalls();
+                          setState(() {
+                            isgettingInferece = "false";
+                          });
                         });
                       });
 
@@ -323,7 +325,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
     );
   }
 
-  Future<void> fetchData() async {
+  Future<List> fetchData() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     var overSnapshot = await FirebaseFirestore.instance
@@ -387,7 +389,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         nextBall = 1;
       }
     }
-    // Step 3: Create a new document for the next ball
+
     DocumentReference ballCollection = firestore
         .collection('sessions')
         .doc(widget.sessionID)
@@ -396,25 +398,27 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         .collection('balls')
         .doc(nextBall.toString());
 
-    String inference = await getInference(_video!);
+    String inference = await getInference(
+        _video!, widget.sessionID, latestOverDoc.id, nextBall.toString());
     _inference = json.decode(inference);
-
-    String annotation = await getAnnotation(_video!);
-    _annotation = json.decode(annotation);
 
     Map<String, dynamic> ball = {
       'ball_id': Random().nextInt(1000000).toString(),
       'prediction': _inference['prediction'],
       'uri': _inference['video_uri'],
-      'annotated_uri': _annotation['annotated_uri'],
+      // 'annotated_uri': _annotation['annotated_uri'],
+      // 'annotated_uri': "",
       'recommendation': _inference['recommendation'],
       'ratings': _inference['ratings'],
       'sessionID': widget.sessionID,
       'sessionName': widget.sessionName,
       'userID': _auth.currentUser!.uid,
+      'createdAt': Timestamp.now(),
     };
 
     await ballCollection.set(ball);
+
+    return [latestOverDoc, nextBall];
   }
 
   Future<void> updateShotTypeStat() async {
@@ -830,9 +834,9 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                       ),
                       child: const Padding(
                         padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 5),
                         child: Text(
-                          'Finish Session',
+                          'Complete Session',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -1042,12 +1046,18 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                       return;
                     } else {
                       final gsReference = FirebaseStorage.instance
-                          .refFromURL(_ballsInSession[index]["uri"]);
+                          .refFromURL(_ballsInSession[index]["annotated_uri"]);
                       final url = await gsReference.getDownloadURL();
+                      final gsvideoReference = FirebaseStorage.instance
+                          .refFromURL(_ballsInSession[index]["uri"]);
+                      final urlVideo = await gsvideoReference.getDownloadURL();
                       Navigator.push(context, MaterialPageRoute(
                         builder: (context) {
                           return SingleBallPage(
-                              ballData: _ballsInSession[index], url: url);
+                            ballData: _ballsInSession[index],
+                            url: urlVideo,
+                            annotated_url: url,
+                          );
                         },
                       ));
                     }
@@ -1135,11 +1145,11 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   ),
                 ),
               ),
-              const Row(
+              Row(
                 children: [
                   Text(
-                    "Jan 1 2024",
-                    style: TextStyle(
+                    DateFormat('d MMM, y').format(sessionDate.toDate()),
+                    style: const TextStyle(
                       fontSize: 12,
                       color: Color.fromARGB(187, 21, 30, 35),
                     ),
@@ -1256,8 +1266,8 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                       onTap: () {
                         setState(() {
                           selectedOver = _oversInSession[index];
+                          fetchBalls();
                         });
-                        fetchBalls();
                         Navigator.pop(context);
                       },
                     ),
