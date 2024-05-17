@@ -42,15 +42,16 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   late String isgettingInferece = "false";
   late List _sessionStats = [];
   late Map<String, dynamic> sessionData = {};
+  late bool isLoadingBalls = true;
 
   @override
   void initState() {
     super.initState();
     fetchSessionData().then((value) {
       fetchBalls();
-    });
-
-    updateShotTypeStat();
+    }).then((value) => setState(() {
+          isLoadingBalls = false;
+        }));
   }
 
   Future<void> fetchSessionData() async {
@@ -102,7 +103,8 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       setState(() {
         _ballsInSession = ballsInSession.docs.map((doc) => doc.data()).toList();
       });
-      ballsInSession.docs.map((doc) => doc.data()).toList().length != 0
+
+      ballsInSession.docs.toList().isNotEmpty
           ? getFrequentShotTypeForSession(false).then((value) {
               setState(() {
                 _sessionStats = value;
@@ -171,6 +173,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
     final pickedFile = await _imagePicker.pickVideo(source: ImageSource.camera);
     if (pickedFile != null) {
       _video = File(pickedFile.path);
+
       _initializeAndShowVideoConfirmationDialog();
     }
   }
@@ -180,6 +183,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         await _imagePicker.pickVideo(source: ImageSource.gallery);
     if (pickedFile != null) {
       _video = File(pickedFile.path);
+
       _initializeAndShowVideoConfirmationDialog();
     }
   }
@@ -194,6 +198,8 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
   }
 
   void _showVideoConfirmationDialog() async {
+    Duration duration = _videoPlayerControllers.last.value.duration;
+    print("duration ${duration.inSeconds}");
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -205,11 +211,23 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              AspectRatio(
-                aspectRatio: _videoPlayerControllers.last.value.aspectRatio,
-                child: VideoPlayer(_videoPlayerControllers.last),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: AspectRatio(
+                  aspectRatio: _videoPlayerControllers.last.value.aspectRatio,
+                  child: VideoPlayer(_videoPlayerControllers.last),
+                ),
               ),
               const SizedBox(height: 16),
+              duration.inSeconds <= 5
+                  ? Container()
+                  : const Text(
+                      'Video should be longer than 5 seconds',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -241,52 +259,74 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                     ),
                   ),
                   const SizedBox(width: 4),
-                  ElevatedButton(
-                    onPressed: () async {
-                      _videoPlayerControllers.last.dispose();
-                      _videoPlayerControllers.removeLast();
-                      setState(() {
-                        isgettingInferece = "true";
-                      });
-                      fetchData().then((value) async {
-                        getFrequentShotTypeForSession(true).then((value) {
-                          setState(() {
-                            _sessionStats = value;
-                          });
-                        });
-                        updateShotTypeStat();
-                        fetchSessionData().then((value) {
-                          setState(() {
-                            selectedOver = _oversInSession.last;
-                          });
-                          fetchBalls();
-                          setState(() {
-                            isgettingInferece = "false";
-                          });
-                        });
-                      });
+                  duration.inSeconds <= 5
+                      ? ElevatedButton(
+                          onPressed: () async {
+                            _videoPlayerControllers.last.dispose();
+                            _videoPlayerControllers.removeLast();
+                            setState(() {
+                              isgettingInferece = "true";
+                            });
+                            fetchData().then((value) async {
+                              getFrequentShotTypeForSession(true).then((value) {
+                                setState(() {
+                                  _sessionStats = value;
+                                });
+                              });
+                              updateShotTypeStat();
+                              fetchSessionData().then((value) {
+                                setState(() {
+                                  selectedOver = _oversInSession.last;
+                                });
+                                fetchBalls();
+                                setState(() {
+                                  isgettingInferece = "false";
+                                });
+                              });
+                            });
 
-                      Navigator.of(context).pop();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff221D55),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                    child: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                      child: Text(
-                        'Confirm',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
+                            Navigator.of(context).pop();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xff221D55),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 8),
+                            child: Text(
+                              'Confirm',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        )
+                      : ElevatedButton(
+                          onPressed: () async {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color.fromARGB(255, 122, 122, 122),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 8),
+                            child: Text(
+                              'Confirm',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 252, 252, 252),
+                              ),
+                            ),
+                          ),
+                        )
                 ],
               ),
             ],
@@ -715,7 +755,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                     title: Text(
                       widget.sessionName!,
                       style: TextStyle(
-                        fontSize: height * 0.03,
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
@@ -782,30 +822,26 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                     _sessionStats.isNotEmpty
                         ? _buildStatContainer(
                             "Ball Hit Accuracy \n\t(${_sessionStats[2]} Balls Played)",
-                            "${((_sessionStats[1] / _sessionStats[2]) * 100).floor()}%")
-                        : _buildStatContainer("Ball Hit Accuracy", "..."),
+                            "${((_sessionStats[1] / _sessionStats[2]) * 100).floor()}%",
+                            false)
+                        : _buildStatContainer(
+                            "Ball Hit Accuracy", "...", false),
+                    const SizedBox(width: 15.0),
                     _sessionStats.isNotEmpty
-                        ? InkWell(
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(
-                                builder: (context) {
-                                  return ShotTypeStats(
-                                    sessionStats: sessionData,
-                                  );
-                                },
-                              ));
-                            },
-                            child: _buildStatContainer(
-                                "Frequent Shot Type", _sessionStats[0]))
-                        : _buildStatContainer("Frequent Shot Type", "..."),
+                        ? _buildStatContainer(
+                            "Frequent Shot Type", _sessionStats[0], true)
+                        : _buildStatContainer(
+                            "Frequent Shot Type", "...", false),
                   ],
                 ),
-                // const SizedBox(height: 15.0),
+                const SizedBox(height: 15.0),
                 _buildOverSection(),
                 const SizedBox(height: 15.0),
-                Expanded(
-                  child: _buildVideosSection(),
-                )
+                isLoadingBalls
+                    ? const Center(child: CircularProgressIndicator())
+                    : Expanded(
+                        child: _buildVideosSection(),
+                      )
               ],
             ),
           ),
@@ -894,146 +930,143 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         ));
   }
 
-  Widget _buildStatContainer(String label, String value) {
-    return Container(
-      width: MediaQuery.of(context).size.width / 2.3,
-      height: MediaQuery.of(context).size.height / 6.3,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.white),
-        borderRadius: BorderRadius.circular(20.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.15),
-            spreadRadius: 1,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-        color: Colors.white,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          Text(
-            label,
-            style: const TextStyle(
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(height: 30),
-        ],
-      ),
-    );
+  Widget _buildStatContainer(String label, String value, bool isTappable) {
+    return Expanded(
+        child: GestureDetector(
+            onTap: () {
+              isTappable
+                  ? Navigator.push(context, MaterialPageRoute(
+                      builder: (context) {
+                        return ShotTypeStats(
+                          sessionStats: sessionData,
+                        );
+                      },
+                    ))
+                  : null;
+            },
+            child: Container(
+              // width: MediaQuery.of(context).size.width / 2.3,
+              height: 120,
+
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.white),
+                borderRadius: BorderRadius.circular(20.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.15),
+                    spreadRadius: 1,
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+                color: Colors.white,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    value,
+                    style: const TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Text(
+                    label,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                  // const SizedBox(height: 30),
+                ],
+              ),
+            )));
   }
 
   Widget _buildOverSection() {
     if (isgettingInferece == "false") {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 15.0),
-          Row(
-            children: [
-              InkWell(
-                onTap: () => {_showOverDropdown(context)},
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Over $selectedOver",
-                      style: const TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 11, 11, 11),
-                      ),
-                    ),
-                    const Icon(Icons.arrow_drop_down_rounded, size: 50),
-                    // const SizedBox(width: double.infinity, height: 0),
-                    const SizedBox(width: 200, height: 0),
-                    isCompleted
-                        ? Container()
-                        : GestureDetector(
-                            onTap: () => _showImagePickerBottomSheet(),
-                            child: const Icon(
-                              Icons.add_circle,
-                              size: 35,
-                              color: Color.fromARGB(255, 11, 51, 84),
-                            ),
-                          ),
-                  ],
+      return InkWell(
+        onTap: () => {_showOverDropdown(context)},
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(children: [
+              Text(
+                "Over $selectedOver",
+                style: const TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 11, 11, 11),
                 ),
               ),
-            ],
-          ),
-        ],
+              const Icon(Icons.arrow_drop_down_rounded, size: 50),
+            ]),
+            // const SizedBox(width: double.infinity, height: 0),
+            // const SizedBox(width: 100, height: 0),
+            Container(
+              child: isCompleted
+                  ? Container()
+                  : GestureDetector(
+                      onTap: () => _showImagePickerBottomSheet(),
+                      child: const Icon(
+                        Icons.add_circle,
+                        size: 35,
+                        color: Color.fromARGB(255, 11, 51, 84),
+                      ),
+                    ),
+            ),
+          ],
+        ),
       );
     } else {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 15.0),
-          Row(
-            children: [
-              InkWell(
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content:
-                          Text('Please wait for the inference to complete'),
-                    ),
-                  );
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Over $selectedOver",
-                      style: const TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 160, 160, 160),
-                      ),
-                    ),
-                    const Icon(
-                      Icons.arrow_drop_down_rounded,
-                      size: 50,
-                      color: Color.fromARGB(255, 160, 160, 160),
-                    ),
-                    // const SizedBox(width: double.infinity, height: 0),
-                    const SizedBox(width: 200, height: 0),
-                    isCompleted
-                        ? Container()
-                        : GestureDetector(
-                            onTap: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                      'Please wait for the inference to complete'),
-                                ),
-                              );
-                            },
-                            child: const Icon(
-                              Icons.add_circle,
-                              size: 35,
-                              color: Color.fromARGB(255, 160, 160, 160),
-                            ),
-                          ),
-                  ],
+      return InkWell(
+        onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Please wait for the inference to complete'),
+            ),
+          );
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(children: [
+              Text(
+                "Over $selectedOver",
+                style: const TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 160, 160, 160),
                 ),
               ),
-            ],
-          ),
-        ],
+              const Icon(
+                Icons.arrow_drop_down_rounded,
+                size: 50,
+                color: Color.fromARGB(255, 160, 160, 160),
+              ),
+            ]),
+            Container(
+                child: isCompleted
+                    ? Container()
+                    : GestureDetector(
+                        onTap: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'Please wait for the inference to complete'),
+                            ),
+                          );
+                        },
+                        child: const Icon(
+                          Icons.add_circle,
+                          size: 35,
+                          color: Color.fromARGB(255, 160, 160, 160),
+                        ),
+                      )),
+          ],
+        ),
       );
     }
   }
@@ -1188,7 +1221,6 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                width: 280,
                 child: Text(
                   _ballsInSession[index]
                       ["prediction"], // Removed 'const' keyword
@@ -1207,7 +1239,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                       color: Color.fromARGB(187, 21, 30, 35),
                     ),
                   ),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
                 ],
               ),
             ],

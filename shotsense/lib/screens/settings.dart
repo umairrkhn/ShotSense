@@ -53,6 +53,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           child: CircularProgressIndicator(),
                         );
                       }
+
                       return Column(
                         children: [
                           Container(
@@ -72,7 +73,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             child: ListTile(
                               leading: Builder(
                                 builder: (context) {
-                                  return Icon(
+                                  return const Icon(
                                     Icons.account_circle,
                                     size: 30,
                                   );
@@ -101,6 +102,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                   showDialog(
                                       context: context,
                                       builder: (context) {
+                                        sessionName.text =
+                                            (snapshot.data)?["displayName"];
                                         return AlertDialog(
                                           title: const Text("Edit Username"),
                                           content: TextField(
@@ -132,7 +135,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
                                                 Navigator.pop(context);
                                               },
-                                              child: const Text("Save"),
+                                              child: const Text("Upadte"),
                                             ),
                                           ],
                                         );

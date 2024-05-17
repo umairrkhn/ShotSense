@@ -185,59 +185,69 @@ class _SessionPageState extends State<SessionPage> {
                       );
                     }).toList();
 
+                    List<session> currentSessions =
+                        Sessions.where((element) => element.completed == false)
+                            .toList();
+
+                    List<session> previousSessions =
+                        Sessions.where((element) => element.completed == true)
+                            .toList();
+
                     return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           if (Sessions.isNotEmpty)
                             (_selectedSession == 'current')
                                 ? Column(
-                                    children: Sessions.map((Session) {
-                                      if (Session.completed == false) {
-                                        return smallCard(
-                                          name: Session.name,
-                                          date: DateFormat('d MMM, y').format(
-                                              Session.createdAt.toDate()),
-                                          sessionId: Session.id,
-                                        );
-                                      } else {
-                                        return Container(
-                                            alignment: Alignment.center,
-                                            margin: const EdgeInsets.only(
-                                                top: 30.0),
-                                            child: const Text(
-                                                style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black,
-                                                ),
-                                                'No current playing session yet'));
-                                      }
-                                    }).toList(),
-                                  )
+                                    children: currentSessions.isNotEmpty
+                                        ? currentSessions.map((Session) {
+                                            return smallCard(
+                                              name: Session.name,
+                                              date: DateFormat('d MMM, y')
+                                                  .format(Session.createdAt
+                                                      .toDate()),
+                                              sessionId: Session.id,
+                                            );
+                                          }).toList()
+                                        : [
+                                            Container(
+                                                alignment: Alignment.center,
+                                                margin: const EdgeInsets.only(
+                                                    top: 30.0),
+                                                child: const Text(
+                                                    style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.black,
+                                                    ),
+                                                    'No current playing session yet'))
+                                          ])
                                 : Column(
-                                    children: Sessions.map((Session) {
-                                      if (Session.completed == true) {
-                                        return smallCard(
-                                          name: Session.name,
-                                          date: DateFormat('d MMM, y').format(
-                                              Session.createdAt.toDate()),
-                                          sessionId: Session.id,
-                                        );
-                                      } else {
-                                        return Container(
-                                            alignment: Alignment.center,
-                                            margin: const EdgeInsets.only(
-                                                top: 30.0),
-                                            child: const Text(
-                                                style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black,
-                                                ),
-                                                'No session completed yet'));
-                                      }
-                                    }).toList(),
-                                  )
+                                    children: currentSessions.isNotEmpty
+                                        ? previousSessions.map((Session) {
+                                            return smallCard(
+                                              name: Session.name,
+                                              date: DateFormat('d MMM, y')
+                                                  .format(Session.createdAt
+                                                      .toDate()),
+                                              sessionId: Session.id,
+                                            );
+                                          }).toList()
+                                        : [
+                                            Container(
+                                                alignment: Alignment.center,
+                                                margin: const EdgeInsets.only(
+                                                    top: 30.0),
+                                                child: const Text(
+                                                    style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.black,
+                                                    ),
+                                                    'No previous playing session yet'))
+                                          ])
                           else
                             const Padding(
                               padding: EdgeInsets.only(top: 30.0, left: 16.0),

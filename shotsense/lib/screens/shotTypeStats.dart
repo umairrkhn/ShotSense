@@ -26,43 +26,43 @@ class ShotTypeStatsScreen extends State<ShotTypeStats> {
           child: SingleChildScrollView(
               child: Column(children: [
             buildListItem(context, "Cover Drive",
-                "${(widget.sessionStats['coverDriveCount'] / widget.sessionStats['totalBalls'] * 100).toString()}%"),
+                "${(widget.sessionStats['coverDriveCount'] / widget.sessionStats['totalBalls'] * 100).toStringAsFixed(1)}%"),
             const Divider(
               color: Colors.grey,
               thickness: 1,
             ),
             buildListItem(context, "Cut",
-                "${(widget.sessionStats['cutCount'] / widget.sessionStats['totalBalls'] * 100).toString()}%"),
+                "${(widget.sessionStats['cutCount'] / widget.sessionStats['totalBalls'] * 100).toStringAsFixed(1)}%"),
             const Divider(
               color: Colors.grey,
               thickness: 1,
             ),
             buildListItem(context, "Defence",
-                "${(widget.sessionStats['defenceCount'] / widget.sessionStats['totalBalls'] * 100).toString()}%"),
+                "${(widget.sessionStats['defenceCount'] / widget.sessionStats['totalBalls'] * 100).toStringAsFixed(1)}%"),
             const Divider(
               color: Colors.grey,
               thickness: 1,
             ),
             buildListItem(context, "Flick",
-                "${(widget.sessionStats['flickCount'] / widget.sessionStats['totalBalls'] * 100).toString()}%"),
+                "${(widget.sessionStats['flickCount'] / widget.sessionStats['totalBalls'] * 100).toStringAsFixed(1)}%"),
             const Divider(
               color: Colors.grey,
               thickness: 1,
             ),
             buildListItem(context, "Hook",
-                "${(widget.sessionStats['hookCount'] / widget.sessionStats['totalBalls'] * 100).toString()}%"),
+                "${(widget.sessionStats['hookCount'] / widget.sessionStats['totalBalls'] * 100).toStringAsFixed(1)}%"),
             const Divider(
               color: Colors.grey,
               thickness: 1,
             ),
             buildListItem(context, "Pull",
-                "${(widget.sessionStats['pullShotCount'] / widget.sessionStats['totalBalls'] * 100).toString()}%"),
+                "${(widget.sessionStats['pullShotCount'] / widget.sessionStats['totalBalls'] * 100).toStringAsFixed(1)}%"),
             const Divider(
               color: Colors.grey,
               thickness: 1,
             ),
             buildListItem(context, "Straight",
-                "${(widget.sessionStats['straightCount'] / widget.sessionStats['totalBalls'] * 100).toString()}%"),
+                "${(widget.sessionStats['straightCount'] / widget.sessionStats['totalBalls'] * 100).toStringAsFixed(1)}%"),
             const Divider(
               color: Colors.grey,
               thickness: 1,

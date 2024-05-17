@@ -118,7 +118,9 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
                 children: [
                   _buildStatBox(
                       context, widget.ballData["prediction"], "Shot Type"),
-                  const SizedBox(width: 15.0),
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width -
+                          (MediaQuery.of(context).size.width - 15)),
                   _buildStatBox(
                       context,
                       widget.ballData["ratings"]["shot"].toUpperCase(),
@@ -182,35 +184,33 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
                 ],
               ),
               const SizedBox(height: 15.0),
-              Column(
-                children: [
-                  Container(
-                    height: 620,
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(20.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.15),
-                          spreadRadius: 1,
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                      color: Colors.white,
+
+              Container(
+                height: MediaQuery.of(context).size.width * (14.4 / 9),
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(20.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.15),
+                      spreadRadius: 1,
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
                     ),
-                    child: _selectedVideo == "video"
-                        ? _buildVideoPlayer()
-                        : widget.annotated_url == ""
-                            ? _buildVideoPlayerAnnotated(true)
-                            : _buildVideoPlayerAnnotated(false),
-                  ),
-                ],
+                  ],
+                  color: Colors.white,
+                ),
+                child: _selectedVideo == "video"
+                    ? _buildVideoPlayer()
+                    : widget.annotated_url == ""
+                        ? _buildVideoPlayerAnnotated(true)
+                        : _buildVideoPlayerAnnotated(false),
               ),
+
               const SizedBox(height: 15.0),
               Container(
-                  height: 100,
+                  // height: 500,
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                     // border: Border.all(color: Colors.white),
@@ -225,33 +225,72 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
                     ],
                     color: Colors.white,
                   ),
-                  child: Row(
+                  child: Column(
                     children: [
-                      Expanded(
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20.0),
+                      Row(
+                        children: [
+                          Expanded(
                               child: buildRatingContainer(
                                   context,
                                   widget.ballData["ratings"]["footwork"],
-                                  "Footwork"))),
-                      const SizedBox(width: 8.0),
-                      Expanded(
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20.0),
+                                  "Footwork")),
+                          const SizedBox(width: 8.0),
+                          Expanded(
                               child: buildRatingContainer(
                                   context,
                                   widget.ballData["ratings"]["shot_choice"],
-                                  "Shot Choice"))),
-                      const SizedBox(width: 8.0),
-                      Expanded(
-                          child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: buildRatingContainer(context,
-                            widget.ballData["ratings"]["timing"], "Timing"),
-                      )),
-                      const SizedBox(height: 15.0),
+                                  "Shot Choice")),
+                          const SizedBox(width: 8.0),
+                          Expanded(
+                            child: buildRatingContainer(context,
+                                widget.ballData["ratings"]["timing"], "Timing"),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4.0),
+                      const Divider(
+                        color: Color.fromARGB(255, 209, 209, 209),
+                        thickness: 1,
+                      ),
+                      const SizedBox(height: 4.0),
+                      Container(
+                        padding: const EdgeInsets.only(left: 6.0, right: 6.0),
+                        child: Text(
+                          widget.ballData["recommendation"],
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      )
                     ],
                   )),
+              const SizedBox(height: 15.0),
+              //  Container(
+              //         padding: const EdgeInsets.all(16.0),
+              //         decoration: BoxDecoration(
+              //           border: Border.all(color: Colors.white),
+              //           borderRadius: BorderRadius.circular(20.0),
+              //           boxShadow: [
+              //             BoxShadow(
+              //               color: Color.fromARGB(255, 3, 45, 255)
+              //                   .withOpacity(0.15),
+              //               spreadRadius: 5,
+              //               blurRadius: 12,
+              //               offset: const Offset(0, 2),
+              //             ),
+              //           ],
+              //           color: Colors.white,
+              //         ),
+              //         child: Text(
+              //           widget.ballData["recommendation"],
+              //           style: TextStyle(
+              //             fontSize: 20,
+              //             fontWeight: FontWeight.bold,
+              //             color: Colors.black,
+              //           ),
+              //         ))
             ],
           ),
         )));
@@ -329,9 +368,11 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
   }
 
   Widget _buildStatBox(BuildContext context, String title, String subtitle) {
-    return Container(
-      width: MediaQuery.of(context).size.width / 2.3,
-      height: MediaQuery.of(context).size.width / 3,
+    return Expanded(
+        child: Container(
+      // width: MediaQuery.of(context).size.width / 5,
+      // height: MediaQuery.of(context).size.width / 3,
+      padding: const EdgeInsets.only(top: 20),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.white),
         borderRadius: BorderRadius.circular(20.0),
@@ -371,7 +412,7 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
           ),
         ],
       ),
-    );
+    ));
   }
 }
 
@@ -443,43 +484,56 @@ Widget buildContainer(BuildContext context, String titleName, String subtitle,
 
 Widget buildRatingContainer(context, rating, ratingName) {
   return Container(
-    // width: 80,
-    // height: 80,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0),
+        boxShadow: const [
+          BoxShadow(
+            color: Color.fromARGB(255, 227, 227, 227),
+            spreadRadius: 1,
+            blurRadius: 2,
+            offset: Offset(0, 0),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+          borderRadius: BorderRadius.circular(20.0),
+          child: Container(
+            // width: 80,
+            height: 80,
 
-    decoration: BoxDecoration(
-      // borderRadius: const BorderRadius.only(
-      //   topLeft: Radius.circular(20.0),
-      //   bottomLeft: Radius.circular(20.0),
-      // ),
-      // gradient: LinearGradient(
-      //   begin: Alignment.bottomCenter,
-      //   end: Alignment.topCenter,
-      //   colors: getRatingColors(rating),
-      //   stops: const [0.0, 0.25, 0.5, 0.75, 1.0],
-      // ),
-      color: getRatingColors(rating)[0],
-    ),
-    child: Center(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          rating.toUpperCase(),
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-        Text(
-          ratingName,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-      ],
-    )),
-  );
+            // borderRadius: const BorderRadius.only(
+            //   topLeft: Radius.circular(20.0),
+            //   bottomLeft: Radius.circular(20.0),
+            // ),
+            // gradient: LinearGradient(
+            //   begin: Alignment.bottomCenter,
+            //   end: Alignment.topCenter,
+            //   colors: getRatingColors(rating),
+            //   stops: const [0.0, 0.25, 0.5, 0.75, 1.0],
+            // ),
+            color: getRatingColors(rating)[0],
+
+            child: Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  rating.toUpperCase(),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                Text(
+                  ratingName,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            )),
+          )));
 }

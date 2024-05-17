@@ -32,10 +32,10 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
     });
 
     await context.read<FirebaseAuthMethods>().loginWithEmail(
-      email: emailController.text,
-      password: passwordController.text,
-      context: context,
-    );
+          email: emailController.text,
+          password: passwordController.text,
+          context: context,
+        );
 
     setState(() {
       isLoading = false;
@@ -65,20 +65,23 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
         return;
       }
 
-      GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+      GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
 
       OAuthCredential googleAuthCredential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
 
-      UserCredential userCredential = await _auth.signInWithCredential(googleAuthCredential);
+      UserCredential userCredential =
+          await _auth.signInWithCredential(googleAuthCredential);
 
       User? user = userCredential.user;
 
       if (user != null && mounted) {
         try {
-          var userSnapshot = await _firestore.collection('users').doc(user.uid).get();
+          var userSnapshot =
+              await _firestore.collection('users').doc(user.uid).get();
           if (!userSnapshot.exists) {
             await _firestore.collection('users').doc(user.uid).set({
               'email': user.email,
@@ -93,13 +96,15 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
           print('Error during Firestore write: $e');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Error during Firestore write: $e', style: const TextStyle(fontSize: 14, color: Colors.white)),
+              content: Text('Error during Firestore write: $e',
+                  style: const TextStyle(fontSize: 14, color: Colors.white)),
               backgroundColor: const Color.fromARGB(255, 38, 5, 116),
             ),
           );
         }
       } else {
-        print('Error during sign in: User object is null or widget is not mounted.');
+        print(
+            'Error during sign in: User object is null or widget is not mounted.');
       }
     } catch (e) {
       if (!mounted) {
@@ -108,7 +113,8 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error during sign in: $e', style: const TextStyle(fontSize: 14, color: Colors.white)),
+          content: Text('Error during sign in: $e',
+              style: const TextStyle(fontSize: 14, color: Colors.white)),
           backgroundColor: const Color.fromARGB(255, 38, 5, 116),
         ),
       );
@@ -122,7 +128,6 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
       }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -160,35 +165,41 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
               ),
               const SizedBox(height: 20),
               isLoading
-                  ? const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 38, 5, 116),),)
+                  ? const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Color.fromARGB(255, 38, 5, 116),
+                      ),
+                    )
                   : ElevatedButton(
-                onPressed: isLoading ? null : loginUser,
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    const Color.fromARGB(255, 38, 5, 116),
-                  ),
-                  textStyle: MaterialStateProperty.all(
-                    const TextStyle(color: Colors.white),
-                  ),
-                ),
-                child: const Text('Log In', style: TextStyle(fontSize: 14)),
-              ),
+                      onPressed: isLoading ? null : loginUser,
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                          const Color.fromARGB(255, 38, 5, 116),
+                        ),
+                        textStyle: MaterialStateProperty.all(
+                          const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      child: const Text('Log In',
+                          style: TextStyle(fontSize: 14, color: Colors.white)),
+                    ),
               const SizedBox(height: 15),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    width: 150,
+                    width: 100,
                     child: Divider(
                       color: Colors.grey,
                       thickness: 1,
                     ),
                   ),
                   SizedBox(width: 8),
-                  Text('OR', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                  Text('OR',
+                      style: TextStyle(color: Colors.grey, fontSize: 12)),
                   SizedBox(width: 8),
                   SizedBox(
-                    width: 150,
+                    width: 100,
                     child: Divider(
                       color: Colors.grey,
                       thickness: 1,
@@ -202,7 +213,8 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                 text: "Log In with Google",
                 onPressed: googleSignIn,
                 elevation: 2,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
               ),
               const SizedBox(height: 15),
               Row(
@@ -213,7 +225,8 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
                     onTap: navigateToSignUp,
                     child: const Text(
                       "Sign Up",
-                      style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          color: Colors.blue, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
