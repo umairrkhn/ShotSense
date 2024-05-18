@@ -19,7 +19,6 @@ Future<String> getInference(
   } else {
     print('Error uploading file. Status code: ${response.statusCode}');
   }
-  //add prediction to correct over in firebase
 
   getAnnotation(file, sessionID, over, ball);
 
@@ -30,8 +29,6 @@ Future<String> getAnnotation(
     File file, String sessionID, String over, String ball) async {
   var url = Uri.parse(
       'https://supervision-backend-uoglzgacta-uc.a.run.app/annotate_video');
-
-  // var url = Uri.parse('http://10.0.2.2:8080/annotate_video');
 
   print('File path: ${file.path}');
   print(file);

@@ -57,11 +57,12 @@ class SingleBallPage extends StatefulWidget {
 }
 
 class _SingleBallPageScreen extends State<SingleBallPage> {
+  late bool _videoIsLoading = true;
+  late bool _videoIsLoadingAnnotated = true;
   late VideoPlayerController _videoPlayerControllerAnnotated =
-      VideoPlayerController.contentUri(Uri.parse(widget.annotated_url))
-        ..initialize();
+      VideoPlayerController.network(widget.annotated_url)..initialize();
   late VideoPlayerController _videoPlayerController =
-      VideoPlayerController.contentUri(Uri.parse(widget.url))..initialize();
+      VideoPlayerController.network(widget.url)..initialize();
   late String _selectedVideo = 'video';
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -298,11 +299,16 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
 
   Widget _buildVideoPlayer() {
     return Scaffold(
-      body: ClipRRect(
-        borderRadius: BorderRadius.circular(20.0),
-        child: AspectRatio(
-            aspectRatio: 9 / 16, child: VideoPlayer(_videoPlayerController)),
-      ),
+      body: _videoIsLoading == false
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: AspectRatio(
+                  aspectRatio: 9 / 16,
+                  child: VideoPlayer(_videoPlayerController)),
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
@@ -392,7 +398,7 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
           Text(
             title,
             style: const TextStyle(
-              fontSize: 30,
+              fontSize: 24,
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
@@ -455,7 +461,7 @@ Widget buildContainer(BuildContext context, String titleName, String subtitle,
           Text(
             titleName,
             style: const TextStyle(
-              fontSize: 25,
+              fontSize: 28,
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
@@ -499,7 +505,7 @@ Widget buildRatingContainer(context, rating, ratingName) {
           borderRadius: BorderRadius.circular(20.0),
           child: Container(
             // width: 80,
-            height: 80,
+            height: 60,
 
             // borderRadius: const BorderRadius.only(
             //   topLeft: Radius.circular(20.0),

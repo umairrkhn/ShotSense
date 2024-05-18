@@ -493,7 +493,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         case 'Pull Shot':
           pullShotCount++;
           break;
-        case 'Straight':
+        case 'Straight Drive':
           straightCount++;
           break;
         case 'Hook':
@@ -539,7 +539,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
             highestShotType = 'Pull Shot';
             break;
           case 'straightCount':
-            highestShotType = 'Straight';
+            highestShotType = 'Straight Drive';
             break;
           case 'hookCount':
             highestShotType = 'Hook';
@@ -623,7 +623,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
             case 'Pull Shot':
               pullShotCount++;
               break;
-            case 'Straight':
+            case 'Straight Drive':
               straightCount++;
               break;
             case 'Hook':
@@ -671,7 +671,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
               highestShotType = 'Pull Shot';
               break;
             case 'straightCount':
-              highestShotType = 'Straight';
+              highestShotType = 'Straight Drive';
               break;
             case 'hookCount':
               highestShotType = 'Hook';
@@ -967,7 +967,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   Text(
                     value,
                     style: const TextStyle(
-                      fontSize: 30,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
@@ -1185,7 +1185,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                 ),
                 child: const Text("No Videos added for this over"),
               ),
-            const SizedBox(height: 70.0),
+            const SizedBox(height: 110.0),
           ],
         ));
   }

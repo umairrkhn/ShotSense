@@ -1,13 +1,1 @@
-{
-  "hosting": {
-    "source": ".",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "frameworksBackend": {
-      "region": "us-central1"
-    }
-  }
-}
+{"hosting":{"source":".","ignore":["firebase.json","**/.*","**/node_modules/**"],"frameworksBackend":{"region":"us-central1"}},"flutter":{"platforms":{"android":{"default":{"projectId":"shotsense-ai","appId":"1:422454591798:android:05d5ed66c28493983e3397","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"shotsense-ai","appId":"1:422454591798:ios:b8cf36fdd058f7113e3397","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"shotsense-ai","configurations":{"android":"1:422454591798:android:05d5ed66c28493983e3397","ios":"1:422454591798:ios:b8cf36fdd058f7113e3397","web":"1:422454591798:web:dfb3a009aae6bad83e3397"}}}}}}

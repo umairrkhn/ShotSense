@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>623073582912-180p75sa4h2fi3vkvp3p05jm5oje7sua.apps.googleusercontent.com</string>
+	<string>422454591798-3hsaeh0r0s4skc9j3g856tlceq1ps77f.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.623073582912-180p75sa4h2fi3vkvp3p05jm5oje7sua</string>
+	<string>com.googleusercontent.apps.422454591798-3hsaeh0r0s4skc9j3g856tlceq1ps77f</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDTBaUaRtrzjuARON6OmKqz3FWAdihDrg0</string>
+	<string>AIzaSyAgumk9rJwBSQN3xfx0Ubwqtdy6QSKGigc</string>
 	<key>GCM_SENDER_ID</key>
-	<string>623073582912</string>
+	<string>422454591798</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.shotsense</string>
 	<key>PROJECT_ID</key>
-	<string>shotsense-f8806</string>
+	<string>shotsense-ai</string>
 	<key>STORAGE_BUCKET</key>
-	<string>shotsense-f8806.appspot.com</string>
+	<string>shotsense-ai.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:623073582912:ios:8b56567084d4af8aec24a5</string>
+	<string>1:422454591798:ios:b8cf36fdd058f7113e3397</string>
 </dict>
 </plist>

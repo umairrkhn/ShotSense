@@ -14,7 +14,6 @@ class ShotTypeStatsScreen extends State<ShotTypeStats> {
   @override
   void initState() {
     super.initState();
-    print(widget.sessionStats);
   }
 
   @override

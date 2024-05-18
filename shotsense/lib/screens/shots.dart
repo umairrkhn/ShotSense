@@ -23,7 +23,7 @@ class _ShotScreenState extends State<ShotScreen> {
   List<String> shotTypes = [
     'All',
     'Cover Drive',
-    'Straight',
+    'Straight Drive',
     'Defence',
     'Hook',
     'Pull',
@@ -36,6 +36,7 @@ class _ShotScreenState extends State<ShotScreen> {
 
   User? user = FirebaseAuth.instance.currentUser;
   bool ballsExist = false;
+  bool _isRunningSingleballFunction = false;
 
   @override
   void initState() {
@@ -253,6 +254,7 @@ class _ShotScreenState extends State<ShotScreen> {
                                                       },
                                                     ));
                                                   },
+
                                                   // leading: ClipRRect(
                                                   //   borderRadius:
                                                   //       BorderRadius.circular(
@@ -265,13 +267,13 @@ class _ShotScreenState extends State<ShotScreen> {
                                                   //   ),
                                                   // ),
                                                   leading: const Icon(
-                                                    Icons.sports_cricket,
+                                                    Icons.circle_rounded,
                                                     size: 40,
                                                     color: Color.fromARGB(
                                                         255, 78, 78, 78),
                                                   ),
                                                   title: Text(
-                                                      "From \b${ballData["sessionName"]}"),
+                                                      "From ${ballData["sessionName"]}"),
                                                   subtitle: Text(
                                                     // "From ${ballData["createdAt"]}",
                                                     "${DateFormat("MMMM d, yyyy").format(ballData["createdAt"].toDate()).toString()}",
@@ -293,7 +295,8 @@ class _ShotScreenState extends State<ShotScreen> {
                                                         await gsAnotattedReference
                                                             .getDownloadURL();
                                                     final gsvideoReference =
-                                                        FirebaseStorage.instance
+                                                        await FirebaseStorage
+                                                            .instance
                                                             .refFromURL(
                                                                 ballData[
                                                                     "uri"]);
@@ -328,7 +331,7 @@ class _ShotScreenState extends State<ShotScreen> {
                                                         255, 78, 78, 78),
                                                   ),
                                                   title: Text(
-                                                      "From \b${ballData["sessionName"]}"),
+                                                      "From ${ballData["sessionName"]}"),
                                                   subtitle: Text(
                                                     // "From ${ballData["createdAt"]}",
                                                     "${DateFormat("MMMM d, yyyy").format(ballData["createdAt"].toDate()).toString()}",
