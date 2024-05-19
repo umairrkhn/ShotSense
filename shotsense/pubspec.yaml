@@ -31,6 +31,10 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^3.0.2
 
+flutter_native_splash :
+    color: "#ffffff"
+    image: assets/images/ShotSense-logo.png
+
 flutter:
   uses-material-design: true
   assets:

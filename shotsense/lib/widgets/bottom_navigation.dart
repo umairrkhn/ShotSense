@@ -58,7 +58,7 @@ class _BottomNavigationBarExampleState
           });
         },
         animationCurve: Curves.easeInOut,
-        animationDuration: const Duration(milliseconds: 400),
+        animationDuration: const Duration(milliseconds: 300),
       ),
     );
   }

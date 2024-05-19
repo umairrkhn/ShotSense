@@ -23,8 +23,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: Navigator.canPop(context)
-              ? Padding(
-                  padding: const EdgeInsets.only(top: 16),
+              ? Container(
+                  padding: const EdgeInsets.only(top: 16.0, left: 15),
                   child: IconButton(
                     icon: const Icon(Icons.arrow_back_ios_new,
                         color: Color.fromARGB(255, 29, 20, 118)),
@@ -37,7 +37,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 'Please wait for the inference to complete'),
                           ),
                         );
-                      } else {
+                      }
+                      // trying of click only once and preventing twice new page opening
+                      // else if (title == "Ball Details") {
+                      //   print("poping from ball details");
+                      //   Navigator.pop(context, "result");
+                      // }
+                      else {
                         Navigator.of(context).pop();
                       }
                     },
@@ -59,24 +65,26 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ? MainAxisAlignment.start
                   : MainAxisAlignment.start,
               children: [
-                ShaderMask(
-                  shaderCallback: (bounds) => const LinearGradient(
-                    colors: [
-                      Color.fromARGB(208, 237, 36, 126),
-                      Color.fromARGB(205, 34, 29, 85),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ).createShader(bounds),
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 34,
-                      fontWeight: FontWeight.w900,
-                    ),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: title == "Session Details"
+                        ? 34
+                        : title == "Shot Type Stats"
+                            ? 30
+                            : 38,
+                    fontWeight: FontWeight.w900,
+                    foreground: Paint()
+                      ..shader = const LinearGradient(
+                        colors: [
+                          Color.fromARGB(208, 237, 36, 126),
+                          Color.fromARGB(205, 34, 29, 85),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0)),
                   ),
-                )
+                ),
               ],
             ),
           ),

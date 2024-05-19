@@ -1,4 +1,7 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
@@ -59,12 +62,12 @@ class SingleBallPage extends StatefulWidget {
 class _SingleBallPageScreen extends State<SingleBallPage> {
   late bool _videoIsLoading = true;
   late bool _videoIsLoadingAnnotated = true;
-  late VideoPlayerController _videoPlayerControllerAnnotated =
-      VideoPlayerController.network(widget.annotated_url)..initialize();
-  late VideoPlayerController _videoPlayerController =
-      VideoPlayerController.network(widget.url)..initialize();
   late String _selectedVideo = 'video';
 
+  late VideoPlayerController _videoPlayerControllerAnnotated =
+      VideoPlayerController.network(widget.annotated_url);
+  late VideoPlayerController _videoPlayerController =
+      VideoPlayerController.network(widget.url);
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late String sessionName = '';
   late Timestamp sessionDate = Timestamp.now();
@@ -73,6 +76,27 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
   void initState() {
     super.initState();
     fetchSessionData();
+
+    initializeVideos();
+  }
+
+  void initializeVideos() async {
+    await _videoPlayerController.initialize().then((value) {
+      if (mounted) {
+        setState(() {
+          _videoIsLoading = false;
+        });
+      }
+    });
+    widget.annotated_url != ""
+        ? await _videoPlayerControllerAnnotated.initialize().then((value) {
+            if (mounted) {
+              setState(() {
+                _videoIsLoadingAnnotated = false;
+              });
+            }
+          })
+        : null;
   }
 
   Future<void> fetchSessionData() async {
@@ -299,7 +323,7 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
 
   Widget _buildVideoPlayer() {
     return Scaffold(
-      body: _videoIsLoading == false
+      body: _videoIsLoading == true
           ? const Center(
               child: CircularProgressIndicator(),
             )
@@ -309,20 +333,24 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
                   aspectRatio: 9 / 16,
                   child: VideoPlayer(_videoPlayerController)),
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _videoPlayerController.value.isPlaying
-                ? _videoPlayerController.pause()
-                : _videoPlayerController.play();
-          });
-        },
-        child: Icon(
-          _videoPlayerController.value.isPlaying
-              ? Icons.pause
-              : Icons.play_arrow,
-        ),
-      ),
+      floatingActionButton: _videoIsLoading == true
+          ? Center(
+              child: Container(),
+            )
+          : FloatingActionButton(
+              onPressed: () {
+                setState(() {
+                  _videoPlayerController.value.isPlaying
+                      ? _videoPlayerController.pause()
+                      : _videoPlayerController.play();
+                });
+              },
+              child: Icon(
+                _videoPlayerController.value.isPlaying
+                    ? Icons.pause
+                    : Icons.play_arrow,
+              ),
+            ),
     );
   }
 
@@ -335,22 +363,30 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
               borderRadius: BorderRadius.circular(20.0),
               child: AspectRatio(
                   aspectRatio: 9 / 16,
-                  child: VideoPlayer(_videoPlayerControllerAnnotated)),
+                  child: (_videoIsLoadingAnnotated == false)
+                      ? VideoPlayer(_videoPlayerControllerAnnotated)
+                      : Center(
+                          child: CircularProgressIndicator(),
+                        )),
             ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                setState(() {
-                  _videoPlayerControllerAnnotated.value.isPlaying
-                      ? _videoPlayerControllerAnnotated.pause()
-                      : _videoPlayerControllerAnnotated.play();
-                });
-              },
-              child: Icon(
-                _videoPlayerControllerAnnotated.value.isPlaying
-                    ? Icons.pause
-                    : Icons.play_arrow,
-              ),
-            ),
+            floatingActionButton: _videoIsLoading == true
+                ? Center(
+                    child: Container(),
+                  )
+                : FloatingActionButton(
+                    onPressed: () {
+                      setState(() {
+                        _videoPlayerControllerAnnotated.value.isPlaying
+                            ? _videoPlayerControllerAnnotated.pause()
+                            : _videoPlayerControllerAnnotated.play();
+                      });
+                    },
+                    child: Icon(
+                      _videoPlayerControllerAnnotated.value.isPlaying
+                          ? Icons.pause
+                          : Icons.play_arrow,
+                    ),
+                  ),
           )
         : Column(
             children: [

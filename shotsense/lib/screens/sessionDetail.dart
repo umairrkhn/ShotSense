@@ -49,9 +49,13 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
     super.initState();
     fetchSessionData().then((value) {
       fetchBalls();
-    }).then((value) => setState(() {
+    }).then((value) {
+      if (mounted) {
+        setState(() {
           isLoadingBalls = false;
-        }));
+        });
+      }
+    });
   }
 
   Future<void> fetchSessionData() async {
@@ -100,15 +104,20 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
           .collection('balls')
           .get();
 
-      setState(() {
-        _ballsInSession = ballsInSession.docs.map((doc) => doc.data()).toList();
-      });
+      if (mounted) {
+        setState(() {
+          _ballsInSession =
+              ballsInSession.docs.map((doc) => doc.data()).toList();
+        });
+      }
 
       ballsInSession.docs.toList().isNotEmpty
           ? getFrequentShotTypeForSession(false).then((value) {
-              setState(() {
-                _sessionStats = value;
-              });
+              if (mounted) {
+                setState(() {
+                  _sessionStats = value;
+                });
+              }
             })
           : null;
     } catch (e) {

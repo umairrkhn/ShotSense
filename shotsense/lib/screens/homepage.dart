@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:shotsense/screens/shotTypeStats.dart';
 import '../widgets/custom_appBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   int? _totalHits;
   Object? _lastSession;
   String? _date;
+  late Map<String, dynamic> overallSessionsData = {};
 
   @override
   void initState() {
@@ -78,6 +80,8 @@ class _HomePageState extends State<HomePage> {
         _mostFrequentShot = (data as Map<String, dynamic>)['highestShotType'];
         _totalBalls = data['totalBalls'];
         _totalHits = data['ballHitCount'];
+        overallSessionsData = data;
+        print(data);
       });
     } catch (e) {
       print('Error fetching display name: $e');
@@ -133,69 +137,89 @@ class _HomePageState extends State<HomePage> {
                                                   color: Color.fromARGB(
                                                       255, 79, 79, 79))),
                                           const SizedBox(height: 15.0),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.white),
-                                              borderRadius:
-                                                  BorderRadius.circular(20.0),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withOpacity(0.15),
-                                                  spreadRadius: 1,
-                                                  blurRadius: 8,
-                                                  offset: const Offset(0, 2),
+                                          InkWell(
+                                              onTap: () {
+                                                Navigator.push(context,
+                                                    MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return ShotTypeStats(
+                                                      sessionStats:
+                                                          overallSessionsData,
+                                                    );
+                                                  },
+                                                ));
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.white),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20.0),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.black
+                                                          .withOpacity(0.15),
+                                                      spreadRadius: 1,
+                                                      blurRadius: 8,
+                                                      offset:
+                                                          const Offset(0, 2),
+                                                    ),
+                                                  ],
+                                                  color: Colors.white,
                                                 ),
-                                              ],
-                                              color: Colors.white,
-                                            ),
-                                            child: ListTile(
-                                                // leading: ClipRRect(
-                                                //   borderRadius: BorderRadius.circular(8.0),
-                                                // ),
-                                                title: const Text(
-                                                    'Most Frequent Shot Played',
-                                                    style: TextStyle(
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Color.fromARGB(
-                                                            255,
-                                                            123,
-                                                            123,
-                                                            123))),
-                                                subtitle: (_mostFrequentShot !=
-                                                            null &&
-                                                        _mostFrequentShot!
-                                                            .isNotEmpty)
-                                                    ? Text(
-                                                        _mostFrequentShot!,
-                                                        style: const TextStyle(
-                                                            fontSize: 15,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    79,
-                                                                    79,
-                                                                    79)),
-                                                      )
-                                                    : const Text(
-                                                        '...',
+                                                child: ListTile(
+                                                    // leading: ClipRRect(
+                                                    //   borderRadius: BorderRadius.circular(8.0),
+                                                    // ),
+                                                    title: const Text(
+                                                        'Most Frequent Shot Played',
                                                         style: TextStyle(
-                                                            fontSize: 15,
+                                                            fontSize: 18,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             color:
                                                                 Color.fromARGB(
                                                                     255,
-                                                                    79,
-                                                                    79,
-                                                                    79)),
-                                                      )),
-                                          ),
+                                                                    123,
+                                                                    123,
+                                                                    123))),
+                                                    subtitle:
+                                                        (_mostFrequentShot !=
+                                                                    null &&
+                                                                _mostFrequentShot!
+                                                                    .isNotEmpty)
+                                                            ? Text(
+                                                                _mostFrequentShot!,
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color: Color
+                                                                        .fromARGB(
+                                                                            255,
+                                                                            79,
+                                                                            79,
+                                                                            79)),
+                                                              )
+                                                            : const Text(
+                                                                '...',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color: Color
+                                                                        .fromARGB(
+                                                                            255,
+                                                                            79,
+                                                                            79,
+                                                                            79)),
+                                                              )),
+                                              )),
                                           const SizedBox(height: 15.0),
                                           Container(
                                             decoration: BoxDecoration(

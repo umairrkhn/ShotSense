@@ -41,7 +41,29 @@ class _ShotScreenState extends State<ShotScreen> {
   @override
   void initState() {
     super.initState();
+    // getBalls().then((value) => setState(() {
+    //       print(value);
+    //       if (value.isNotEmpty) {
+    //         ballsExist = true;
+    //       } else {
+    //         ballsExist = false;
+    //       }
+
+    //       if (value.isNotEmpty) {
+    //         List<String> predictions = [];
+    //         value.forEach((ball) {
+    //           predictions.add(ball.data()['prediction']);
+    //         });
+    //         shotTypes = ['All', ...predictions.toSet()];
+    //       }
+    //     }));
+    getBallsAndUpdate();
+    // printBalls();
+  }
+
+  void getBallsAndUpdate() {
     getBalls().then((value) => setState(() {
+          print(value);
           if (value.isNotEmpty) {
             ballsExist = true;
           } else {
@@ -56,7 +78,6 @@ class _ShotScreenState extends State<ShotScreen> {
             shotTypes = ['All', ...predictions.toSet()];
           }
         }));
-    // printBalls();
   }
 
   // void printBalls() async {
@@ -130,230 +151,244 @@ class _ShotScreenState extends State<ShotScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: const CustomAppBar(title: "Shots"),
-        body: SingleChildScrollView(
-          child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ballsExist
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              selectedShotType,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge!
-                                  .copyWith(
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.w900,
-                                    color:
-                                        const Color.fromARGB(255, 38, 5, 116),
-                                  ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                _showShotTypeDropdown(context);
-                              },
-                              child: const FaIcon(
-                                FontAwesomeIcons.filter,
-                                size: 22,
-                                color: Color.fromARGB(255, 38, 5, 116),
-                              ),
-                            ),
-                          ],
-                        )
-                      : Container(),
-                  const SizedBox(height: 8.0),
-                  Column(
+        body: RefreshIndicator(
+            onRefresh: () async {
+              getBallsAndUpdate();
+            },
+            child: SingleChildScrollView(
+              child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: Column(
-                            children: [
-                              const SizedBox(height: 10.0),
-                              FutureBuilder<List>(
-                                future: getBalls(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const Center(
-                                        child: Padding(
-                                            padding:
-                                                EdgeInsets.only(top: 100.0),
-                                            child:
-                                                const CircularProgressIndicator()));
-                                  } else if (snapshot.hasError) {
-                                    return Text('Error: ${snapshot.error}');
-                                  } else if (snapshot.data!.isEmpty) {
-                                    return const Padding(
-                                      padding: EdgeInsets.only(
-                                          top: 30.0, left: 16.0),
-                                      child: Text(
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                          ),
-                                          'All recorded balls will appear here! You can manage and check annotated videos and performance stats.\n\nClick "Create New Session" button in the sessions tab to create a new session and add balls.'),
-                                    );
-                                  } else {
-                                    List balls = snapshot.data as List;
-                                    return ListView.separated(
-                                      scrollDirection: Axis.vertical,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      itemCount: balls.length,
-                                      separatorBuilder: (context, index) =>
-                                          SizedBox(height: 10.0),
-                                      itemBuilder: (context, index) {
-                                        Map<String, dynamic> ballData =
-                                            balls[index].data();
-
-                                        return Container(
-                                          decoration: BoxDecoration(
-                                            border:
-                                                Border.all(color: Colors.white),
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.2),
-                                                spreadRadius: 2,
-                                                blurRadius: 10,
-                                                offset: const Offset(0, 2),
-                                              ),
-                                            ],
-                                            color: Colors.white,
-                                          ),
-                                          child: ballData["annotated_uri"] ==
-                                                  null
-                                              ? ListTile(
-                                                  onTap: () async {
-                                                    final gsReference =
-                                                        FirebaseStorage.instance
-                                                            .refFromURL(
-                                                                ballData[
-                                                                    "uri"]);
-                                                    final url =
-                                                        await gsReference
-                                                            .getDownloadURL();
-                                                    Navigator.push(context,
-                                                        MaterialPageRoute(
-                                                      builder: (context) {
-                                                        return SingleBallPage(
-                                                            ballData: ballData,
-                                                            url: url,
-                                                            annotated_url: "");
-                                                      },
-                                                    ));
-                                                  },
-
-                                                  // leading: ClipRRect(
-                                                  //   borderRadius:
-                                                  //       BorderRadius.circular(
-                                                  //           8.0),
-                                                  //   child: Image.asset(
-                                                  //     'assets/images/ShotSense-logo.png',
-                                                  //     width: 80,
-                                                  //     height: 45,
-                                                  //     fit: BoxFit.cover,
-                                                  //   ),
-                                                  // ),
-                                                  leading: const Icon(
-                                                    Icons.circle_rounded,
-                                                    size: 40,
-                                                    color: Color.fromARGB(
-                                                        255, 78, 78, 78),
-                                                  ),
-                                                  title: Text(
-                                                      "From ${ballData["sessionName"]}"),
-                                                  subtitle: Text(
-                                                    // "From ${ballData["createdAt"]}",
-                                                    "${DateFormat("MMMM d, yyyy").format(ballData["createdAt"].toDate()).toString()}",
-                                                    style: const TextStyle(
-                                                      fontSize: 12.0,
-                                                      color: Colors.grey,
-                                                    ),
-                                                  ),
-                                                )
-                                              : // if ball is annotated, show the annotated video
-
-                                              ListTile(
-                                                  onTap: () async {
-                                                    final gsAnotattedReference =
-                                                        FirebaseStorage.instance
-                                                            .refFromURL(ballData[
-                                                                "annotated_uri"]);
-                                                    final url =
-                                                        await gsAnotattedReference
-                                                            .getDownloadURL();
-                                                    final gsvideoReference =
-                                                        await FirebaseStorage
-                                                            .instance
-                                                            .refFromURL(
-                                                                ballData[
-                                                                    "uri"]);
-                                                    final urlVideo =
-                                                        await gsvideoReference
-                                                            .getDownloadURL();
-                                                    Navigator.push(context,
-                                                        MaterialPageRoute(
-                                                      builder: (context) {
-                                                        return SingleBallPage(
-                                                            ballData: ballData,
-                                                            url: urlVideo,
-                                                            annotated_url: url);
-                                                      },
-                                                    ));
-                                                  },
-                                                  // leading: ClipRRect(
-                                                  //   borderRadius:
-                                                  //       BorderRadius.circular(
-                                                  //           8.0),
-                                                  //   child: Image.asset(
-                                                  //     'assets/images/ShotSense-logo.png',
-                                                  //     width: 80,
-                                                  //     height: 45,
-                                                  //     fit: BoxFit.cover,
-                                                  //   ),
-                                                  // ),
-                                                  leading: const Icon(
-                                                    Icons.circle_rounded,
-                                                    size: 40,
-                                                    color: Color.fromARGB(
-                                                        255, 78, 78, 78),
-                                                  ),
-                                                  title: Text(
-                                                      "From ${ballData["sessionName"]}"),
-                                                  subtitle: Text(
-                                                    // "From ${ballData["createdAt"]}",
-                                                    "${DateFormat("MMMM d, yyyy").format(ballData["createdAt"].toDate()).toString()}",
-                                                    style: const TextStyle(
-                                                      fontSize: 12.0,
-                                                      color: Colors.grey,
-                                                    ),
-                                                  )),
-                                        );
-                                      },
-                                    );
-                                  }
-                                },
+                      ballsExist
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  selectedShotType,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge!
+                                      .copyWith(
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.w900,
+                                        color: const Color.fromARGB(
+                                            255, 38, 5, 116),
+                                      ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    _showShotTypeDropdown(context);
+                                  },
+                                  child: const FaIcon(
+                                    FontAwesomeIcons.filter,
+                                    size: 22,
+                                    color: Color.fromARGB(255, 38, 5, 116),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Container(),
+                      const SizedBox(height: 8.0),
+                      Column(
+                        children: [
+                          Container(
+                              decoration: BoxDecoration(
+                                // border: Border.all(color: Colors.white),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
-                            ],
-                          )),
+                              child: Column(
+                                children: [
+                                  const SizedBox(height: 10.0),
+                                  FutureBuilder<List>(
+                                    future: getBalls(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const Center(
+                                            child: Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 100.0),
+                                                child:
+                                                    CircularProgressIndicator()));
+                                      } else if (snapshot.hasError) {
+                                        return Text('Error: ${snapshot.error}');
+                                      } else if (snapshot.data!.isEmpty) {
+                                        return const Padding(
+                                          padding: EdgeInsets.only(
+                                              top: 30.0, left: 16.0),
+                                          child: Text(
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ),
+                                              'All recorded balls will appear here! You can manage and check annotated videos and performance stats.\n\nClick "Create New Session" button in the sessions tab to create a new session and add balls.'),
+                                        );
+                                      } else {
+                                        List balls = snapshot.data as List;
+                                        return ListView.separated(
+                                          scrollDirection: Axis.vertical,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount: balls.length,
+                                          separatorBuilder: (context, index) =>
+                                              const SizedBox(height: 10.0),
+                                          itemBuilder: (context, index) {
+                                            Map<String, dynamic> ballData =
+                                                balls[index].data();
+
+                                            return Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.white),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black
+                                                        .withOpacity(0.2),
+                                                    spreadRadius: 2,
+                                                    blurRadius: 10,
+                                                    offset: const Offset(0, 2),
+                                                  ),
+                                                ],
+                                                color: Colors.white,
+                                              ),
+                                              child: ballData[
+                                                          "annotated_uri"] ==
+                                                      null
+                                                  ? ListTile(
+                                                      onTap: () async {
+                                                        final gsReference =
+                                                            FirebaseStorage
+                                                                .instance
+                                                                .refFromURL(
+                                                                    ballData[
+                                                                        "uri"]);
+                                                        final url =
+                                                            await gsReference
+                                                                .getDownloadURL();
+                                                        Navigator.push(context,
+                                                            MaterialPageRoute(
+                                                          builder: (context) {
+                                                            return SingleBallPage(
+                                                                ballData:
+                                                                    ballData,
+                                                                url: url,
+                                                                annotated_url:
+                                                                    "");
+                                                          },
+                                                        ));
+                                                      },
+
+                                                      // leading: ClipRRect(
+                                                      //   borderRadius:
+                                                      //       BorderRadius.circular(
+                                                      //           8.0),
+                                                      //   child: Image.asset(
+                                                      //     'assets/images/ShotSense-logo.png',
+                                                      //     width: 80,
+                                                      //     height: 45,
+                                                      //     fit: BoxFit.cover,
+                                                      //   ),
+                                                      // ),
+                                                      leading: const Icon(
+                                                        Icons.circle_rounded,
+                                                        size: 40,
+                                                        color: Color.fromARGB(
+                                                            255, 78, 78, 78),
+                                                      ),
+                                                      title: Text(
+                                                          "From ${ballData["sessionName"]}"),
+                                                      subtitle: Text(
+                                                        // "From ${ballData["createdAt"]}",
+                                                        "${DateFormat("MMMM d, yyyy").format(ballData["createdAt"].toDate()).toString()}",
+                                                        style: const TextStyle(
+                                                          fontSize: 12.0,
+                                                          color: Colors.grey,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : // if ball is annotated, show the annotated video
+
+                                                  ListTile(
+                                                      onTap: () async {
+                                                        final gsAnotattedReference =
+                                                            FirebaseStorage
+                                                                .instance
+                                                                .refFromURL(
+                                                                    ballData[
+                                                                        "annotated_uri"]);
+                                                        final url =
+                                                            await gsAnotattedReference
+                                                                .getDownloadURL();
+                                                        final gsvideoReference =
+                                                            await FirebaseStorage
+                                                                .instance
+                                                                .refFromURL(
+                                                                    ballData[
+                                                                        "uri"]);
+                                                        final urlVideo =
+                                                            await gsvideoReference
+                                                                .getDownloadURL();
+
+                                                        Navigator.push(context,
+                                                            MaterialPageRoute(
+                                                          builder: (context) {
+                                                            return SingleBallPage(
+                                                                ballData:
+                                                                    ballData,
+                                                                url: urlVideo,
+                                                                annotated_url:
+                                                                    url);
+                                                          },
+                                                        ));
+                                                      },
+
+                                                      // leading: ClipRRect(
+                                                      //   borderRadius:
+                                                      //       BorderRadius.circular(
+                                                      //           8.0),
+                                                      //   child: Image.asset(
+                                                      //     'assets/images/ShotSense-logo.png',
+                                                      //     width: 80,
+                                                      //     height: 45,
+                                                      //     fit: BoxFit.cover,
+                                                      //   ),
+                                                      // ),
+                                                      leading: const Icon(
+                                                        Icons.circle_rounded,
+                                                        size: 40,
+                                                        color: Color.fromARGB(
+                                                            255, 78, 78, 78),
+                                                      ),
+                                                      title: Text(
+                                                          "From ${ballData["sessionName"]}"),
+                                                      subtitle: Text(
+                                                        // "From ${ballData["createdAt"]}",
+                                                        "${DateFormat("MMMM d, yyyy").format(ballData["createdAt"].toDate()).toString()}",
+                                                        style: const TextStyle(
+                                                          fontSize: 12.0,
+                                                          color: Colors.grey,
+                                                        ),
+                                                      )),
+                                            );
+                                          },
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ],
+                              )),
+                        ],
+                      ),
+                      // )),
                     ],
-                  ),
-                  // )),
-                ],
-              )),
-        ));
+                  )),
+            )));
   }
 
   void _showShotTypeDropdown(BuildContext context) {
@@ -364,6 +399,7 @@ class _ShotScreenState extends State<ShotScreen> {
       ),
       builder: (BuildContext context) {
         return SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.vertical,
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 25.0),
@@ -381,7 +417,7 @@ class _ShotScreenState extends State<ShotScreen> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.5,
                   child: ListView.builder(
-                    // shrinkWrap: true,
+                    shrinkWrap: true,
                     itemCount: shotTypes.length,
                     itemBuilder: (context, index) => ListTile(
                       title: Text(

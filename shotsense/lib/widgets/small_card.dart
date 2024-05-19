@@ -22,7 +22,7 @@ class _smallCardState extends State<smallCard> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.white),
+        // border: Border.all(color: const Color.fromARGB(255, 0, 0, 0)),
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Column(
