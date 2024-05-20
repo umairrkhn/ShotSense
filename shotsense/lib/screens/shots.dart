@@ -150,13 +150,17 @@ class _ShotScreenState extends State<ShotScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color.fromRGBO(255, 255, 255, 1),
         appBar: const CustomAppBar(title: "Shots"),
         body: RefreshIndicator(
             onRefresh: () async {
               getBallsAndUpdate();
             },
             child: SingleChildScrollView(
-              child: Padding(
+              child: Container(
+                  constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height - 200,
+                  ),
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -423,6 +427,12 @@ class _ShotScreenState extends State<ShotScreen> {
                       title: Text(
                         shotTypes[index],
                         style: const TextStyle(fontSize: 16.0),
+                      ),
+                      shape: const Border(
+                        bottom: BorderSide(
+                          color: Color.fromARGB(149, 158, 158, 158),
+                          width: 1.0,
+                        ),
                       ),
                       onTap: () {
                         setState(() {

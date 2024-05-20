@@ -37,6 +37,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color.fromRGBO(255, 255, 255, 1),
         appBar: CustomAppBar(title: "Settings"),
         body: Container(
             margin: const EdgeInsets.all(20),

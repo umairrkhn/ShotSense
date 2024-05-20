@@ -1351,9 +1351,9 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                         style: const TextStyle(
                             fontSize: 18.0, fontWeight: FontWeight.bold),
                       ),
-                      shape: Border(
+                      shape: const Border(
                         bottom: BorderSide(
-                          color: const Color.fromARGB(149, 158, 158, 158),
+                          color: Color.fromARGB(149, 158, 158, 158),
                           width: 1.0,
                         ),
                       ),

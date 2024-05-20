@@ -91,6 +91,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color.fromRGBO(255, 255, 255, 1),
         appBar: CustomAppBar(
           title: 'ShotSense',
         ),
@@ -106,7 +107,6 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Container(
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white),
                               borderRadius: BorderRadius.circular(8.0),
                             ),
                             child: Column(

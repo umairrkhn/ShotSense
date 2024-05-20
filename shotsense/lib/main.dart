@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:shotsense/firebase_options.dart';
 import 'package:shotsense/screens/login.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,13 @@ Future<void> main() async {
     );
     await FirebaseAppCheck.instance.activate();
   }
+
+  // Set the status bar icon color to black for both iOS and Android
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.dark, // For Android
+    statusBarBrightness: Brightness.dark, // For iOS
+  ));
 
   runApp(const MyApp());
 }

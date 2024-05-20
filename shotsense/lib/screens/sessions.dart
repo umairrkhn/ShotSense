@@ -32,6 +32,7 @@ class _SessionPageState extends State<SessionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(255, 255, 255, 1),
       appBar: CustomAppBar(title: "Sessions"),
       body: SingleChildScrollView(
         child: Padding(
@@ -224,7 +225,7 @@ class _SessionPageState extends State<SessionPage> {
                                                     'No current playing session yet'))
                                           ])
                                 : Column(
-                                    children: currentSessions.isNotEmpty
+                                    children: previousSessions.isNotEmpty
                                         ? previousSessions.map((Session) {
                                             return smallCard(
                                               name: Session.name,
