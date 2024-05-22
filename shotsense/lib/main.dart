@@ -22,11 +22,11 @@ Future<void> main() async {
   }
 
   // Set the status bar icon color to black for both iOS and Android
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.dark, // For Android
-    statusBarBrightness: Brightness.dark, // For iOS
-  ));
+  // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+  //   statusBarColor: Colors.transparent,
+  //   statusBarIconBrightness: Brightness.dark, // For Android
+  //   statusBarBrightness: Brightness.dark, // For iOS
+  // ));
 
   runApp(const MyApp());
 }

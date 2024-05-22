@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:shotsense/screens/sessionDetail.dart';
 import 'package:shotsense/screens/shotTypeStats.dart';
 import '../widgets/custom_appBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,6 +28,7 @@ class _HomePageState extends State<HomePage> {
   Object? _lastSession;
   String? _date;
   late Map<String, dynamic> overallSessionsData = {};
+  String? _session_id;
 
   @override
   void initState() {
@@ -59,6 +62,7 @@ class _HomePageState extends State<HomePage> {
 
       print((data as Map<String, dynamic>)['ballHitCount']);
       setState(() {
+        _session_id = sessions.docs.last.id;
         _date = DateFormat('d MMM, y')
             .format((data as Map<String, dynamic>)['createdAt'].toDate());
         print(_date);
@@ -293,6 +297,222 @@ class _HomePageState extends State<HomePage> {
                                                   color: Color.fromARGB(
                                                       255, 79, 79, 79))),
                                           const SizedBox(height: 15.0),
+                                          GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(context,
+                                                    MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return SessionDetailScreen(
+                                                      // sessionID: (_lastSession.id,
+                                                      sessionID:
+                                                          (_session_id ?? ""),
+                                                      sessionName: (_lastSession
+                                                              as Map<String,
+                                                                  dynamic>)?[
+                                                          "name"],
+                                                    );
+                                                  },
+                                                ));
+                                              },
+                                              child: Container(
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: Colors.white),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20.0),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.black
+                                                            .withOpacity(0.15),
+                                                        spreadRadius: 1,
+                                                        blurRadius: 8,
+                                                        offset:
+                                                            const Offset(0, 2),
+                                                      ),
+                                                    ],
+                                                    color: Colors.white,
+                                                  ),
+                                                  child: Column(
+                                                    children: [
+                                                      const SizedBox(
+                                                          height: 5.0),
+                                                      ListTile(
+                                                        // leading: ClipRRect(
+                                                        //   child: Text('1'),
+                                                        // ),
+                                                        title: const Text(
+                                                            'Most Frequent Shot Played',
+                                                            style: TextStyle(
+                                                                fontSize: 18,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Color
+                                                                    .fromARGB(
+                                                                        255,
+                                                                        123,
+                                                                        123,
+                                                                        123))),
+                                                        subtitle: _lastSession !=
+                                                                    null &&
+                                                                (_lastSession as Map<
+                                                                        String,
+                                                                        dynamic>)
+                                                                    .containsKey(
+                                                                        'highestShotType')
+                                                            ? Text(
+                                                                (_lastSession as Map<
+                                                                        String,
+                                                                        dynamic>)[
+                                                                    'highestShotType'],
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color: Color
+                                                                        .fromARGB(
+                                                                            255,
+                                                                            79,
+                                                                            79,
+                                                                            79)),
+                                                              )
+                                                            : const Text(
+                                                                'Play a session to get stats',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color: Color
+                                                                        .fromARGB(
+                                                                            255,
+                                                                            79,
+                                                                            79,
+                                                                            79))),
+                                                      ),
+                                                      ListTile(
+                                                        // leading: ClipRRect(
+                                                        //   child: Text('1'),
+                                                        // ),
+                                                        title: const Text(
+                                                            'Balls Hit',
+                                                            style: TextStyle(
+                                                                fontSize: 18,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Color
+                                                                    .fromARGB(
+                                                                        255,
+                                                                        123,
+                                                                        123,
+                                                                        123))),
+                                                        subtitle: RichText(
+                                                          text: TextSpan(
+                                                            style: DefaultTextStyle
+                                                                    .of(context)
+                                                                .style,
+                                                            children: <TextSpan>[
+                                                              _lastSession !=
+                                                                          null &&
+                                                                      (_lastSession as Map<
+                                                                              String,
+                                                                              dynamic>)
+                                                                          .containsKey(
+                                                                              'highestShotType')
+                                                                  ? TextSpan(
+                                                                      text:
+                                                                          '${(_lastSession as Map<String, dynamic>)['ballHitCount']}/${(_lastSession as Map<String, dynamic>)['totalBalls']} ',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontSize:
+                                                                            15,
+                                                                        color: Color.fromARGB(
+                                                                            255,
+                                                                            79,
+                                                                            79,
+                                                                            79),
+                                                                        fontWeight:
+                                                                            FontWeight.w600,
+                                                                      ),
+                                                                    )
+                                                                  : const TextSpan(
+                                                                      text:
+                                                                          '0/0 ',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontSize:
+                                                                            15,
+                                                                        color: Color.fromARGB(
+                                                                            255,
+                                                                            79,
+                                                                            79,
+                                                                            79),
+                                                                        fontWeight:
+                                                                            FontWeight.w600,
+                                                                      ),
+                                                                    ),
+                                                              const TextSpan(
+                                                                text:
+                                                                    'balls hit',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 14,
+                                                                  color: Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          79,
+                                                                          79,
+                                                                          79),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      // add one for the date
+                                                      ListTile(
+                                                        // leading: ClipRRect(
+                                                        //   child: Text('1'),
+                                                        // ),
+                                                        title: const Text(
+                                                            'Date',
+                                                            style: TextStyle(
+                                                                fontSize: 18,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Color
+                                                                    .fromARGB(
+                                                                        255,
+                                                                        123,
+                                                                        123,
+                                                                        123))),
+                                                        subtitle: Text(
+                                                          _date != null
+                                                              ? _date!
+                                                              : '...',
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 15,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  color: Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          79,
+                                                                          79,
+                                                                          79)),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ))),
+                                          const SizedBox(height: 15.0),
                                           Container(
                                               decoration: BoxDecoration(
                                                 border: Border.all(
@@ -313,169 +533,7 @@ class _HomePageState extends State<HomePage> {
                                               child: Column(
                                                 children: [
                                                   const SizedBox(height: 5.0),
-                                                  ListTile(
-                                                    // leading: ClipRRect(
-                                                    //   child: Text('1'),
-                                                    // ),
-                                                    title: const Text(
-                                                        'Most Frequent Shot Played',
-                                                        style: TextStyle(
-                                                            fontSize: 18,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    123,
-                                                                    123,
-                                                                    123))),
-                                                    subtitle: _lastSession !=
-                                                                null &&
-                                                            (_lastSession as Map<
-                                                                    String,
-                                                                    dynamic>)
-                                                                .containsKey(
-                                                                    'highestShotType')
-                                                        ? Text(
-                                                            (_lastSession as Map<
-                                                                    String,
-                                                                    dynamic>)[
-                                                                'highestShotType'],
-                                                            style: const TextStyle(
-                                                                fontSize: 15,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                color: Color
-                                                                    .fromARGB(
-                                                                        255,
-                                                                        79,
-                                                                        79,
-                                                                        79)),
-                                                          )
-                                                        : const Text(
-                                                            'Play a session to get stats',
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                color: Color
-                                                                    .fromARGB(
-                                                                        255,
-                                                                        79,
-                                                                        79,
-                                                                        79))),
-                                                  ),
-                                                  ListTile(
-                                                    // leading: ClipRRect(
-                                                    //   child: Text('1'),
-                                                    // ),
-                                                    title: const Text(
-                                                        'Balls Hit',
-                                                        style: TextStyle(
-                                                            fontSize: 18,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    123,
-                                                                    123,
-                                                                    123))),
-                                                    subtitle: RichText(
-                                                      text: TextSpan(
-                                                        style:
-                                                            DefaultTextStyle.of(
-                                                                    context)
-                                                                .style,
-                                                        children: <TextSpan>[
-                                                          _lastSession !=
-                                                                      null &&
-                                                                  (_lastSession as Map<
-                                                                          String,
-                                                                          dynamic>)
-                                                                      .containsKey(
-                                                                          'highestShotType')
-                                                              ? TextSpan(
-                                                                  text:
-                                                                      '${(_lastSession as Map<String, dynamic>)['ballHitCount']}/${(_lastSession as Map<String, dynamic>)['totalBalls']} ',
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    color: Color
-                                                                        .fromARGB(
-                                                                            255,
-                                                                            79,
-                                                                            79,
-                                                                            79),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                  ),
-                                                                )
-                                                              : const TextSpan(
-                                                                  text: '0/0 ',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    color: Color
-                                                                        .fromARGB(
-                                                                            255,
-                                                                            79,
-                                                                            79,
-                                                                            79),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                  ),
-                                                                ),
-                                                          const TextSpan(
-                                                            text: 'balls hit',
-                                                            style: TextStyle(
-                                                              fontSize: 14,
-                                                              color: Color
-                                                                  .fromARGB(
-                                                                      255,
-                                                                      79,
-                                                                      79,
-                                                                      79),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  // add one for the date
-                                                  ListTile(
-                                                    // leading: ClipRRect(
-                                                    //   child: Text('1'),
-                                                    // ),
-                                                    title: const Text('Date',
-                                                        style: TextStyle(
-                                                            fontSize: 18,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    123,
-                                                                    123,
-                                                                    123))),
-                                                    subtitle: Text(
-                                                      _date != null
-                                                          ? _date!
-                                                          : '...',
-                                                      style: const TextStyle(
-                                                          fontSize: 15,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: Color.fromARGB(
-                                                              255, 79, 79, 79)),
-                                                    ),
-                                                  ),
+                                                  Container()
                                                 ],
                                               ))
                                         ],
