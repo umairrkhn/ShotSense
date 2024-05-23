@@ -27,7 +27,7 @@ class ShotTypeStatsScreen extends State<ShotTypeStats> {
             widget.sessionStats['coverDriveCount'] > 0
                 ? Column(children: [
                     buildListItem(context, "Cover Drive",
-                        "${(widget.sessionStats['cutCount'] / widget.sessionStats['totalBalls'] * 100).toStringAsFixed(1)}%"),
+                        "${(widget.sessionStats['coverDriveCount'] / widget.sessionStats['totalBalls'] * 100).toStringAsFixed(1)}%"),
                     const Divider(
                       color: Colors.grey,
                       thickness: 1,
@@ -36,7 +36,7 @@ class ShotTypeStatsScreen extends State<ShotTypeStats> {
                 : Container(),
             widget.sessionStats['cutCount'] > 0
                 ? Column(children: [
-                    buildListItem(context, "Cut",
+                    buildListItem(context, "Cut Shot",
                         "${(widget.sessionStats['cutCount'] / widget.sessionStats['totalBalls'] * 100).toStringAsFixed(1)}%"),
                     const Divider(
                       color: Colors.grey,
@@ -56,7 +56,7 @@ class ShotTypeStatsScreen extends State<ShotTypeStats> {
                 : Container(),
             widget.sessionStats['flickCount'] > 0
                 ? Column(children: [
-                    buildListItem(context, "Flick",
+                    buildListItem(context, "Flick Shot",
                         "${(widget.sessionStats['flickCount'] / widget.sessionStats['totalBalls'] * 100).toStringAsFixed(1)}%"),
                     const Divider(
                       color: Colors.grey,
@@ -66,7 +66,7 @@ class ShotTypeStatsScreen extends State<ShotTypeStats> {
                 : Container(),
             widget.sessionStats['hookCount'] > 0
                 ? Column(children: [
-                    buildListItem(context, "Hook",
+                    buildListItem(context, "Hook Shot",
                         "${(widget.sessionStats['hookCount'] / widget.sessionStats['totalBalls'] * 100).toStringAsFixed(1)}%"),
                     const Divider(
                       color: Colors.grey,
@@ -76,7 +76,7 @@ class ShotTypeStatsScreen extends State<ShotTypeStats> {
                 : Container(),
             widget.sessionStats['pullShotCount'] > 0
                 ? Column(children: [
-                    buildListItem(context, "Pull",
+                    buildListItem(context, "Pull Shot",
                         "${(widget.sessionStats['pullShotCount'] / widget.sessionStats['totalBalls'] * 100).toStringAsFixed(1)}%"),
                     const Divider(
                       color: Colors.grey,
@@ -86,7 +86,7 @@ class ShotTypeStatsScreen extends State<ShotTypeStats> {
                 : Container(),
             widget.sessionStats['straightCount'] > 0
                 ? Column(children: [
-                    buildListItem(context, "Straight",
+                    buildListItem(context, "Straight Drive",
                         "${(widget.sessionStats['straightCount'] / widget.sessionStats['totalBalls'] * 100).toStringAsFixed(1)}%"),
                     const Divider(
                       color: Colors.grey,
@@ -104,9 +104,9 @@ class ShotTypeStatsScreen extends State<ShotTypeStats> {
                     ),
                   ])
                 : Container(),
-            buildListItem(context, "Total Balls Played",
+            buildListItem(context, "Total shots Played",
                 widget.sessionStats['totalBalls'].toString()),
-            buildListItem(context, "Highest Shot Type",
+            buildListItem(context, "Most played type",
                 widget.sessionStats['highestShotType'].toString()),
           ]))),
     );

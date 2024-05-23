@@ -153,7 +153,7 @@ class _SessionPageState extends State<SessionPage> {
                             : null,
                       ),
                       child: Text(
-                        'Previous Sessions',
+                        'Complete Sessions',
                         style: TextStyle(
                           color: _selectedSession == 'previous'
                               ? Colors.white
@@ -222,7 +222,7 @@ class _SessionPageState extends State<SessionPage> {
                                                           FontWeight.bold,
                                                       color: Colors.black,
                                                     ),
-                                                    'No current playing session yet'))
+                                                    'No current playing sessions'))
                                           ])
                                 : Column(
                                     children: previousSessions.isNotEmpty
@@ -247,7 +247,7 @@ class _SessionPageState extends State<SessionPage> {
                                                           FontWeight.bold,
                                                       color: Colors.black,
                                                     ),
-                                                    'No previous playing session yet'))
+                                                    'No session has been completed'))
                                           ])
                           else
                             const Padding(

@@ -26,6 +26,7 @@ dependencies:
   firebase_app_check: ^0.2.1+8
   skeletonizer: ^1.1.2+1
   syncfusion_flutter_charts: ^25.2.5
+  fl_chart: ^0.61.0
 
 
 

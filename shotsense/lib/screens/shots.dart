@@ -25,11 +25,11 @@ class _ShotScreenState extends State<ShotScreen> {
     'Cover Drive',
     'Straight Drive',
     'Defence',
-    'Hook',
-    'Pull',
-    'Cut',
+    'Hook Shot',
+    'Pull Shot',
+    'Cut Shot',
     'Sweep',
-    'Flick',
+    'Flick Shot',
   ];
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

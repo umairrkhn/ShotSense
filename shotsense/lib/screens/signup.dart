@@ -21,7 +21,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController repeatPasswordController = TextEditingController();
+  final TextEditingController repeatPasswordController =
+      TextEditingController();
   final TextEditingController displayNameController = TextEditingController();
 
   bool isLoading = false;
@@ -41,7 +42,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             repeatPasswordController.text.trim().isEmpty) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('All fields are required', style: TextStyle(fontSize: 14, color: Colors.white)),
+              content: Text('All fields are required',
+                  style: TextStyle(fontSize: 14, color: Colors.white)),
               backgroundColor: Color.fromARGB(255, 38, 5, 116),
             ),
           );
@@ -52,24 +54,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (passwordController.text.trim().length < 6) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Password must be at least 6 characters long', style: TextStyle(fontSize: 14, color: Colors.white)),
+            content: Text('Password must be at least 6 characters long',
+                style: TextStyle(fontSize: 14, color: Colors.white)),
             backgroundColor: Color.fromARGB(255, 38, 5, 116),
           ),
         );
         return;
       }
 
-      if (passwordController.text.trim() != repeatPasswordController.text.trim()) {
+      if (passwordController.text.trim() !=
+          repeatPasswordController.text.trim()) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Passwords do not match', style: TextStyle(fontSize: 14, color: Colors.white)),
+            content: Text('Passwords do not match',
+                style: TextStyle(fontSize: 14, color: Colors.white)),
             backgroundColor: Color.fromARGB(255, 38, 5, 116),
           ),
         );
         return;
       }
 
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
@@ -90,7 +96,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           print('Error during Firestore write: $e');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Error during Firestore write: $e', style: const TextStyle(fontSize: 14, color: Colors.white)),
+              content: Text('Error during Firestore write: $e',
+                  style: const TextStyle(fontSize: 14, color: Colors.white)),
               backgroundColor: const Color.fromARGB(255, 38, 5, 116),
             ),
           );
@@ -101,7 +108,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error during sign up: $e', style: const TextStyle(fontSize: 14, color: Colors.white)),
+          content: Text('Error during sign up: $e',
+              style: const TextStyle(fontSize: 14, color: Colors.white)),
           backgroundColor: const Color.fromARGB(255, 38, 5, 116),
         ),
       );
@@ -129,14 +137,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
         return;
       }
 
-      GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+      GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
 
       OAuthCredential googleAuthCredential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
 
-      UserCredential userCredential = await _auth.signInWithCredential(googleAuthCredential);
+      UserCredential userCredential =
+          await _auth.signInWithCredential(googleAuthCredential);
 
       User? user = userCredential.user;
 
@@ -154,7 +164,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           print('Error during Firestore write: $e');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Error during Firestore write: $e', style: const TextStyle(fontSize: 14, color: Colors.white)),
+              content: Text('Error during Firestore write: $e',
+                  style: const TextStyle(fontSize: 14, color: Colors.white)),
               backgroundColor: const Color.fromARGB(255, 38, 5, 116),
             ),
           );
@@ -165,7 +176,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error during sign up: $e', style: const TextStyle(fontSize: 14, color: Colors.white)),
+          content: Text('Error during sign up: $e',
+              style: const TextStyle(fontSize: 14, color: Colors.white)),
           backgroundColor: const Color.fromARGB(255, 38, 5, 116),
         ),
       );
@@ -176,7 +188,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -247,22 +258,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(height: 20),
                 isLoading
                     ? const CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    Color.fromARGB(255, 38, 5, 116),
-                  ),
-                )
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Color.fromARGB(255, 38, 5, 116),
+                        ),
+                      )
                     : ElevatedButton(
-                  onPressed: signUpUser,
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                      const Color.fromARGB(255, 38, 5, 116),
-                    ),
-                    textStyle: MaterialStateProperty.all(
-                      const TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  child: const Text('Sign Up', style: TextStyle(fontSize: 14)),
-                ),
+                        onPressed: signUpUser,
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            const Color.fromARGB(255, 38, 5, 116),
+                          ),
+                          textStyle: MaterialStateProperty.all(
+                            const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        child: const Text('Sign Up',
+                            style:
+                                TextStyle(fontSize: 14, color: Colors.white)),
+                      ),
                 const SizedBox(height: 15),
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -275,7 +288,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
                     SizedBox(width: 8),
-                    Text('OR', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                    Text('OR',
+                        style: TextStyle(color: Colors.grey, fontSize: 12)),
                     SizedBox(width: 8),
                     SizedBox(
                       width: 150,

@@ -505,16 +505,16 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         case 'Straight Drive':
           straightCount++;
           break;
-        case 'Hook':
+        case 'Hook Shot':
           hookCount++;
           break;
-        case 'Cut':
+        case 'Cut Shot':
           cutCount++;
           break;
         case 'Sweep':
           sweepCount++;
           break;
-        case 'Flick':
+        case 'Flick Shot':
           flickCount++;
           break;
       }
@@ -551,16 +551,16 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
             highestShotType = 'Straight Drive';
             break;
           case 'hookCount':
-            highestShotType = 'Hook';
+            highestShotType = 'Hook Shot';
             break;
           case 'cutCount':
-            highestShotType = 'Cut';
+            highestShotType = 'Cut Shot';
             break;
           case 'sweepCount':
             highestShotType = 'Sweep';
             break;
           case 'flickCount':
-            highestShotType = 'Flick';
+            highestShotType = 'Flick Shot';
             break;
         }
       }
@@ -635,16 +635,16 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
             case 'Straight Drive':
               straightCount++;
               break;
-            case 'Hook':
+            case 'Hook Shot':
               hookCount++;
               break;
-            case 'Cut':
+            case 'Cut Shot':
               cutCount++;
               break;
             case 'Sweep':
               sweepCount++;
               break;
-            case 'Flick':
+            case 'Flick Shot':
               flickCount++;
               break;
           }
@@ -683,16 +683,16 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
               highestShotType = 'Straight Drive';
               break;
             case 'hookCount':
-              highestShotType = 'Hook';
+              highestShotType = 'Hook Shot';
               break;
             case 'cutCount':
-              highestShotType = 'Cut';
+              highestShotType = 'Cut Shot';
               break;
             case 'sweepCount':
               highestShotType = 'Sweep';
               break;
             case 'flickCount':
-              highestShotType = 'Flick';
+              highestShotType = 'Flick Shot';
               break;
           }
         }
@@ -1181,7 +1181,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   )),
             if (isgettingInferece == "true")
               const Text(
-                "Getting Inference, It will take a few minutes...",
+                "Getting Inference, It will take a few seconds...",
                 style: const TextStyle(
                   fontSize: 16,
                   color: Color.fromARGB(255, 142, 142, 142),

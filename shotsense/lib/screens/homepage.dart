@@ -4,9 +4,11 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:shotsense/screens/sessionDetail.dart';
 import 'package:shotsense/screens/shotTypeStats.dart';
+import 'package:shotsense/widgets/BarChart.dart';
 import '../widgets/custom_appBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -290,7 +292,40 @@ class _HomePageState extends State<HomePage> {
                                                       )),
                                           ),
                                           const SizedBox(height: 15.0),
-                                          const Text("Previous Session Played",
+                                          Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.white),
+                                                borderRadius:
+                                                    BorderRadius.circular(20.0),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black
+                                                        .withOpacity(0.15),
+                                                    spreadRadius: 1,
+                                                    blurRadius: 8,
+                                                    offset: const Offset(0, 2),
+                                                  ),
+                                                ],
+                                                color: Colors.white,
+                                              ),
+                                              child: Column(
+                                                children: [
+                                                  Container(
+                                                      padding: EdgeInsets.only(
+                                                          bottom: 0, top: 5),
+                                                      child: AspectRatio(
+                                                          aspectRatio: 3,
+                                                          child: Container(
+                                                              child:
+                                                                  ShotsBarChart(
+                                                            ballsData:
+                                                                overallSessionsData,
+                                                          )))),
+                                                ],
+                                              )),
+                                          const SizedBox(height: 15.0),
+                                          const Text("Last Played Session",
                                               style: TextStyle(
                                                   fontSize: 24,
                                                   fontWeight: FontWeight.bold,
@@ -513,29 +548,6 @@ class _HomePageState extends State<HomePage> {
                                                     ],
                                                   ))),
                                           const SizedBox(height: 15.0),
-                                          Container(
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: Colors.white),
-                                                borderRadius:
-                                                    BorderRadius.circular(20.0),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.black
-                                                        .withOpacity(0.15),
-                                                    spreadRadius: 1,
-                                                    blurRadius: 8,
-                                                    offset: const Offset(0, 2),
-                                                  ),
-                                                ],
-                                                color: Colors.white,
-                                              ),
-                                              child: Column(
-                                                children: [
-                                                  const SizedBox(height: 5.0),
-                                                  Container()
-                                                ],
-                                              ))
                                         ],
                                       )
                                     : Container(
