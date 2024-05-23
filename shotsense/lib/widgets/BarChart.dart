@@ -164,7 +164,7 @@ class BarChartSample1State extends State<ShotsBarChart> {
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
-          // getTooltipColor: (_) => Colors.blueGrey,
+          getTooltipColor: (_) => Color.fromARGB(172, 128, 107, 131),
           tooltipHorizontalAlignment: FLHorizontalAlignment.right,
           tooltipMargin: -7,
           getTooltipItem: (group, groupIndex, rod, rodIndex) {
