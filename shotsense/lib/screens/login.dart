@@ -84,10 +84,10 @@ class _EmailPasswordLoginState extends State<EmailPasswordLogin> {
               await _firestore.collection('users').doc(user.uid).get();
           if (!userSnapshot.exists) {
             await _firestore.collection('users').doc(user.uid).set({
+              'displayName': user.displayName,
               'email': user.email,
-              'name': user.displayName,
-              'photoUrl': user.photoURL,
-              'createdAt': FieldValue.serverTimestamp(),
+              'uid': user.uid,
+              'createdAt': DateTime.now(),
             });
             Navigator.pop(context);
           }

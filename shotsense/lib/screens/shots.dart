@@ -334,7 +334,7 @@ class _ShotScreenState extends State<ShotScreen> {
                                                         ),
                                                       ),
                                                       title: Text(
-                                                          "From ${ballData["sessionName"]}"),
+                                                          "${ballData["Ball_title"]}"),
                                                       subtitle: Text(
                                                         // "From ${ballData["createdAt"]}",
                                                         "${DateFormat("MMMM d, yyyy").format(ballData["createdAt"].toDate()).toString()}",
@@ -426,10 +426,10 @@ class _ShotScreenState extends State<ShotScreen> {
                                                         ),
                                                       ),
                                                       title: Text(
-                                                          "From ${ballData["sessionName"]}"),
+                                                          "${ballData["ball_title"]}"),
                                                       subtitle: Text(
                                                         // "From ${ballData["createdAt"]}",
-                                                        "${DateFormat("MMMM d, yyyy").format(ballData["createdAt"].toDate()).toString()}",
+                                                        "${DateFormat("MMMM d, yyyy").format(ballData["createdAt"].toDate()).toString()} • ${ballData["sessionName"]}",
                                                         style: const TextStyle(
                                                           fontSize: 12.0,
                                                           color: Colors.grey,
