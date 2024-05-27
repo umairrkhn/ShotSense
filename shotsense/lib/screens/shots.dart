@@ -299,11 +299,39 @@ class _ShotScreenState extends State<ShotScreen> {
                                                       //     fit: BoxFit.cover,
                                                       //   ),
                                                       // ),
-                                                      leading: const Icon(
-                                                        Icons.circle_rounded,
-                                                        size: 40,
-                                                        color: Color.fromARGB(
-                                                            255, 78, 78, 78),
+                                                      leading: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                bottom: 5),
+                                                        width: 45,
+                                                        height: 45,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          image:
+                                                              const DecorationImage(
+                                                            image: AssetImage(
+                                                                'assets/images/BallIcon.png'),
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.0),
+                                                        ),
+                                                        child: const Center(
+                                                          child: Text(
+                                                            "",
+                                                            style: TextStyle(
+                                                              fontSize: 13,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                        ),
                                                       ),
                                                       title: Text(
                                                           "From ${ballData["sessionName"]}"),
@@ -363,11 +391,39 @@ class _ShotScreenState extends State<ShotScreen> {
                                                       //     fit: BoxFit.cover,
                                                       //   ),
                                                       // ),
-                                                      leading: const Icon(
-                                                        Icons.circle_rounded,
-                                                        size: 40,
-                                                        color: Color.fromARGB(
-                                                            255, 78, 78, 78),
+                                                      leading: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                bottom: 5),
+                                                        width: 45,
+                                                        height: 45,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          image:
+                                                              const DecorationImage(
+                                                            image: AssetImage(
+                                                                'assets/images/BallIcon.png'),
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.0),
+                                                        ),
+                                                        child: const Center(
+                                                          child: Text(
+                                                            "",
+                                                            style: TextStyle(
+                                                              fontSize: 13,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                        ),
                                                       ),
                                                       title: Text(
                                                           "From ${ballData["sessionName"]}"),

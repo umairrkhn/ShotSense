@@ -21,7 +21,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           // ),
           ),
       child: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
         elevation: 0,
         leading: Navigator.canPop(context)
             ? Container(
@@ -73,13 +73,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ? 34
                       : title == "Shot Type Stats"
                           ? 30
-                          : 38,
+                          : title == "Ball Details"
+                              ? 34
+                              : 38,
                   fontWeight: FontWeight.w900,
                   foreground: Paint()
                     ..shader = const LinearGradient(
                       colors: [
-                        Color.fromARGB(208, 237, 36, 126),
-                        Color.fromARGB(205, 34, 29, 85),
+                        Color(0xD0ED247E),
+                        Color(0xCD221D55),
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -90,6 +92,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         systemOverlayStyle: SystemUiOverlayStyle.dark,
+
         // toolbarHeight: 70,
       ),
     );

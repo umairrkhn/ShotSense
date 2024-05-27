@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shotsense/screens/singleBall.dart';
 import 'package:shotsense/screens/shotTypeStats.dart';
@@ -456,6 +457,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
       'ball_id': Random().nextInt(1000000).toString(),
       'prediction': _inference['prediction'],
       'uri': _inference['video_uri'],
+      'ball_title': _inference['title'],
       // 'annotated_uri': _annotation['annotated_uri'],
       // 'annotated_uri': "",
       'recommendation': _inference['recommendation'],
@@ -725,12 +727,10 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
     }
   }
 
-  var height;
-  var width;
   @override
   Widget build(BuildContext context) {
-    height = MediaQuery.of(context).size.height;
-    width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
 
     return PopScope(
         canPop: (isgettingInferece == "false"),
@@ -739,7 +739,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
               title: "Session Details", isgettingInferece: isgettingInferece),
           body: Container(
             padding: const EdgeInsets.all(16.0),
-            color: const Color(0xFFF5F5F5),
+            color: Color.fromARGB(255, 255, 255, 255),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -760,11 +760,11 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   ),
                   child: ListTile(
                     contentPadding: const EdgeInsets.only(
-                        top: 6, bottom: 0, left: 20, right: 20),
+                        top: 0, bottom: 0, left: 20, right: 20),
                     title: Text(
                       widget.sessionName!,
-                      style: TextStyle(
-                        fontSize: 28,
+                      style: const TextStyle(
+                        fontSize: 26,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
@@ -772,8 +772,8 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                     subtitle: Text(
                       DateFormat('d MMM, y').format(sessionDate.toDate()),
                       style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        // fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 123, 123, 123),
                       ),
                     ),
@@ -830,7 +830,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   children: [
                     _sessionStats.isNotEmpty
                         ? _buildStatContainer(
-                            "Ball Hit Accuracy \n\t(${_sessionStats[2]} Balls Played)",
+                            "Ball Hit Accuracy",
                             "${((_sessionStats[1] / _sessionStats[2]) * 100).floor()}%",
                             false)
                         : _buildStatContainer(
@@ -955,8 +955,8 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
             },
             child: Container(
               // width: MediaQuery.of(context).size.width / 2.3,
-              height: 120,
-
+              height: 140,
+              padding: const EdgeInsets.only(top: 10.0),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.white),
                 borderRadius: BorderRadius.circular(20.0),
@@ -977,14 +977,15 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                     value,
                     style: const TextStyle(
                       fontSize: 24,
-                      fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
+                  const SizedBox(height: 5),
                   Text(
                     label,
                     style: const TextStyle(
                       color: Colors.black,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   // const SizedBox(height: 30),
@@ -1229,20 +1230,22 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              Container(
+                width: 250,
                 child: Text(
-                  _ballsInSession[index]
-                      ["prediction"], // Removed 'const' keyword
+                  _ballsInSession[index]["ball_title"] ?? "",
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.black,
                   ),
+                  softWrap: true,
                 ),
               ),
               Row(
                 children: [
                   Text(
-                    DateFormat('d MMM, y').format(sessionDate.toDate()),
+                    "${DateFormat('d MMM, y').format(sessionDate.toDate())} • " +
+                        _ballsInSession[index]["prediction"],
                     style: const TextStyle(
                       fontSize: 12,
                       color: Color.fromARGB(187, 21, 30, 35),

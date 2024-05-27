@@ -11,6 +11,7 @@ import 'package:shotsense/widgets/bottom_navigation.dart';
 import 'package:shotsense/screens/shots.dart';
 import 'package:shotsense/screens/signup.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
         title: 'Shot Sense',
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
         ),
         home: const AuthWrapper(),
         routes: {

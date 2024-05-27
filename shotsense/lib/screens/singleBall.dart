@@ -122,14 +122,14 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
         body: SingleChildScrollView(
             child: Container(
           padding: const EdgeInsets.all(16.0),
-          color: const Color(0xFFF5F5F5),
+          color: Color.fromARGB(255, 255, 255, 255),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 15.0),
               buildContainer(
                 context,
-                sessionName,
+                widget.ballData["ball_title"] ?? "",
                 DateFormat("MMMM d, yyyy")
                     .format(sessionDate.toDate())
                     .toString(),
@@ -138,20 +138,6 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
               // const SizedBox(height: 15.0),
               // buildContainer(
               //     context, widget.ballData["prediction"], "Shot Type", false),
-              const SizedBox(height: 15.0),
-              Row(
-                children: [
-                  _buildStatBox(
-                      context, widget.ballData["prediction"], "Shot Type"),
-                  SizedBox(
-                      width: MediaQuery.of(context).size.width -
-                          (MediaQuery.of(context).size.width - 15)),
-                  _buildStatBox(
-                      context,
-                      widget.ballData["ratings"]["shot"].toUpperCase(),
-                      "Hit/Miss"),
-                ],
-              ),
               const SizedBox(height: 15.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -232,6 +218,22 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
                         ? _buildVideoPlayerAnnotated(true)
                         : _buildVideoPlayerAnnotated(false),
               ),
+              const SizedBox(height: 15.0),
+              Row(
+                children: [
+                  _buildStatBox(
+                      context, widget.ballData["prediction"], "Shot Type"),
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width -
+                          (MediaQuery.of(context).size.width - 10)),
+                  _buildStatBox(
+                      context,
+                      widget.ballData["ratings"]["shot"] == "hit"
+                          ? "Shot Hit"
+                          : "Shot Missed",
+                      "Hit/Miss"),
+                ],
+              ),
 
               const SizedBox(height: 15.0),
               Container(
@@ -272,50 +274,63 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 4.0),
-                      const Divider(
-                        color: Color.fromARGB(255, 209, 209, 209),
-                        thickness: 1,
-                      ),
-                      const SizedBox(height: 4.0),
-                      Container(
-                        padding: const EdgeInsets.only(left: 6.0, right: 6.0),
-                        child: Text(
-                          widget.ballData["recommendation"],
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      )
+                      // const SizedBox(height: 4.0),
+                      // const Divider(
+                      //   color: Color.fromARGB(255, 209, 209, 209),
+                      //   thickness: 1,
+                      // ),
+                      // const SizedBox(height: 4.0),
+                      // Container(
+                      //   padding: const EdgeInsets.only(left: 6.0, right: 6.0),
+                      //   child: Text(
+                      //     widget.ballData["recommendation"],
+                      //     style: const TextStyle(
+                      //       fontSize: 20,
+                      //       // fontWeight: FontWeight.bold,
+                      //       color: Colors.black,
+                      //     ),
+                      //   ),
+                      // )
                     ],
                   )),
               const SizedBox(height: 15.0),
-              //  Container(
-              //         padding: const EdgeInsets.all(16.0),
-              //         decoration: BoxDecoration(
-              //           border: Border.all(color: Colors.white),
-              //           borderRadius: BorderRadius.circular(20.0),
-              //           boxShadow: [
-              //             BoxShadow(
-              //               color: Color.fromARGB(255, 3, 45, 255)
-              //                   .withOpacity(0.15),
-              //               spreadRadius: 5,
-              //               blurRadius: 12,
-              //               offset: const Offset(0, 2),
-              //             ),
-              //           ],
-              //           color: Colors.white,
-              //         ),
-              //         child: Text(
-              //           widget.ballData["recommendation"],
-              //           style: TextStyle(
-              //             fontSize: 20,
-              //             fontWeight: FontWeight.bold,
-              //             color: Colors.black,
-              //           ),
-              //         ))
+              Container(
+                  padding: const EdgeInsets.only(
+                      bottom: 16.0, left: 16, right: 16, top: 4),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(20.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.15),
+                        spreadRadius: 1,
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    children: [
+                      const Text(
+                        "Recommendation",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        widget.ballData["recommendation"],
+                        style: const TextStyle(
+                          fontSize: 16,
+                          // fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      )
+                    ],
+                  ))
             ],
           ),
         )));
@@ -414,10 +429,10 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
         child: Container(
       // width: MediaQuery.of(context).size.width / 5,
       // height: MediaQuery.of(context).size.width / 3,
-      padding: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.white),
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.15),
@@ -434,24 +449,22 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
           Text(
             title,
             style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
               color: Colors.black,
             ),
           ),
-          const SizedBox(
-            height: 15,
-          ),
-          Text(
-            subtitle,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
+          // const SizedBox(
+          //   height: 5,
+          // ),
+          // Text(
+          //   subtitle,
+          //   style: const TextStyle(
+          //     fontSize: 12,
+          //     fontWeight: FontWeight.bold,
+          //     color: Colors.black,
+          //   ),
+          // ),
         ],
       ),
     ));
@@ -475,50 +488,23 @@ Widget buildContainer(BuildContext context, String titleName, String subtitle,
       color: Colors.white,
     ),
     child: ListTile(
-      contentPadding: const EdgeInsets.only(
-        top: 6,
-        bottom: 0,
-        left: 20,
-        right: 20,
+      contentPadding:
+          const EdgeInsets.only(top: 0, bottom: 0, left: 20, right: 20),
+      title: Text(
+        titleName,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: Colors.black,
+        ),
       ),
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          isFirstContainer
-              ? const Text(
-                  'From the session',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 71, 71, 71),
-                  ),
-                )
-              : const SizedBox(height: 0),
-          Text(
-            titleName,
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-        ],
-      ),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            subtitle,
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 123, 123, 123),
-            ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-        ],
+      subtitle: Text(
+        subtitle,
+        style: const TextStyle(
+          fontSize: 12,
+          // fontWeight: FontWeight.bold,
+          color: Color.fromARGB(255, 123, 123, 123),
+        ),
       ),
     ),
   );
@@ -562,16 +548,16 @@ Widget buildRatingContainer(context, rating, ratingName) {
                 Text(
                   rating.toUpperCase(),
                   style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    // fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
                 ),
                 Text(
                   ratingName,
                   style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
                     color: Colors.black,
                   ),
                 ),
