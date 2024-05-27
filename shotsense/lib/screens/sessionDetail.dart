@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shotsense/screens/singleBall.dart';
 import 'package:shotsense/screens/shotTypeStats.dart';
 import 'package:shotsense/services/Inferences.dart';
+import 'package:shotsense/widgets/bottom_navigation.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
 import 'dart:io';
 import 'package:video_player/video_player.dart';

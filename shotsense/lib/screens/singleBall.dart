@@ -328,9 +328,10 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
                           // fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
-                      )
+                      ),
                     ],
-                  ))
+                  )),
+              const SizedBox(height: 20),
             ],
           ),
         )));

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:shotsense/screens/homepage.dart';
+import 'package:shotsense/screens/sessionDetail.dart';
 import 'package:shotsense/screens/sessions.dart';
 import 'package:shotsense/screens/shots.dart';
 import 'package:shotsense/screens/settings.dart';
+import 'package:shotsense/screens/singleBall.dart';
 
 void main() => runApp(const BottomNavigationBarExampleApp());
 
