@@ -9,7 +9,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shotsense/screens/singleBall.dart';
 import 'package:shotsense/screens/shotTypeStats.dart';
 import 'package:shotsense/services/Inferences.dart';
-import 'package:shotsense/widgets/bottom_navigation.dart';
 import 'package:shotsense/widgets/custom_appBar.dart';
 import 'dart:io';
 import 'package:video_player/video_player.dart';
@@ -389,7 +388,6 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
     var latestOverDoc;
 
     if (overSnapshot.docs.isNotEmpty) {
-      print(overSnapshot.docs.last.id);
       latestOverDoc = overSnapshot.docs.last;
     } else {
       Map<String, Object> dummyMap = {'dummy': 'dummy'};
@@ -441,7 +439,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         nextBall = 1;
       }
     }
-
+    print(latestOverDoc.id);
     DocumentReference ballCollection = firestore
         .collection('sessions')
         .doc(widget.sessionID)

@@ -334,7 +334,7 @@ class _ShotScreenState extends State<ShotScreen> {
                                                         ),
                                                       ),
                                                       title: Text(
-                                                          "${ballData["Ball_title"]}"),
+                                                          "${ballData["ball_title"]}"),
                                                       subtitle: Text(
                                                         // "From ${ballData["createdAt"]}",
                                                         "${DateFormat("MMMM d, yyyy").format(ballData["createdAt"].toDate()).toString()}",

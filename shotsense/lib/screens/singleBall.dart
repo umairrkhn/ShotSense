@@ -119,6 +119,7 @@ class _SingleBallPageScreen extends State<SingleBallPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: const CustomAppBar(title: "Ball Details"),
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
             child: Container(
           padding: const EdgeInsets.all(16.0),
